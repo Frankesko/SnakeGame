@@ -1,3 +1,11 @@
+modificare il server nei config di xampp con localhost:3306 al posto di 127.0.0.1
+http://localhost/index.html link gioco
+https://localhost/phpmyadmin/index.php?route=/sql&pos=0&db=snakedb&table=utenti
+
+
+
+
+
 restful // soap etc:
 dare classifica migliori punteggi
 dare i propri migliori punteggi
