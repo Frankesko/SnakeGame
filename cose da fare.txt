@@ -1,0 +1,79 @@
+restful // soap etc:
+dare classifica migliori punteggi
+dare i propri migliori punteggi
+
+
+
+
+html/css:
+immagini frutta per cibo (anche nello shop)
+
+leaderboards personali
+leaderboards di tutti 
+
+bottone chiusura impostazioni
+
+
+
+nello shop:
+mostra "imposta" (in blu) se è "si" nel db  
+mostra "acquista" (in verde) se è "no" nel db
+
+
+mostrare dei messaggi di conferma sulla registrazione o di negazione in caso di problemi 
+mostrare messaggi di negazione anche sul login in caso di pw sbagliata
+
+
+
+cliccato pw dimenticata
+fare inserire la mail 
+se presente 
+mandare messaggio "ti è stata inviata una mail con la nuova password"
+altrimenti
+mail non presente
+
+FARE IL CSS IN BASE ALLA GRANDEZZA DELLO SCHERMO
+
+
+logica:
+buy colori che mettte si nel db
+
+prendere i coin dal db
+non mostrare i coin quando non loggato 
+
+non fare cliccare registrati se non sono compilati tutti i moduli
+
+
+
+immagini frutta per cibo
+controllo completamento gioco
+messaggio per completamento gioco
+
+
+per registrazione
+controllo su username già esistente
+controlli su email valida
+
+per login
+controllo account presente nel db
+controllo password corrispondente
+
+chiusura impostazioni
+salvataggio impostazioni
+
+leaderboards personali
+leaderboards di tutti 
+
+recupero password manda messaggio alla mail con pw nuova generata con numeri a caso
+
+mostrare dei messaggi di conferma sulla registrazione o di negazione in caso di problemi 
+mostrare messaggi di negazione anche sul login in caso di pw sbagliata
+
+
+db:
+
+
+
+salvataggio impostazioni 
+salvataggio dati sul db a fine game
+nella tabella "partite" salvare anche la quantità di cibo
