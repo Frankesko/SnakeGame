@@ -35,6 +35,12 @@ const chiudiLeaderBoardsContainerBtn = document.querySelector("#chiudiLeaderBoar
 const passwordDimenticataBtn = document.getElementById("passwordDimenticata");
 const passwordDimenticataPopUp = document.getElementById("passwordDimenticataPopUp");
 const recuperoPasswordBtn = document.getElementById("recuperoPasswordBtn");
+
+const chiudiLoginPopUpButton = document.getElementById("chiudiLoginPopUpButton");
+const chiudiRegistratiPopUpButton = document.getElementById("chiudiRegistratiPopUpButton");
+const chiudiPasswordDimenticataPopUpButton = document.getElementById("chiudiPasswordDimenticataPopUpButton");
+
+
 const gameWidth = gameBoard.width;
 const gameHeight = gameBoard.height;
 const boardBackground = "white";
@@ -63,6 +69,8 @@ let login = false;
 let isRestarted = false;
 let speed = 100;
 let numFood = 1;
+let usernameUtenteLoggato;
+
 
 window.addEventListener("keydown", changeDirection);
 resetBtn.addEventListener("click", resetGame);
@@ -80,6 +88,11 @@ chiudiLeaderBoardsContainerBtn.addEventListener("click", closeLeaderBoards);
 passwordDimenticataBtn.addEventListener("click", passwordDimenticata);
 recuperoPasswordBtn.addEventListener("click", inviaRichiestaRecuperoPassword);
 
+chiudiLoginPopUpButton.addEventListener("click", chiudiLogin);
+chiudiRegistratiPopUpButton.addEventListener("click", chiudiRegistrati);
+chiudiPasswordDimenticataPopUpButton.addEventListener("click", chiudiPasswordDimenticata);
+
+
 document.addEventListener("DOMContentLoaded", function() {
     loginChoiceButton.addEventListener("click", function() {
         // Nascondi il container di registrazione
@@ -91,6 +104,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             let loginUsername = document.querySelector("#loginUsername").value;
             let loginPassword = document.querySelector("#loginPassword").value;
+            
             let dataLogin = {
                 username: loginUsername,
                 password: loginPassword
@@ -107,6 +121,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             // Accesso consentito, reindirizza o esegui altre azioni
                             alert("Accesso consentito!");
                             login = true;
+                            usernameUtenteLoggato = loginUsername;
                         } else {
                             // Accesso negato, mostra un messaggio di errore
                             alert("Accesso negato. " + response.message);
@@ -124,6 +139,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
 
             if (login){
+            getCoins(usernameUtenteLoggato);
             loginPopUp.style.display = "none";
             testoSpiegazioneGioco.style.display = "none";
             mostraUsernameIfLoggato.style.display = "block";
@@ -525,14 +541,35 @@ function closeLeaderBoards(){
     leaderBoardsContainer.style.display = "none";
 }
 
+function chiudiLogin(){
+    loginPopUp.style.display = "none";
+    loginRegistratiContainer.style.display = "flex";
+}
+function chiudiRegistrati(){
+    registratiPopup.style.display = "none";
+    loginRegistratiContainer.style.display = "flex";
+}
+function chiudiPasswordDimenticata(){
+    passwordDimenticataPopUp.style.display = "none";
+    loginRegistratiContainer.style.display = "flex";
+}
+
+
+
+
+
+
+
+
+
+
+
 
 function passwordDimenticata(){
     loginPopUp.style.display = "none";
     passwordDimenticataPopUp.style.display = "block";
     event.preventDefault(); // Impedisci il comportamento predefinito del modulo HTML
 }
-
-
 
 function inviaRichiestaRecuperoPassword(){
     
@@ -571,4 +608,29 @@ function inviaRichiestaRecuperoPassword(){
     let recuperoPasswordSuccessMessage = document.querySelector("#recuperoPasswordSuccessMessage");
     recuperoPasswordSuccessMessage.style.display = "block";
     loginRegistratiContainer.style.display = "flex";
+}
+
+
+function getCoins(username){
+    let xhr = new XMLHttpRequest();
+    let url = "getCoins.php?username=" + username;
+    xhr.open("GET", url, true);
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                // Elabora la risposta del server
+                var response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    var coins = response.coins;
+                    // Aggiorna l'elemento HTML per mostrare i coins
+                    document.getElementById("coinsUtente").textContent = coins;
+                } else {
+                    // Gestisci errori o situazioni in cui l'utente non è autenticato
+                }
+            }
+        }
+    };
+
+    xhr.send();
 }

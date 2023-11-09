@@ -34,7 +34,7 @@
                 <div id="containerShopCoins">
                     <div id="coins">
                         <img src="coin.png" width="20" height="20">
-                        <span>100</span>
+                        <span id="coinsUtente"></span>
                     </div>
                 </div>
                 <div id="scoreText">0</div>
@@ -57,6 +57,7 @@
                 </div>
             </div>
             <div id="loginPopUp" class="hidden">
+                <button id="chiudiLoginPopUpButton">x</button>
                 <form id="loginForm">
                     <input type="text" id="loginUsername" placeholder="Username">
                     <input type="password" id="loginPassword" placeholder="Password">
@@ -67,6 +68,7 @@
                 </form>
             </div>
             <div id="registratiPopup" class="hidden">
+                <button id="chiudiRegistratiPopUpButton">x</button>
                 <form id="registratiForm">
                     <input type="text" id="registratiUsername" placeholder="Username" required>
                     <input type="email" id="registratiEmail" placeholder="Email" required>
@@ -76,6 +78,7 @@
                 </form>
             </div>       
             <div id="passwordDimenticataPopUp" class="hidden">
+                <button id="chiudiPasswordDimenticataPopUpButton">x</button>
                 <form id="passwordDimenticataForm">
                     <input type="email" id="passwordDimenticataEmail" placeholder="Email" required>
                     <button id="recuperoPasswordBtn" type="button">Recupera password</button>

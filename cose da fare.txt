@@ -6,6 +6,8 @@ https://localhost/phpmyadmin/index.php?route=/sql&pos=0&db=snakedb&table=utenti
 VERIFICARE SE REGISTRATI FUNZIONA ANCORA
 VERIFICARE SE I CONTROLLI SUL LOGIN FUNZIONANO
 VERIFICARE PASS DIMENTICATA
+VERIFICARE SE PRENDE I COINS
+
 
 restful // soap etc:
 dare classifica migliori punteggi
@@ -34,9 +36,7 @@ FARE IL CSS IN BASE ALLA GRANDEZZA DELLO SCHERMO
 
 logica:
 buy colori che mettte si nel db
-
-prendere i coin dal db
-non mostrare i coin quando non loggato 
+ 
 
 non fare cliccare registrati se non sono compilati tutti i moduli
 
