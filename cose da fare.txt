@@ -5,7 +5,7 @@ https://localhost/phpmyadmin/index.php?route=/sql&pos=0&db=snakedb&table=utenti
 
 VERIFICARE SE REGISTRATI FUNZIONA ANCORA
 VERIFICARE SE I CONTROLLI SUL LOGIN FUNZIONANO
-
+VERIFICARE PASS DIMENTICATA
 
 restful // soap etc:
 dare classifica migliori punteggi
