@@ -32,6 +32,9 @@ const leaderBoardsButtonInFinePartita = document.querySelector("#leaderBoardsBut
 const leaderBoardsButton = document.querySelector("#leaderBoardsButton");
 const leaderBoardsContainer = document.querySelector("#leaderBoardsContainer");
 const chiudiLeaderBoardsContainerBtn = document.querySelector("#chiudiLeaderBoardsContainerBtn");
+const passwordDimenticataBtn = document.getElementById("passwordDimenticata");
+const passwordDimenticataPopUp = document.getElementById("passwordDimenticataPopUp");
+const recuperoPasswordBtn = document.getElementById("recuperoPasswordBtn");
 const gameWidth = gameBoard.width;
 const gameHeight = gameBoard.height;
 const boardBackground = "white";
@@ -74,6 +77,8 @@ settingsBtnInFinePartita.addEventListener("click", openSettings);
 leaderBoardsButton.addEventListener("click", openLeaderBoards);
 leaderBoardsButtonInFinePartita.addEventListener("click", openLeaderBoards);
 chiudiLeaderBoardsContainerBtn.addEventListener("click", closeLeaderBoards);
+passwordDimenticataBtn.addEventListener("click", passwordDimenticata);
+recuperoPasswordBtn.addEventListener("click", inviaRichiestaRecuperoPassword);
 
 document.addEventListener("DOMContentLoaded", function() {
     loginChoiceButton.addEventListener("click", function() {
@@ -84,8 +89,8 @@ document.addEventListener("DOMContentLoaded", function() {
         
         loginSubmitButton.addEventListener("click", function() {
 
-            let loginUsername = document.querySelector("#loginUsername");
-            let loginPassword = document.querySelector("#loginPassword");
+            let loginUsername = document.querySelector("#loginUsername").value;
+            let loginPassword = document.querySelector("#loginPassword").value;
             let dataLogin = {
                 username: loginUsername,
                 password: loginPassword
@@ -152,6 +157,7 @@ document.addEventListener("DOMContentLoaded", function() {
             email: email,
             password: registratiPassword
         };
+
         if (registratiUsername.trim() === "" || email.trim() === "" || registratiPassword.trim() === "" || confermaPassword.trim() === "") {
             alert("Compila tutti i campi obbligatori.");
         } else if (registratiPassword !== confermaPassword) {
@@ -517,4 +523,51 @@ function openLeaderBoards(){
 
 function closeLeaderBoards(){
     leaderBoardsContainer.style.display = "none";
+}
+
+
+function passwordDimenticata(){
+    loginRegistratiContainer.style.display = "none";
+    passwordDimenticataPopUp.style.display = "block";
+    
+    
+
+    
+    
+}
+
+
+
+function inviaRichiestaRecuperoPassword(){
+    // Recupera l'indirizzo email inserito dall'utente
+    let email = document.getElementById("passwordDimenticataEmail").value;
+
+    // Esegui una richiesta AJAX al server per verificare l'email
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "password_dimenticata.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                // La richiesta al server è stata completata con successo
+                var response = JSON.parse(xhr.responseText);
+                
+                if (response.success) {
+                    // Email valida, mostra un messaggio di successo
+                    document.getElementById("recPassSuccessMessage").innerText = response.message;
+                } else {
+                    // Email non valida, mostra un messaggio di errore
+                    document.getElementById("errorMessage").innerText = response.message;
+                }
+            } else {
+                // Gestisci gli errori
+                console.error("Errore nella richiesta AJAX");
+            }
+        }
+    };
+
+    // Invia l'email al server
+    xhr.send("email=" + email);
+    
 }

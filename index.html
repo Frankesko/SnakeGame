@@ -55,8 +55,8 @@
             </div>
             <div id="loginPopUp" class="hidden">
                 <form id="loginForm">
-                    <input type="text" id="loginUsername" placeholder="Username" required>
-                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <input type="text" id="loginUsername" placeholder="Username">
+                    <input type="password" id="loginPassword" placeholder="Password">
                     <button  type="button" id="loginSubmitButton">Login</button>
                     <br>
                     <br>
@@ -72,7 +72,14 @@
                     <button type="button" id="registratiSubmitButton">Registrati</button>
                 </form>
             </div>       
-                
+            <div id="passwordDimenticataPopUp" class="hidden">
+                <form id="passwordDimenticataForm">
+                    <input type="email" id="passwordDimenticataEmail" placeholder="Email" required>
+                </form>
+                <button id="recuperoPasswordBtn">Recupera password</button>
+                <div id="recPassSuccessMessage" style="color: green;"></div>
+                <div id="errorMessage" style="color: red;"></div>
+            </div>
 
             <div id="startContainer" class="hidden">
                 <div id="playButtonContainer">
