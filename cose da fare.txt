@@ -1,4 +1,3 @@
-modificare il server nei config di xampp con localhost:3306 al posto di 127.0.0.1
 http://localhost/index.html link gioco
 https://localhost/phpmyadmin/index.php?route=/sql&pos=0&db=snakedb&table=utenti
 
@@ -7,12 +6,11 @@ VERIFICARE SE REGISTRATI FUNZIONA ANCORA
 VERIFICARE SE I CONTROLLI SUL LOGIN FUNZIONANO
 VERIFICARE PASS DIMENTICATA
 VERIFICARE SE PRENDE I COINS
-VERIFICARE SE TI BLOCCA NEL CASO ESISTESSE GIA' QUELLO USERNAME
+VERIFICARE SE TI BLOCCA NEL CASO ESISTESSE GIA' QUELLO USERNAME (forse da problemi)
 
 restful // soap etc:
 dare classifica migliori punteggi
 dare i propri migliori punteggi
-
 
 
 
@@ -24,32 +22,21 @@ leaderboards di tutti
 
 bottone chiusura impostazioni
 
-
 nello shop:
 mostra "imposta" (in blu) se è "si" nel db  
 mostra "acquista" (in verde) se è "no" nel db
 
 
-
 FARE IL CSS IN BASE ALLA GRANDEZZA DELLO SCHERMO
+
 
 
 logica:
 buy colori che mettte si nel db
- 
-
 
 immagini frutta per cibo
 controllo completamento gioco
 messaggio per completamento gioco
-
-
-per registrazione
-controlli su email valida
-
-per login
-controllo account presente nel db
-controllo password corrispondente
 
 chiusura impostazioni
 salvataggio impostazioni
@@ -57,16 +44,11 @@ salvataggio impostazioni
 leaderboards personali
 leaderboards di tutti 
 
-recupero password manda messaggio alla mail con pw nuova generata con numeri a caso
-
-mostrare dei messaggi di conferma sulla registrazione o di negazione in caso di problemi 
 mostrare messaggi di negazione anche sul login in caso di pw sbagliata
 
 
+
 db:
-
-
-
 salvataggio impostazioni 
 salvataggio dati sul db a fine game
 nella tabella "partite" salvare anche la quantità di cibo

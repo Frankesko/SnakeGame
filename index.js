@@ -165,15 +165,14 @@ document.addEventListener("DOMContentLoaded", function() {
             let registratiPassword = document.querySelector("#registratiPassword").value;
             let confermaPassword = document.querySelector("#registratiConfirmPassword").value;
         
-            
-
-         // Crea un oggetto con i dati della registrazione
-        let dataRegistrati = {
-            username: registratiUsername,
-            email: email,
-            password: registratiPassword
-        };
-
+        if (isEmailValid(email)) {
+            // L'indirizzo email è valido
+            // Esegui il resto della registrazione
+        } else {
+            // L'indirizzo email non è valido
+            alert("L'indirizzo email non è valido. Inserisci un indirizzo email valido.");
+        }
+        
         if (registratiUsername.trim() === "" || email.trim() === "" || registratiPassword.trim() === "" || confermaPassword.trim() === "") {
             alert("Compila tutti i campi obbligatori.");
         } else if (registratiPassword !== confermaPassword) {
@@ -667,4 +666,12 @@ function checkUsernameAvailability(username, callback) {
     };
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
+}
+
+function isEmailValid(email) {
+    // Definisci un'espressione regolare per verificare l'indirizzo email
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+    // Verifica se l'indirizzo email corrisponde all'espressione regolare
+    return emailRegex.test(email);
 }
