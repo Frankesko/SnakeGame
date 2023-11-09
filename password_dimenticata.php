@@ -14,7 +14,7 @@ if ($stmt->rowCount() > 0) {
     // Invia l'email
     $to = $email;
     $subject = "Recupero Password";
-    $message = "Il tuo codice di recupero è: " . $codice;
+    $message = "La tua nuova password è: " . $codice;
     $headers = "From: no-reply@example.com"; // Puoi personalizzare l'indirizzo del mittente
 
     // Invia l'email utilizzando la funzione mail()

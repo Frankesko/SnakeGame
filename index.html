@@ -52,6 +52,9 @@
                 <div id="successMessage" class="hidden">
                     Registrazione avvenuta con successo!
                 </div>
+                <div id="recuperoPasswordSuccessMessage" class="hidden">
+                    Mail inviata, esegui il login con la nuova password.
+                </div>
             </div>
             <div id="loginPopUp" class="hidden">
                 <form id="loginForm">
@@ -75,10 +78,8 @@
             <div id="passwordDimenticataPopUp" class="hidden">
                 <form id="passwordDimenticataForm">
                     <input type="email" id="passwordDimenticataEmail" placeholder="Email" required>
+                    <button id="recuperoPasswordBtn" type="button">Recupera password</button>
                 </form>
-                <button id="recuperoPasswordBtn">Recupera password</button>
-                <div id="recPassSuccessMessage" style="color: green;"></div>
-                <div id="errorMessage" style="color: red;"></div>
             </div>
 
             <div id="startContainer" class="hidden">

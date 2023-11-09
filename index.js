@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
             
 
-            // Crea un oggetto con i dati della registrazione
+         // Crea un oggetto con i dati della registrazione
         let dataRegistrati = {
             username: registratiUsername,
             email: email,
@@ -527,18 +527,15 @@ function closeLeaderBoards(){
 
 
 function passwordDimenticata(){
-    loginRegistratiContainer.style.display = "none";
+    loginPopUp.style.display = "none";
     passwordDimenticataPopUp.style.display = "block";
-    
-    
-
-    
-    
+    event.preventDefault(); // Impedisci il comportamento predefinito del modulo HTML
 }
 
 
 
 function inviaRichiestaRecuperoPassword(){
+    
     // Recupera l'indirizzo email inserito dall'utente
     let email = document.getElementById("passwordDimenticataEmail").value;
 
@@ -569,5 +566,9 @@ function inviaRichiestaRecuperoPassword(){
 
     // Invia l'email al server
     xhr.send("email=" + email);
-    
+    passwordDimenticataPopUp.style.display = "none";
+    registratiChoiceButton.style.display = "none";
+    let recuperoPasswordSuccessMessage = document.querySelector("#recuperoPasswordSuccessMessage");
+    recuperoPasswordSuccessMessage.style.display = "block";
+    loginRegistratiContainer.style.display = "flex";
 }

@@ -30,16 +30,6 @@ mostra "acquista" (in verde) se è "no" nel db
 
 
 
-
-
-
-cliccato pw dimenticata
-fare inserire la mail 
-se presente 
-mandare messaggio "ti è stata inviata una mail con la nuova password"
-altrimenti
-mail non presente
-
 FARE IL CSS IN BASE ALLA GRANDEZZA DELLO SCHERMO
 
 

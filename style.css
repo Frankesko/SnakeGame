@@ -129,7 +129,7 @@ body {
     border-radius: 16px;
 }
 
-#loginPopUp, #registratiPopup {
+#loginPopUp, #registratiPopup, #passwordDimenticataPopUp {
     position: fixed;
     border-radius: 24px;
     top: 50%;
@@ -142,7 +142,7 @@ body {
     display: none; /* Nasconde il popup per impostazione predefinita */
 }
 
-#loginForm, #registratiForm  {
+#loginForm, #registratiForm, #passwordDimenticataForm  {
     border: 2px solid #ccc;
     padding: 10px; /* Aumentato il padding per centrare i campi di input verticalmente */
     text-align: center;
@@ -152,13 +152,13 @@ body {
     align-items: center; /* Allinea gli input al centro orizzontalmente */
 }
 
-#loginForm input, #registratiForm input {
+#loginForm input, #registratiForm input, #passwordDimenticataForm input{
     width: 80%;
     margin: 5px 0; /* Aggiunto un margine tra gli input */
     padding: 10px;
 }
 
-#loginSubmitButton, #registratiSubmitButton {
+#loginSubmitButton, #registratiSubmitButton, #recuperoPasswordBtn {
     background-color: #0074D9;
     color: white;
     border: none;
@@ -454,7 +454,7 @@ body {
 }
 
 
-#successMessage {
+#successMessage, #recuperoPasswordSuccessMessage {
     display: none;
     background-color: #4CAF50; /* Sfondo verde */
     color: white; /* Testo bianco */
