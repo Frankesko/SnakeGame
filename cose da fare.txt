@@ -3,7 +3,8 @@ http://localhost/index.html link gioco
 https://localhost/phpmyadmin/index.php?route=/sql&pos=0&db=snakedb&table=utenti
 
 
-
+VERIFICARE SE REGISTRATI FUNZIONA ANCORA
+VERIFICARE SE I CONTROLLI SUL LOGIN FUNZIONANO
 
 
 restful // soap etc:
@@ -28,7 +29,7 @@ mostra "imposta" (in blu) se è "si" nel db
 mostra "acquista" (in verde) se è "no" nel db
 
 
-mostrare messaggi di negazione anche sul login in caso di pw sbagliata
+
 
 
 

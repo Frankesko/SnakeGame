@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function() {
             };
         
             // Converte l'oggetto dati in una stringa JSON e invialo al server
-            var jsonData = JSON.stringify(data);
+            let jsonData = JSON.stringify(dataLogin);
             xhr.send(jsonData);
         
 
