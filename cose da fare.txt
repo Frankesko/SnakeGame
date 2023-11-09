@@ -28,7 +28,6 @@ mostra "imposta" (in blu) se è "si" nel db
 mostra "acquista" (in verde) se è "no" nel db
 
 
-mostrare dei messaggi di conferma sulla registrazione o di negazione in caso di problemi 
 mostrare messaggi di negazione anche sul login in caso di pw sbagliata
 
 

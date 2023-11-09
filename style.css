@@ -454,6 +454,17 @@ body {
 }
 
 
+#successMessage {
+    display: none;
+    background-color: #4CAF50; /* Sfondo verde */
+    color: white; /* Testo bianco */
+    padding: 10px; /* Spaziatura interna */
+    text-align: center; /* Testo centrato */
+    font-weight: bold; /* Testo in grassetto */
+    border-radius: 16px;
+}
+
+
 /*
 @media (max-width: 768px) {
     #gameContainer {

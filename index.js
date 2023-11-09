@@ -84,17 +84,50 @@ document.addEventListener("DOMContentLoaded", function() {
         
         loginSubmitButton.addEventListener("click", function() {
 
-            login = true;
-            if (login) {
-                loginPopUp.style.display = "none";
-                testoSpiegazioneGioco.style.display = "none";
-                mostraUsernameIfLoggato.style.display = "block";
-                //mostraUsernameIfLoggato.textContent = logicadeldb
-                startContainer.style.display = "block";
-                playButton.addEventListener("click", function() {
-                    startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer
-                    gameStart(); // E poi avvierà il gioco
-                });
+            let loginUsername = document.querySelector("#loginUsername");
+            let loginPassword = document.querySelector("#loginPassword");
+            let dataLogin = {
+                username: loginUsername,
+                password: loginPassword
+            };
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "verifica_accesso.php", true); // Assicurati che l'URL sia corretto
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        // Elabora la risposta dal server
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            // Accesso consentito, reindirizza o esegui altre azioni
+                            alert("Accesso consentito!");
+                            login = true;
+                        } else {
+                            // Accesso negato, mostra un messaggio di errore
+                            alert("Accesso negato. " + response.message);
+                        }
+                    } else {
+                        // Gestisci eventuali errori durante la richiesta AJAX
+                        console.error("Errore nella richiesta AJAX");
+                    }
+                }
+            };
+        
+            // Converte l'oggetto dati in una stringa JSON e invialo al server
+            var jsonData = JSON.stringify(data);
+            xhr.send(jsonData);
+        
+
+            if (login){
+            loginPopUp.style.display = "none";
+            testoSpiegazioneGioco.style.display = "none";
+            mostraUsernameIfLoggato.style.display = "block";
+            //mostraUsernameIfLoggato.textContent = logicadeldb
+            startContainer.style.display = "block";
+            playButton.addEventListener("click", function() {
+                startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer
+                gameStart(); // E poi avvierà il gioco
+            });
             }
         });
     });
@@ -106,26 +139,26 @@ document.addEventListener("DOMContentLoaded", function() {
         registratiPopup.style.display = "block";
 
         registratiSubmitButton.addEventListener("click", function() {
-            var username = document.querySelector("#registratiUsername").value;
-            var email = document.querySelector("#registratiEmail").value;
-            var password = document.querySelector("#registratiPassword").value;
-            var confermaPassword = document.querySelector("#registratiConfirmPassword").value;
+            let registratiUsername = document.querySelector("#registratiUsername").value;
+            let email = document.querySelector("#registratiEmail").value;
+            let registratiPassword = document.querySelector("#registratiPassword").value;
+            let confermaPassword = document.querySelector("#registratiConfirmPassword").value;
         
             
 
             // Crea un oggetto con i dati della registrazione
-        var data = {
-            username: username,
+        let dataRegistrati = {
+            username: registratiUsername,
             email: email,
-            password: password
+            password: registratiPassword
         };
-        if (username.trim() === "" || email.trim() === "" || password.trim() === "" || confirmPassword.trim() === "") {
+        if (registratiUsername.trim() === "" || email.trim() === "" || registratiPassword.trim() === "" || confermaPassword.trim() === "") {
             alert("Compila tutti i campi obbligatori.");
-        } else if (password !== confermaPassword) {
+        } else if (registratiPassword !== confermaPassword) {
             alert("Le password non corrispondono.");
-        } else if (password == confermaPassword) {
+        } else if (registratiPassword == confermaPassword) {
             // Invia una richiesta AJAX al server per salvare i dati nel database
-            var xhr = new XMLHttpRequest();
+            let xhr = new XMLHttpRequest();
             xhr.open("POST", "registra_account.php", true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
@@ -135,7 +168,11 @@ document.addEventListener("DOMContentLoaded", function() {
                         console.log(xhr.responseText);
                         // Chiudi il modulo di registrazione se la registrazione è avvenuta con successo
                         registratiPopup.style.display = "none";
+                        registratiChoiceButton.style.display = "none";
+                        let successMessage = document.querySelector("#successMessage");
+                        successMessage.style.display = "block";
                         loginRegistratiContainer.style.display = "flex";
+                        
                     } else {
                         // Gestisci eventuali errori durante la richiesta AJAX
                         console.error("Errore nella richiesta AJAX");
@@ -144,7 +181,7 @@ document.addEventListener("DOMContentLoaded", function() {
             };
 
             // Converte l'oggetto dati in una stringa JSON
-            var jsonData = JSON.stringify(data);
+            let jsonData = JSON.stringify(dataRegistrati);
             // Invia i dati JSON al server
             xhr.send(jsonData);
         }
