@@ -1,5 +1,5 @@
 <?php
-$conn = require('db_connection.php');
+$conn = require('db_conn.php');
 // Ricevi i dati inviati dal client (JavaScript)
 $data = json_decode(file_get_contents("php://input"));
 
@@ -10,6 +10,7 @@ if (!$data) {
     $email = $data->email;
     $password = $data->password;
 
+    $username = trim(strtolower($username));
     // Esegui eventuali controlli sulla validità dei dati (validazione)
 
     // Esegui l'inserimento nel database

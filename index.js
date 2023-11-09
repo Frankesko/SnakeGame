@@ -109,6 +109,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 username: loginUsername,
                 password: loginPassword
             };
+
+            console.log(loginUsername);
+            console.log(loginPassword);
             let xhr = new XMLHttpRequest();
             xhr.open("POST", "verifica_accesso.php", true); // Assicurati che l'URL sia corretto
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -116,15 +119,26 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                         // Elabora la risposta dal server
-                        var response = JSON.parse(xhr.responseText);
-                        if (response.success) {
+                        var response = xhr.responseText;
+                        if (response === "true") {
                             // Accesso consentito, reindirizza o esegui altre azioni
-                            alert("Accesso consentito!");
-                            login = true;
+                            loginPopUp.style.display = "none";
                             usernameUtenteLoggato = loginUsername;
-                        } else {
+                            testoSpiegazioneGioco.style.display = "none";
+                            mostraUsernameIfLoggato.style.display = "block";
+                            //mostraUsernameIfLoggato.textContent = logicadeldb
+                            startContainer.style.display = "block";
+                            getCoins(usernameUtenteLoggato);
+                            playButton.addEventListener("click", function() {
+                                startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer
+                                gameStart(); // E poi avvierà il gioco
+                            });
+                            
+                        } else if (response === "usernameFalse") {
                             // Accesso negato, mostra un messaggio di errore
-                            alert("Accesso negato. " + response.message);
+                            alert("Account inesistente");
+                        } else if (response === "passwordFalse") {
+                            alert("Password errata");
                         }
                     } else {
                         // Gestisci eventuali errori durante la richiesta AJAX
@@ -134,22 +148,12 @@ document.addEventListener("DOMContentLoaded", function() {
             };
         
             // Converte l'oggetto dati in una stringa JSON e invialo al server
-            let jsonData = JSON.stringify(dataLogin);
-            xhr.send(jsonData);
+            let jsonDataLog = JSON.stringify(dataLogin);
+            xhr.send(jsonDataLog);
         
 
-            if (login){
-            getCoins(usernameUtenteLoggato);
-            loginPopUp.style.display = "none";
-            testoSpiegazioneGioco.style.display = "none";
-            mostraUsernameIfLoggato.style.display = "block";
-            //mostraUsernameIfLoggato.textContent = logicadeldb
-            startContainer.style.display = "block";
-            playButton.addEventListener("click", function() {
-                startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer
-                gameStart(); // E poi avvierà il gioco
-            });
-            }
+            
+            
         });
     });
 
@@ -210,8 +214,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     };
     
                     // Converte l'oggetto dati in una stringa JSON e invialo al server
-                    let jsonData = JSON.stringify(dataRegistrati);
-                    xhr.send(jsonData);
+                    let jsonDataReg = JSON.stringify(dataRegistrati);
+                    xhr.send(jsonDataReg);
                 } else {
                     // Lo username non è disponibile, mostra un messaggio di errore
                     alert("Lo username non è disponibile. Scegli un altro username.");
@@ -619,10 +623,10 @@ function inviaRichiestaRecuperoPassword(){
 }
 
 
-function getCoins(username){
+function getCoins(username) {
     let xhr = new XMLHttpRequest();
-    let url = "getCoins.php?username=" + username;
-    xhr.open("GET", url, true);
+    xhr.open("POST", "get_coins.php", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
@@ -639,11 +643,15 @@ function getCoins(username){
             }
         }
     };
-
-    xhr.send();
+    const data = {
+        username: username
+    };
+    const jsonData = JSON.stringify(data);
+    xhr.send(jsonData);
 }
 
-function checkUsernameAvailability(username, callback) {
+
+function checkUsernameAvailability(registratiUsername, callback) {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "verifica_username.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -662,7 +670,7 @@ function checkUsernameAvailability(username, callback) {
     };
 
     const data = {
-        username: username
+        username: registratiUsername
     };
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);

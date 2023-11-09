@@ -2,11 +2,17 @@ http://localhost/index.html link gioco
 https://localhost/phpmyadmin/index.php?route=/sql&pos=0&db=snakedb&table=utenti
 
 
-VERIFICARE SE REGISTRATI FUNZIONA ANCORA
-VERIFICARE SE I CONTROLLI SUL LOGIN FUNZIONANO
 VERIFICARE PASS DIMENTICATA
-VERIFICARE SE PRENDE I COINS
-VERIFICARE SE TI BLOCCA NEL CASO ESISTESSE GIA' QUELLO USERNAME (forse da problemi)
+
+
+
+non fare cliccare password dimenticata(lasecondaovotla) se c'è il campo vuoot
+il check sulla mail presente nel db non funziona
+
+LOGIN NON FUNZIONA
+
+
+
 
 restful // soap etc:
 dare classifica migliori punteggi
