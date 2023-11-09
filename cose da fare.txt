@@ -20,32 +20,36 @@ immagini frutta per cibo (anche nello shop)
 leaderboards personali
 leaderboards di tutti 
 
-bottone chiusura impostazioni
+chiusura impostazioni
+chiusura shop
+chiusura leaderboards
 
 nello shop:
 mostra "imposta" (in blu) se è "si" nel db  
 mostra "acquista" (in verde) se è "no" nel db
 
+fare un modifica account
 
 FARE IL CSS IN BASE ALLA GRANDEZZA DELLO SCHERMO
 
 
 
 logica:
-buy colori che mettte si nel db
+buy colori che mettte si nel db e sottrae le monete
 
 immagini frutta per cibo
 controllo completamento gioco
 messaggio per completamento gioco
 
 chiusura impostazioni
+chiusura shop
+chiusura leaderboards
 salvataggio impostazioni
 
 leaderboards personali
 leaderboards di tutti 
 
-mostrare messaggi di negazione anche sul login in caso di pw sbagliata
-
+fare un modifica account
 
 
 db:
