@@ -111,14 +111,19 @@ document.addEventListener("DOMContentLoaded", function() {
             var password = document.querySelector("#registratiPassword").value;
             var confermaPassword = document.querySelector("#registratiConfirmPassword").value;
         
+            
+
             // Crea un oggetto con i dati della registrazione
         var data = {
             username: username,
             email: email,
             password: password
         };
-
-        if (password == confermaPassword) {
+        if (username.trim() === "" || email.trim() === "" || password.trim() === "" || confirmPassword.trim() === "") {
+            alert("Compila tutti i campi obbligatori.");
+        } else if (password !== confermaPassword) {
+            alert("Le password non corrispondono.");
+        } else if (password == confermaPassword) {
             // Invia una richiesta AJAX al server per salvare i dati nel database
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "registra_account.php", true);
