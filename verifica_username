@@ -1,0 +1,21 @@
+<?php
+$conn = require('db_connection.php');
+
+$username = $_POST['username'];
+
+// Esegui una query per verificare se lo username è già presente nel database
+$query = "SELECT COUNT(*) as count FROM utenti WHERE username = :username";
+$stmt = $pdo->prepare($query);
+$stmt->execute(['username' => $username]);
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if ($row['count'] > 0) {
+    // Lo username è già presente nel database
+    $response = array('available' => false);
+} else {
+    // Lo username è disponibile
+    $response = array('available' => true);
+}
+
+echo json_encode($response);
+?>

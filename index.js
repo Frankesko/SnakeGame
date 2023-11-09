@@ -178,37 +178,46 @@ document.addEventListener("DOMContentLoaded", function() {
             alert("Compila tutti i campi obbligatori.");
         } else if (registratiPassword !== confermaPassword) {
             alert("Le password non corrispondono.");
-        } else if (registratiPassword == confermaPassword) {
-            // Invia una richiesta AJAX al server per salvare i dati nel database
-            let xhr = new XMLHttpRequest();
-            xhr.open("POST", "registra_account.php", true);
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        // Elabora la risposta dal server, se necessario
-                        console.log(xhr.responseText);
-                        // Chiudi il modulo di registrazione se la registrazione è avvenuta con successo
-                        registratiPopup.style.display = "none";
-                        registratiChoiceButton.style.display = "none";
-                        let successMessage = document.querySelector("#successMessage");
-                        successMessage.style.display = "block";
-                        loginRegistratiContainer.style.display = "flex";
-                        
-                    } else {
-                        // Gestisci eventuali errori durante la richiesta AJAX
-                        console.error("Errore nella richiesta AJAX");
-                    }
+        } else {
+            // Verifica l'unicità dello username prima di procedere con la registrazione
+            checkUsernameAvailability(registratiUsername, function(isAvailable) {
+                if (isAvailable) {
+                    // Lo username è disponibile, invia i dati al server
+                    const dataRegistrati = {
+                        username: registratiUsername,
+                        email: email,
+                        password: registratiPassword
+                    };
+    
+                    let xhr = new XMLHttpRequest();
+                    xhr.open("POST", "registra_account.php", true);
+                    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4) {
+                            if (xhr.status === 200) {
+                                // Elabora la risposta dal server, se necessario
+                                console.log(xhr.responseText);
+                                // Chiudi il modulo di registrazione se la registrazione è avvenuta con successo
+                                registratiPopup.style.display = "none";
+                                registratiChoiceButton.style.display = "none";
+                                let successMessage = document.querySelector("#successMessage");
+                                successMessage.style.display = "block";
+                                loginRegistratiContainer.style.display = "flex";
+                            } else {
+                                // Gestisci eventuali errori durante la richiesta AJAX
+                                console.error("Errore nella richiesta AJAX");
+                            }
+                        }
+                    };
+    
+                    // Converte l'oggetto dati in una stringa JSON e invialo al server
+                    let jsonData = JSON.stringify(dataRegistrati);
+                    xhr.send(jsonData);
+                } else {
+                    // Lo username non è disponibile, mostra un messaggio di errore
+                    alert("Lo username non è disponibile. Scegli un altro username.");
                 }
-            };
-
-            // Converte l'oggetto dati in una stringa JSON
-            let jsonData = JSON.stringify(dataRegistrati);
-            // Invia i dati JSON al server
-            xhr.send(jsonData);
-        }
-        else {
-            console.log("pw non corrispondente");
+            });
         }
     });
 });
@@ -633,4 +642,29 @@ function getCoins(username){
     };
 
     xhr.send();
+}
+
+function checkUsernameAvailability(username, callback) {
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "verifica_username.php", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                // Elabora la risposta dal server
+                const response = JSON.parse(xhr.responseText);
+                callback(response.available);
+            } else {
+                // Gestisci eventuali errori durante la richiesta AJAX
+                console.error("Errore nella richiesta AJAX");
+                callback(false); // Assume che ci siano problemi nel server
+            }
+        }
+    };
+
+    const data = {
+        username: username
+    };
+    const jsonData = JSON.stringify(data);
+    xhr.send(jsonData);
 }

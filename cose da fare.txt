@@ -7,7 +7,7 @@ VERIFICARE SE REGISTRATI FUNZIONA ANCORA
 VERIFICARE SE I CONTROLLI SUL LOGIN FUNZIONANO
 VERIFICARE PASS DIMENTICATA
 VERIFICARE SE PRENDE I COINS
-
+VERIFICARE SE TI BLOCCA NEL CASO ESISTESSE GIA' QUELLO USERNAME
 
 restful // soap etc:
 dare classifica migliori punteggi
@@ -23,7 +23,7 @@ leaderboards personali
 leaderboards di tutti 
 
 bottone chiusura impostazioni
-bottone chiusura rec pass
+
 
 nello shop:
 mostra "imposta" (in blu) se è "si" nel db  
@@ -38,9 +38,6 @@ logica:
 buy colori che mettte si nel db
  
 
-non fare cliccare registrati se non sono compilati tutti i moduli
-
-
 
 immagini frutta per cibo
 controllo completamento gioco
@@ -48,7 +45,6 @@ messaggio per completamento gioco
 
 
 per registrazione
-controllo su username già esistente
 controlli su email valida
 
 per login
