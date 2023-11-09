@@ -21,8 +21,7 @@ leaderboards personali
 leaderboards di tutti 
 
 bottone chiusura impostazioni
-
-
+bottone chiusura rec pass
 
 nello shop:
 mostra "imposta" (in blu) se è "si" nel db  
