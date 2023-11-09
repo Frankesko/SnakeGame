@@ -2,7 +2,6 @@
 $conn = require('db_conn.php');
 
 $data = json_decode(file_get_contents("php://input"));
-
 if (!$data) {
     echo "Dati non validi o mancanti.";
 } else {

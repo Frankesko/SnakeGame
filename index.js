@@ -583,28 +583,39 @@ function passwordDimenticata(){
     event.preventDefault(); // Impedisci il comportamento predefinito del modulo HTML
 }
 
-function inviaRichiestaRecuperoPassword(){
-    
+function inviaRichiestaRecuperoPassword() {
     // Recupera l'indirizzo email inserito dall'utente
     let email = document.getElementById("passwordDimenticataEmail").value;
+
+
+    // Verifica se il campo email è compilato
+    if (email.trim() === "") {
+        // Mostra un messaggio di errore e esci dalla funzione
+        document.getElementById("errorMessage").innerText = "Inserisci un indirizzo email valido.";
+        return;
+    }
+
+    console.log(email);
 
     // Esegui una richiesta AJAX al server per verificare l'email
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "password_dimenticata.php", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 // La richiesta al server è stata completata con successo
                 var response = JSON.parse(xhr.responseText);
-                
-                if (response.success) {
+
+                if (response === "true") {
                     // Email valida, mostra un messaggio di successo
-                    document.getElementById("recPassSuccessMessage").innerText = response.message;
-                } else {
+                    document.getElementById("recPassSuccessMessage").innerText = "Mail inviata con successo.";
+                } else if (response === "false") {
                     // Email non valida, mostra un messaggio di errore
-                    document.getElementById("errorMessage").innerText = response.message;
+                    document.getElementById("errorMessage").innerText = "Errore, mail non inviata.";
+                } else if (response === "falseAccount") {
+                    document.getElementById("errorMessage").innerText = "Errore, nessun account registrato con questa mail";
                 }
             } else {
                 // Gestisci gli errori
@@ -612,9 +623,12 @@ function inviaRichiestaRecuperoPassword(){
             }
         }
     };
-
-    // Invia l'email al server
-    xhr.send("email=" + email);
+    const data = {
+        email: email
+    };
+    const jsonData = JSON.stringify(data);
+    xhr.send(jsonData);
+    
     passwordDimenticataPopUp.style.display = "none";
     registratiChoiceButton.style.display = "none";
     let recuperoPasswordSuccessMessage = document.querySelector("#recuperoPasswordSuccessMessage");
