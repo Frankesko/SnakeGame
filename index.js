@@ -110,8 +110,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 password: loginPassword
             };
 
-            console.log(loginUsername);
-            console.log(loginPassword);
+            
             let xhr = new XMLHttpRequest();
             xhr.open("POST", "verifica_accesso.php", true); // Assicurati che l'URL sia corretto
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -126,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             usernameUtenteLoggato = loginUsername;
                             testoSpiegazioneGioco.style.display = "none";
                             mostraUsernameIfLoggato.style.display = "block";
-                            //mostraUsernameIfLoggato.textContent = logicadeldb
+                            mostraUsernameIfLoggato.textContent = usernameUtenteLoggato;
                             startContainer.style.display = "block";
                             getCoins(usernameUtenteLoggato);
                             playButton.addEventListener("click", function() {

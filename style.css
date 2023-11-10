@@ -465,7 +465,7 @@ body {
 }
 
 
-#chiudiLoginPopUpButton, #chiudiRegistratiPopUpButton, #chiudiPasswordDimenticataPopUpButton {
+#chiudiLoginPopUpButton, #chiudiRegistratiPopUpButton, #chiudiPasswordDimenticataPopUpButton{
     position: absolute;
     top: 5.5%;
     right: 5.5%;
@@ -475,6 +475,18 @@ body {
     border-radius: 100px;
     font-size: 14px;
 }
+
+#chiudiShopPopUpButton {
+    position: absolute;
+    top: 5.5%;
+    right: 5.5%;
+    background-color: #fff; 
+    border: none;
+    cursor: pointer; 
+    border-radius: 100px;
+    font-size: 14px;
+}
+
 /*
 @media (max-width: 768px) {
     #gameContainer {
