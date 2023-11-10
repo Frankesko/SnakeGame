@@ -1,7 +1,7 @@
 const gameBoard = document.querySelector("#gameBoard");
 const ctx = gameBoard.getContext("2d");
 const scoreText = document.querySelector("#scoreText");
-const resetBtn = document.querySelector("#resetBtn");
+const resetBtn = document.getElementById("resetBtn");
 const pauseBtn = document.querySelector("#pauseBtn");
 const shopBtn = document.querySelector("#shopBtn");
 const loginRegistratiContainer = document.querySelector("#loginRegistratiButtons");
@@ -132,14 +132,13 @@ document.addEventListener("DOMContentLoaded", function() {
                             startContainer.style.display = "block";
                             getIdUtente(usernameUtenteLoggato)
                             .then(id => {
-                                id_utente = id;
+                               id_utente = id;
                             })
                             getCoins(usernameUtenteLoggato);
                             playButton.addEventListener("click", function() {
-                                
                                 startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer
                                 gameStart(); // E poi avvierà il gioco
-                               
+                                login = true;
                             });
                             
                         } else if (response === "usernameFalse") {
@@ -424,15 +423,11 @@ function displayGameOver() {
         ctx.fillText("Gnam!", gameWidth / 2, gameHeight / 2);
     }
 
-    running = false;
+    running = false;    
+    inviaPunteggioAlServer(id_utente, score, numFood, unitSize, speed);
+    scoreInFinePartita.textContent = `Score: ${score}`;
+    riepilogoPartitaFinita.style.display = "block";
 
-    try {
-        inviaPunteggioAlServer(id_utente, score, numFood, unitSize, speed);
-        scoreInFinePartita.textContent = `Score: ${score}`;
-        riepilogoPartitaFinita.style.display = "block";
-    } catch (error) {
-        console.error("Errore durante l'invio del punteggio al server:", error);
-    }
 }
 
 function resetGame() {
@@ -632,7 +627,7 @@ function inviaRichiestaRecuperoPassword() {
             if (xhr.status === 200) {
                 // Resto del codice per gestire la risposta dal server
                 var response = xhr.responseText;
-                console.log(response);
+                
                 if (response === "true") {
                     // Email valida, mostra un messaggio di successo
                     document.getElementById("recPassSuccessMessage").innerText = " Mail inviata, esegui il login con la nuova password.";
@@ -740,7 +735,7 @@ function getIdUtente(usernameUtenteLoggato) {
                         resolve(response.id_utente);
                     } else {
                         reject("Utente non trovato o non autenticato");
-                        console.log(response.id_utente);
+                        
                     }
                 } else {
                     reject("Errore nella richiesta AJAX");
@@ -760,7 +755,7 @@ function getIdUtente(usernameUtenteLoggato) {
 
 function inviaPunteggioAlServer(id_utente, score, numeroCibo, dimensioneSerpente, speed) {
     
-    console.log(id_utente);
+    
     // Dati da inviare al server
     
 
@@ -773,7 +768,6 @@ function inviaPunteggioAlServer(id_utente, score, numeroCibo, dimensioneSerpente
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 // La richiesta al server è stata completata con successo
-                console.log(xhr.responseText);
             } else {
                 // Gestisci gli errori
                 console.error("Errore nella richiesta AJAX");
