@@ -2,12 +2,10 @@ http://localhost/index.html link gioco
 https://localhost/phpmyadmin/index.php?route=/sql&pos=0&db=snakedb&table=utenti
 
 
-VERIFICARE PASS DIMENTICATA
-
-
-
-non fare cliccare password dimenticata(lasecondaovotla) se c'è il campo vuoot
+recupero pass non può funzionare finchè non riesco a mandare la mail
 il check sulla mail presente nel db non funziona
+
+
 
 LOGIN NON FUNZIONA
 

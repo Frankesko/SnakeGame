@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         if (xhr.readyState === 4) {
                             if (xhr.status === 200) {
                                 // Elabora la risposta dal server, se necessario
-                                console.log(xhr.responseText);
+                                
                                 // Chiudi il modulo di registrazione se la registrazione è avvenuta con successo
                                 registratiPopup.style.display = "none";
                                 registratiChoiceButton.style.display = "none";
@@ -587,7 +587,6 @@ function inviaRichiestaRecuperoPassword() {
     // Recupera l'indirizzo email inserito dall'utente
     let email = document.getElementById("passwordDimenticataEmail").value;
 
-
     // Verifica se il campo email è compilato
     if (email.trim() === "") {
         // Mostra un messaggio di errore e esci dalla funzione
@@ -595,7 +594,14 @@ function inviaRichiestaRecuperoPassword() {
         return;
     }
 
-    console.log(email);
+    // Verifica se l'indirizzo email è valido utilizzando la funzione isEmailValid
+    if (!isEmailValid(email)) {
+        // Mostra un messaggio di errore e esci dalla funzione
+        document.getElementById("errorMessage").innerText = "Inserisci un indirizzo email valido.";
+        return;
+    }
+
+    // Continua solo se l'indirizzo email è valido
 
     // Esegui una richiesta AJAX al server per verificare l'email
     let xhr = new XMLHttpRequest();
@@ -605,15 +611,19 @@ function inviaRichiestaRecuperoPassword() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                // La richiesta al server è stata completata con successo
-                var response = JSON.parse(xhr.responseText);
-
+                // Resto del codice per gestire la risposta dal server
+                var response = xhr.responseText;
+                console.log(response);
                 if (response === "true") {
                     // Email valida, mostra un messaggio di successo
-                    document.getElementById("recPassSuccessMessage").innerText = "Mail inviata con successo.";
+                    document.getElementById("recPassSuccessMessage").innerText = " Mail inviata, esegui il login con la nuova password.";
+                    let recuperoPasswordSuccessMessage = document.querySelector("#recuperoPasswordSuccessMessage");
+                    recuperoPasswordSuccessMessage.style.display = "block";
                 } else if (response === "false") {
                     // Email non valida, mostra un messaggio di errore
-                    document.getElementById("errorMessage").innerText = "Errore, mail non inviata.";
+                    document.getElementById("recPassSuccessMessage").innerText = "Errore durante l'invio della mail";
+                    let recuperoPasswordSuccessMessage = document.querySelector("#recuperoPasswordSuccessMessage");
+                    recuperoPasswordSuccessMessage.style.display = "block";
                 } else if (response === "falseAccount") {
                     document.getElementById("errorMessage").innerText = "Errore, nessun account registrato con questa mail";
                 }
@@ -631,11 +641,8 @@ function inviaRichiestaRecuperoPassword() {
     
     passwordDimenticataPopUp.style.display = "none";
     registratiChoiceButton.style.display = "none";
-    let recuperoPasswordSuccessMessage = document.querySelector("#recuperoPasswordSuccessMessage");
-    recuperoPasswordSuccessMessage.style.display = "block";
     loginRegistratiContainer.style.display = "flex";
 }
-
 
 function getCoins(username) {
     let xhr = new XMLHttpRequest();

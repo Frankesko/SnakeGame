@@ -7,9 +7,10 @@ if (!$data) {
 } else {
     $email = $data->email;
 
+
     // Esegui una query per verificare se l'email è presente nel database
-    $stmt = $conn->prepare("SELECT * FROM utenti WHERE email = ?");
-    $stmt->execute([$username]);
+    $stmt = $conn->prepare("SELECT COUNT(*) as count FROM utenti WHERE email = ?");
+    $stmt->execute([$email]);
 
     if ($stmt->rowCount() > 0) {
         // L'email è presente nel database, genera un codice casuale di 5 cifre
@@ -30,6 +31,6 @@ if (!$data) {
         } 
     } else {
             echo "falseAccount";
-        }
+    }
 }
 ?>
