@@ -39,6 +39,8 @@ const recuperoPasswordBtn = document.getElementById("recuperoPasswordBtn");
 const chiudiLoginPopUpButton = document.getElementById("chiudiLoginPopUpButton");
 const chiudiRegistratiPopUpButton = document.getElementById("chiudiRegistratiPopUpButton");
 const chiudiPasswordDimenticataPopUpButton = document.getElementById("chiudiPasswordDimenticataPopUpButton");
+const chiudiShopPopUpButton = document.getElementById("chiudiShopPopUpButton");
+const chiudiImpostazioniPopUpButton = document.getElementById("chiudiImpostazioniPopUpButton");
 
 
 const gameWidth = gameBoard.width;
@@ -91,7 +93,8 @@ recuperoPasswordBtn.addEventListener("click", inviaRichiestaRecuperoPassword);
 chiudiLoginPopUpButton.addEventListener("click", chiudiLogin);
 chiudiRegistratiPopUpButton.addEventListener("click", chiudiRegistrati);
 chiudiPasswordDimenticataPopUpButton.addEventListener("click", chiudiPasswordDimenticata);
-
+chiudiShopPopUpButton.addEventListener("click", saveSettings);
+chiudiImpostazioniPopUpButton.addEventListener("click", closeShop)
 
 document.addEventListener("DOMContentLoaded", function() {
     loginChoiceButton.addEventListener("click", function() {
@@ -542,6 +545,7 @@ function openShop(){
 
 function closeShop(){
     negozioContainer.style.display = "none";
+
 }
 
 function openLeaderBoards(){

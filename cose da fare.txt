@@ -24,8 +24,7 @@ immagini frutta per cibo (anche nello shop)
 leaderboards personali
 leaderboards di tutti 
 
-chiusura impostazioni
-chiusura shop
+
 chiusura leaderboards
 
 nello shop:
@@ -45,8 +44,7 @@ immagini frutta per cibo
 controllo completamento gioco
 messaggio per completamento gioco
 
-chiusura impostazioni
-chiusura shop
+
 chiusura leaderboards
 salvataggio impostazioni
 
@@ -57,6 +55,5 @@ fare un modifica account
 
 
 db:
-salvataggio impostazioni 
-salvataggio dati sul db a fine game
-nella tabella "partite" salvare anche la quantità di cibo
+salvataggio impostazioni nel db   (savesettings())
+salvataggio dati sul db a fine game e aggiungere lo score ai coins
