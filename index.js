@@ -30,7 +30,7 @@ const shopBtnInFinePartita = document.querySelector("#shopBtnInFinePartita");
 const settingsBtnInFinePartita = document.querySelector("#settingsBtnInFinePartita");
 const leaderBoardsButtonInFinePartita = document.querySelector("#leaderBoardsButtonInFinePartita");
 const leaderBoardsButton = document.querySelector("#leaderBoardsButton");
-const leaderBoardsContainer = document.querySelector("#leaderBoardsContainer");
+const leaderBoardsContainer = document.querySelector("#container");
 const chiudiLeaderBoardsContainerBtn = document.querySelector("#chiudiLeaderBoardsContainerBtn");
 const passwordDimenticataBtn = document.getElementById("passwordDimenticata");
 const passwordDimenticataPopUp = document.getElementById("passwordDimenticataPopUp");
@@ -79,22 +79,22 @@ resetBtn.addEventListener("click", resetGame);
 pauseBtn.addEventListener("click", pauseGame);
 riprendiBtn.addEventListener("click", continueGame);
 settingsBtn.addEventListener("click", openSettings);
-chiudiImpostazioniContainerBtn.addEventListener("click", closeSettings);
+chiudiImpostazioniContainerBtn.addEventListener("click", saveSettings);
 shopBtn.addEventListener("click", openShop);
 chiudiNegozioBtn.addEventListener("click", closeShop);
 shopBtnInFinePartita.addEventListener("click", openShop);
 settingsBtnInFinePartita.addEventListener("click", openSettings);
 leaderBoardsButton.addEventListener("click", openLeaderBoards);
 leaderBoardsButtonInFinePartita.addEventListener("click", openLeaderBoards);
-chiudiLeaderBoardsContainerBtn.addEventListener("click", closeLeaderBoards);
 passwordDimenticataBtn.addEventListener("click", passwordDimenticata);
 recuperoPasswordBtn.addEventListener("click", inviaRichiestaRecuperoPassword);
 
+chiudiLeaderBoardsContainerBtn.addEventListener("click", closeLeaderBoards);
 chiudiLoginPopUpButton.addEventListener("click", chiudiLogin);
 chiudiRegistratiPopUpButton.addEventListener("click", chiudiRegistrati);
 chiudiPasswordDimenticataPopUpButton.addEventListener("click", chiudiPasswordDimenticata);
-chiudiShopPopUpButton.addEventListener("click", saveSettings);
-chiudiImpostazioniPopUpButton.addEventListener("click", closeShop)
+chiudiShopPopUpButton.addEventListener("click", closeShop);
+chiudiImpostazioniPopUpButton.addEventListener("click", closeSettings)
 
 document.addEventListener("DOMContentLoaded", function() {
     loginChoiceButton.addEventListener("click", function() {
@@ -533,10 +533,12 @@ function openSettings() {
 
 function saveSettings(){
     impostazioniContainer.style.display = "none";
+    
 }
 
 function closeSettings(){
     impostazioniContainer.style.display = "none";
+    
 }
 
 function openShop(){
@@ -545,7 +547,7 @@ function openShop(){
 
 function closeShop(){
     negozioContainer.style.display = "none";
-
+    
 }
 
 function openLeaderBoards(){

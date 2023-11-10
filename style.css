@@ -477,6 +477,81 @@ body {
 }
 
 
+
+#container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 3;
+    width: 15%;
+    height: 38%;
+    background-color: #f2f2f2;
+    padding: 10px;
+    border: 3px solid black;
+    border-radius: 12px;
+}
+
+#leaderBoardsContainer {
+    text-align: center;
+    column-count: 2;
+    column-gap: 20px;
+}
+
+#personalBestLeaderBoard,
+#generalBestLeaderBoard {
+    display: inline-block;
+    width: 40%;
+    padding: 5px;
+    padding-top: 0px;
+    border: 1px solid black;
+    box-sizing: border-box;
+    margin: 5px ;
+    border-radius: 10px;
+}
+.personalBest span,
+.generalBest span {
+    display: block;
+    margin: 5px 0;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: white;
+}
+
+#PBContainer1,
+#PBContainer2,
+#PBContainer3,
+#PBContainer4,
+#PBContainer5,
+#GBContainer1,
+#GBContainer2,
+#GBContainer3,
+#GBContainer4,
+#GBContainer5 {
+    border: 1px solid black; /* Puoi regolare lo stile e il colore del bordo a tuo piacimento */
+    padding: 4px; /* Aggiunto padding per separare il contenuto dal bordo */
+    margin-bottom: 10px; /* Aggiunto margine in basso per separare i container */
+    border-radius: 20px;
+}
+
+#chiudiLeaderBoardsContainerBtn {
+    position: absolute;
+    bottom: 1.8%; /* Regola la distanza dal fondo del container */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 7px 14px;
+    background-color: #0074D9;
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 14px;
+    cursor: pointer;
+    z-index: 4;
+}
+
+
 /*
 @media (max-width: 768px) {
     #gameContainer {

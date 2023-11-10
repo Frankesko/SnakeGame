@@ -21,11 +21,8 @@ dare i propri migliori punteggi
 html/css:
 immagini frutta per cibo (anche nello shop)
 
-leaderboards personali
-leaderboards di tutti 
 
 
-chiusura leaderboards
 
 nello shop:
 mostra "imposta" (in blu) se è "si" nel db  
@@ -45,7 +42,7 @@ controllo completamento gioco
 messaggio per completamento gioco
 
 
-chiusura leaderboards
+
 salvataggio impostazioni
 
 leaderboards personali
