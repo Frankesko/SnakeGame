@@ -6,15 +6,9 @@ recupero pass non può funzionare finchè non riesco a mandare la mail il check 
 
 
 
-
-
-
-
-
 restful // soap etc:
 dare classifica migliori punteggi
 dare i propri migliori punteggi
-
 
 
 html/css:

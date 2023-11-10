@@ -6,7 +6,7 @@ $data = json_decode(file_get_contents("php://input"));
 
 if(!$data){
     echo "Dati non validi o mancanti.";
-}   
+} else {
     $username = $data->username;
     $username = trim($username);
     error_log("Received username: " . $username);
@@ -24,6 +24,6 @@ if(!$data){
     }
 
     echo json_encode($response);
-
+}
 
 ?>

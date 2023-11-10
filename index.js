@@ -46,9 +46,9 @@ const chiudiImpostazioniPopUpButton = document.getElementById("chiudiImpostazion
 const gameWidth = gameBoard.width;
 const gameHeight = gameBoard.height;
 const boardBackground = "white";
-const snakeColor = "orange";
-const snakeBorder = "orange";
-const foodColor = "red";
+let snakeColor = "orange";
+let snakeBorder = "orange";
+let foodColor = "red";
 let unitSize = 25;
 let running = false;
 let isPaused = false;
@@ -79,7 +79,6 @@ resetBtn.addEventListener("click", resetGame);
 pauseBtn.addEventListener("click", pauseGame);
 riprendiBtn.addEventListener("click", continueGame);
 settingsBtn.addEventListener("click", openSettings);
-chiudiImpostazioniContainerBtn.addEventListener("click", saveSettings);
 shopBtn.addEventListener("click", openShop);
 chiudiNegozioBtn.addEventListener("click", closeShop);
 shopBtnInFinePartita.addEventListener("click", openShop);
@@ -137,6 +136,8 @@ document.addEventListener("DOMContentLoaded", function() {
                             getCoins(usernameUtenteLoggato);
                             playButton.addEventListener("click", function() {
                                 startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer
+                                loadSettings();
+                                console.log("loadsettings prova");
                                 gameStart(); // E poi avvierà il gioco
                                 login = true;
                             });
@@ -537,18 +538,76 @@ function openSettings() {
     ciboSelect.addEventListener("change", function() {
         numFood = parseInt(this.value)
     });
+
+    chiudiImpostazioniContainerBtn.addEventListener("click", function() {
+        // Chiamare la funzione di salvataggio con i parametri corretti
+        saveSettings(numFood, unitSize, speed, foodColor, snakeColor);
+    });
 }
 
 
-function saveSettings(){
-    impostazioniContainer.style.display = "none";
+function saveSettings(numFood, unitSize, speed, colore_cibo_selezionato, colore_serpente_selezionato){
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "salva_impostazioni.php", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                console.log("tutto ok");
+            } else {
+                // Gestisci gli errori
+                console.error("Errore nella richiesta AJAX");
+            }
+        }
+    };
+
+    data = {
+        id_utente: id_utente,
+        numFood: numFood,
+        unitSize: unitSize,
+        speed: speed,
+        colore_serpente_selezionato: colore_serpente_selezionato,
+        colore_cibo_selezionato: colore_cibo_selezionato
+    };
+
+    const jsonData = JSON.stringify(data);
+    xhr.send(jsonData);
     
+    impostazioniContainer.style.display = "none";
 }
 
 function closeSettings(){
     impostazioniContainer.style.display = "none";
-    
 }
+
+function loadSettings(){
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "carica_impostazioni.php", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                // Elabora la risposta del server
+                var response = JSON.parse(xhr.responseText);
+                if (response.numero_cibo && response.dimensione_serpente
+                && response.speed && response.colore_cibo_selezionato && response.colore_serpente_selezionato) {
+                    numFood = response.numero_cibo;
+                    unitSize = response.dimensione_serpente;
+                    speed = response.speed;
+                    snakeColor = response.colore_cibo_selezionato;
+                    snakeBorder = snakeColor;
+                    foodColor = response.colore_cibo_selezionato;
+                } else {
+                    console.log("La risposta del server non contiene i campi attesi.");
+                }
+            } else {
+                console.log("Errore durante la richiesta al server. Codice di stato: " + xhr.status);
+            }
+        }
+    };
+    xhr.send();
+}
+
 
 function openShop(){
     negozioContainer.style.display = "block";
