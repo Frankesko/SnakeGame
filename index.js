@@ -236,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 function gameStart() {
-    running = true;
+    running = true;    
     impostazioniContainer.style.display = "none";
     // Avvia un intervallo per il timer
     timerInterval = setInterval(() => {
@@ -427,7 +427,7 @@ function displayGameOver() {
     inviaPunteggioAlServer(id_utente, score, numFood, unitSize, speed);
     scoreInFinePartita.textContent = `Score: ${score}`;
     riepilogoPartitaFinita.style.display = "block";
-
+    getCoins(usernameUtenteLoggato);
 }
 
 function resetGame() {
