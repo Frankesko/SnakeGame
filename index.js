@@ -72,7 +72,7 @@ let isRestarted = false;
 let speed = 100;
 let numFood = 1;
 let usernameUtenteLoggato;
-
+let id_utente;
 
 window.addEventListener("keydown", changeDirection);
 resetBtn.addEventListener("click", resetGame);
@@ -130,10 +130,16 @@ document.addEventListener("DOMContentLoaded", function() {
                             mostraUsernameIfLoggato.style.display = "block";
                             mostraUsernameIfLoggato.textContent = usernameUtenteLoggato;
                             startContainer.style.display = "block";
+                            getIdUtente(usernameUtenteLoggato)
+                            .then(id => {
+                                id_utente = id;
+                            })
                             getCoins(usernameUtenteLoggato);
                             playButton.addEventListener("click", function() {
+                                
                                 startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer
                                 gameStart(); // E poi avvierà il gioco
+                               
                             });
                             
                         } else if (response === "usernameFalse") {
@@ -407,19 +413,27 @@ function checkGameOver(){
         }
     }
 };
-function displayGameOver(){
+function displayGameOver() {
     ctx.font = "50px MV Boli";
     ctx.fillStyle = "black";
     ctx.textAlign = "center";
-    if(persoControIlMuro)
+    
+    if (persoControIlMuro) {
         ctx.fillText("Boink!", gameWidth / 2, gameHeight / 2);
-    else {
+    } else {
         ctx.fillText("Gnam!", gameWidth / 2, gameHeight / 2);
     }
+
     running = false;
-    scoreInFinePartita.textContent =  `Score: ${score}`;
-    riepilogoPartitaFinita.style.display = "block";
-};
+
+    try {
+        inviaPunteggioAlServer(id_utente, score, numFood, unitSize, speed);
+        scoreInFinePartita.textContent = `Score: ${score}`;
+        riepilogoPartitaFinita.style.display = "block";
+    } catch (error) {
+        console.error("Errore durante l'invio del punteggio al server:", error);
+    }
+}
 
 function resetGame() {
     if(login && !running){
@@ -708,4 +722,73 @@ function isEmailValid(email) {
 
     // Verifica se l'indirizzo email corrisponde all'espressione regolare
     return emailRegex.test(email);
+}
+
+
+function getIdUtente(usernameUtenteLoggato) {
+    return new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "prendi_id_utente.php", true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    let response = JSON.parse(xhr.responseText);
+
+                    if (response.success) {
+                        resolve(response.id_utente);
+                    } else {
+                        reject("Utente non trovato o non autenticato");
+                        console.log(response.id_utente);
+                    }
+                } else {
+                    reject("Errore nella richiesta AJAX");
+                    console.error("Errore nella richiesta AJAX");
+                }
+            }
+        };
+
+        const data = {
+            username: usernameUtenteLoggato
+        };
+        const jsonData = JSON.stringify(data);
+        xhr.send(jsonData);
+    });
+}
+
+
+function inviaPunteggioAlServer(id_utente, score, numeroCibo, dimensioneSerpente, speed) {
+    
+    console.log(id_utente);
+    // Dati da inviare al server
+    
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "salva_partita_in_db.php", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+    // Callback che verrà eseguita quando lo stato della richiesta cambia
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                // La richiesta al server è stata completata con successo
+                console.log(xhr.responseText);
+            } else {
+                // Gestisci gli errori
+                console.error("Errore nella richiesta AJAX");
+            }
+        }
+    };
+
+    const data = {
+        id_utente: id_utente, 
+        score: score,
+        numero_cibo: numeroCibo,
+        dimensione_serpente: dimensioneSerpente,
+        speed: speed
+    };
+
+const jsonData = JSON.stringify(data);
+    xhr.send(jsonData);
 }
