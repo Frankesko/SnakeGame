@@ -31,6 +31,7 @@ const settingsBtnInFinePartita = document.querySelector("#settingsBtnInFineParti
 const leaderBoardsButtonInFinePartita = document.querySelector("#leaderBoardsButtonInFinePartita");
 const leaderBoardsButton = document.querySelector("#leaderBoardsButton");
 const leaderBoardsContainer = document.querySelector("#container");
+const sottocontaienrLeaderBoardsContainer = document.getElementById("leaderBoardsContainer");
 const chiudiLeaderBoardsContainerBtn = document.querySelector("#chiudiLeaderBoardsContainerBtn");
 const passwordDimenticataBtn = document.getElementById("passwordDimenticata");
 const passwordDimenticataPopUp = document.getElementById("passwordDimenticataPopUp");
@@ -74,6 +75,10 @@ let numFood = 1;
 let usernameUtenteLoggato;
 let id_utente;
 
+let prevSpeed;
+let prevNumFood;
+let prevUnitSize;    
+
 window.addEventListener("keydown", changeDirection);
 resetBtn.addEventListener("click", resetGame);
 pauseBtn.addEventListener("click", pauseGame);
@@ -83,8 +88,14 @@ shopBtn.addEventListener("click", openShop);
 chiudiNegozioBtn.addEventListener("click", closeShop);
 shopBtnInFinePartita.addEventListener("click", openShop);
 settingsBtnInFinePartita.addEventListener("click", openSettings);
-leaderBoardsButton.addEventListener("click", openLeaderBoards);
-leaderBoardsButtonInFinePartita.addEventListener("click", openLeaderBoards);
+leaderBoardsButton.addEventListener("click", function() {
+    openLeaderBoards(id_utente);
+});
+
+leaderBoardsButtonInFinePartita.addEventListener("click", function() {
+    openLeaderBoards(id_utente);
+});
+
 passwordDimenticataBtn.addEventListener("click", passwordDimenticata);
 recuperoPasswordBtn.addEventListener("click", inviaRichiestaRecuperoPassword);
 
@@ -133,14 +144,11 @@ document.addEventListener("DOMContentLoaded", function() {
                             .then(id => {
                                id_utente = id;
                             })
+                            console.log("aaasddsadada");
                             getCoins(usernameUtenteLoggato);
                             playButton.addEventListener("click", function() {
                                 startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer
                                 loadSettings(id_utente);
-                                getTopScores(id_utente)
-                                .then(scores => {
-                                    console.log("punteggi:", scores);
-                                })
                                 gameStart(); // E poi avvierà il gioco
                                 login = true;
                             });
@@ -524,6 +532,10 @@ function openSettings() {
     if (!running && !isPaused)
         impostazioniContainer.style.display = "block";
 
+    prevSpeed = speed;
+    prevNumFood = numFood;
+    prevUnitSize = unitSize;
+
     // Inverti il valore di speed prima di visualizzarlo
     speedValue.textContent = 251 - speed; // Mostra il valore in modo invertito
 
@@ -582,6 +594,9 @@ function saveSettings(numFood, unitSize, speed, colore_cibo_selezionato, colore_
 }
 
 function closeSettings(){
+    speed = prevSpeed;
+    numFood = prevNumFood;
+    unitSize = prevUnitSize;
     impostazioniContainer.style.display = "none";
 }
 
@@ -628,9 +643,76 @@ function closeShop(){
     
 }
 
-function openLeaderBoards(){
-    leaderBoardsContainer.style.display = "block";
+function openLeaderBoards(id_utente) {
+    const allBestUrl = 'http://localhost/get_best_score.php';
+    const myBestUrl = `http://localhost/get_my_best_score.php?id_utente=${id_utente}`;
+
+    Promise.all([
+        fetch(allBestUrl).then(response => response.json()),
+        fetch(myBestUrl).then(response => response.json())
+    ])
+    .then(([allBestData, myBestData]) => {
+        console.log('Dati dei punteggi generali:', allBestData);
+        console.log('Dati dei miei punteggi:', myBestData);
+
+        // Ottieni il riferimento al container nel tuo HTML
+        const generalBestLeaderBoard = document.getElementById('generalBestLeaderBoard');
+        const personalBestLeaderBoard = document.getElementById('personalBestLeaderBoard');
+
+        // Rimuovi eventuali elementi esistenti nei container
+        generalBestLeaderBoard.innerHTML = '';
+        personalBestLeaderBoard.innerHTML = '';
+
+        // Funzione per creare gli elementi HTML
+        const createScoreElement = (score) => {
+            const scoreContainer = document.createElement('div');
+            scoreContainer.setAttribute('class', 'scoreContainer');
+
+            const usernameElement = document.createElement('span');
+            usernameElement.textContent = `Utente: ${score.username}`;
+
+            const spaceElement = document.createElement('br');
+
+            const scoreElement = document.createElement('span');
+            scoreElement.textContent = `Punteggio: ${score.score}`;
+
+            scoreContainer.appendChild(usernameElement);
+            scoreContainer.appendChild(spaceElement);
+            scoreContainer.appendChild(scoreElement);
+
+            return scoreContainer;
+        };
+
+        const textBest = document.createElement('p');
+        textBest.textContent = "Best score";
+        const textMyBest = document.createElement('p');
+        textMyBest.textContent = "My best score";
+
+        // Itera attraverso i dati generali e crea gli elementi HTML
+        generalBestLeaderBoard.appendChild(textBest);
+        allBestData.forEach(score => {
+            const scoreContainer = createScoreElement(score);
+            generalBestLeaderBoard.appendChild(scoreContainer);
+        });
+
+        // Itera attraverso i dati personali e crea gli elementi HTML
+        personalBestLeaderBoard.appendChild(textMyBest);
+        myBestData.forEach(score => {
+            const scoreContainer = createScoreElement(score);
+            personalBestLeaderBoard.appendChild(scoreContainer);
+        });
+
+        // Mostra i container dei leaderboard
+        generalBestLeaderBoard.style.display = 'block';
+        personalBestLeaderBoard.style.display = 'block';
+        leaderBoardsContainer.style.display = 'block';
+    })
+    .catch(error => {
+        console.error('Errore durante la richiesta dei punteggi:', error);
+    });
 }
+
+
 
 function closeLeaderBoards(){
     leaderBoardsContainer.style.display = "none";
@@ -856,26 +938,3 @@ const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
 }
 
-
-
-function getTopScores(id_utente) {
-    const url = `http://localhost/index.html/scores?id_utente=${id_utente}&limit=${5}`;
-  
-    return fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Errore nella richiesta: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        // Fai qualcosa con i dati restituiti (ad esempio, visualizzali nella console)
-        console.log(data);
-        return data; // Puoi restituire i dati se necessario
-      })
-      .catch(error => {
-        console.error('Errore durante la richiesta:', error);
-        throw error; // Puoi gestire l'errore o lanciarlo di nuovo
-      });
-  }
-  

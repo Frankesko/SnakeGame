@@ -6,12 +6,6 @@ recupero pass non può funzionare finchè non riesco a mandare la mail il check 
 
 
 
-
-restful // soap etc:
-dare classifica migliori punteggi
-dare i propri migliori punteggi
-
-
 html/css:
 immagini frutta per cibo (anche nello shop)
 
@@ -36,8 +30,6 @@ controllo completamento gioco
 messaggio per completamento gioco
 
 
-leaderboards personali
-leaderboards di tutti 
 
 
 

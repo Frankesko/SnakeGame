@@ -333,6 +333,7 @@ body {
     column-count: 2; 
     column-gap: 20px; 
     
+    
 }
 
 #shop-item {
@@ -493,16 +494,17 @@ body {
     border-radius: 12px;
 }
 
-#leaderBoardsContainer {
+.leaderBoardsContainer {
     text-align: center;
     column-count: 2;
     column-gap: 20px;
+    display: flex;
+    align-items: flex-start; /* Allinea i leaderboard in alto */
 }
 
-#personalBestLeaderBoard,
-#generalBestLeaderBoard {
+.leaderboard {
     display: inline-block;
-    width: 40%;
+    width: 100%;
     padding: 5px;
     padding-top: 0px;
     border: 1px solid black;
@@ -510,29 +512,16 @@ body {
     margin: 5px ;
     border-radius: 10px;
 }
-.personalBest span,
-.generalBest span {
-    display: block;
-    margin: 5px 0;
-    padding: 10px;
-    border: 1px solid black;
-    border-radius: 5px;
-    background-color: white;
+
+.scoreContainer p{
+    margin: 0;
+    padding: 0;
 }
 
-#PBContainer1,
-#PBContainer2,
-#PBContainer3,
-#PBContainer4,
-#PBContainer5,
-#GBContainer1,
-#GBContainer2,
-#GBContainer3,
-#GBContainer4,
-#GBContainer5 {
+.scoreContainer {
     border: 1px solid black; /* Puoi regolare lo stile e il colore del bordo a tuo piacimento */
     padding: 4px; /* Aggiunto padding per separare il contenuto dal bordo */
-    margin-bottom: 10px; /* Aggiunto margine in basso per separare i container */
+    margin-bottom: 4px; /* Aggiunto margine in basso per separare i container */
     border-radius: 20px;
 }
 
