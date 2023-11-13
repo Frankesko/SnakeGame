@@ -136,8 +136,8 @@ document.addEventListener("DOMContentLoaded", function() {
                             getCoins(usernameUtenteLoggato);
                             playButton.addEventListener("click", function() {
                                 startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer
-                                loadSettings();
-                                console.log("loadsettings prova");
+                                loadSettings(id_utente);
+                                console.log("loadsettings provaYGVRSD");
                                 gameStart(); // E poi avvierà il gioco
                                 login = true;
                             });
@@ -237,6 +237,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 function gameStart() {
+    playButton.disabled = true;
     running = true;    
     impostazioniContainer.style.display = "none";
     // Avvia un intervallo per il timer
@@ -257,6 +258,7 @@ function gameStart() {
 
 function startGame() {
     if(!isRestarted){
+        playButton.disabled = false;
         foods.splice(0, foods.length); // Svuota l'array foods
         for (let i = 0; i < numFood; i++) {
             createFood(); // Chiamata alla funzione per creare il cibo
@@ -553,7 +555,7 @@ function saveSettings(numFood, unitSize, speed, colore_cibo_selezionato, colore_
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                console.log("tutto ok");
+
             } else {
                 // Gestisci gli errori
                 console.error("Errore nella richiesta AJAX");
@@ -580,7 +582,7 @@ function closeSettings(){
     impostazioniContainer.style.display = "none";
 }
 
-function loadSettings(){
+function loadSettings(id_utente){
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "carica_impostazioni.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -594,7 +596,7 @@ function loadSettings(){
                     numFood = response.numero_cibo;
                     unitSize = response.dimensione_serpente;
                     speed = response.speed;
-                    snakeColor = response.colore_cibo_selezionato;
+                    snakeColor = response.colore_serpente_selezionato;
                     snakeBorder = snakeColor;
                     foodColor = response.colore_cibo_selezionato;
                 } else {
@@ -605,7 +607,13 @@ function loadSettings(){
             }
         }
     };
-    xhr.send();
+
+    const data = {
+        id_utente: id_utente
+    };
+    const jsonData = JSON.stringify(data);
+    console.log(jsonData);
+    xhr.send(jsonData);
 }
 
 

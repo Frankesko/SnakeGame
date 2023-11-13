@@ -6,6 +6,7 @@ $data = json_decode(file_get_contents("php://input"));
 if (!$data) {
     echo "Dati non validi o mancanti.";
 } else {
+    $id_utente = $data->id_utente;
 
     $stmt = $conn->prepare("SELECT numero_cibo, dimensione_serpente, speed, colore_serpente_selezionato, colore_cibo_selezionato FROM impostazioni WHERE id_utente = ?");
     $stmt->execute([$id_utente]);
