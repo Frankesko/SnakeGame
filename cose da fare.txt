@@ -36,14 +36,13 @@ controllo completamento gioco
 messaggio per completamento gioco
 
 
-
-salvataggio impostazioni
-
 leaderboards personali
 leaderboards di tutti 
+
+
 
 fare un modifica account
 
 
 db:
-salvataggio impostazioni nel db   (savesettings())
+compra colori

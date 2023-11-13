@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             playButton.addEventListener("click", function() {
                                 startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer
                                 loadSettings(id_utente);
-                                console.log("loadsettings provaYGVRSD");
+                                
                                 gameStart(); // E poi avvierà il gioco
                                 login = true;
                             });
@@ -612,7 +612,6 @@ function loadSettings(id_utente){
         id_utente: id_utente
     };
     const jsonData = JSON.stringify(data);
-    console.log(jsonData);
     xhr.send(jsonData);
 }
 
