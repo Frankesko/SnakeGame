@@ -5,10 +5,8 @@ https://localhost/phpmyadmin/index.php?route=/sql&pos=0&db=snakedb&table=utenti
 recupero pass non può funzionare finchè non riesco a mandare la mail il check sulla mail presente nel db non funziona
 
 
-
 html/css:
 immagini frutta per cibo (anche nello shop)
-
 
 
 

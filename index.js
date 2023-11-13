@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             .then(id => {
                                id_utente = id;
                             })
-                            console.log("aaasddsadada");
+                            
                             getCoins(usernameUtenteLoggato);
                             playButton.addEventListener("click", function() {
                                 startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer
@@ -635,6 +635,7 @@ function loadSettings(id_utente){
 
 
 function openShop(){
+    
     negozioContainer.style.display = "block";
 }
 
