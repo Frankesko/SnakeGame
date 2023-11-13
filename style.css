@@ -488,7 +488,7 @@ body {
     z-index: 3;
     width: 15%;
     height: 38%;
-    background-color: #f2f2f2;
+    background-color: #899a62;
     padding: 10px;
     border: 3px solid black;
     border-radius: 12px;
@@ -511,6 +511,7 @@ body {
     box-sizing: border-box;
     margin: 5px ;
     border-radius: 10px;
+    background-color: #aeba93;
 }
 
 .scoreContainer p{
@@ -523,6 +524,7 @@ body {
     padding: 4px; /* Aggiunto padding per separare il contenuto dal bordo */
     margin-bottom: 4px; /* Aggiunto margine in basso per separare i container */
     border-radius: 20px;
+    background-color: #d4dac5;
 }
 
 #chiudiLeaderBoardsContainerBtn {
@@ -531,13 +533,14 @@ body {
     left: 50%;
     transform: translateX(-50%);
     padding: 7px 14px;
-    background-color: #0074D9;
+    background-color: #aeba93;
     color: white;
     border: none;
     border-radius: 16px;
     font-size: 14px;
     cursor: pointer;
     z-index: 4;
+    color: black;
 }
 
 
