@@ -642,8 +642,46 @@ function openShop(){
 }
 
 function closeShop(){
-    negozioContainer.style.display = "none";
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "save_shop.php", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+
+            } else {
+                // Gestisci gli errori
+                console.error("Errore nella richiesta AJAX");
+            }
+        }
+    };
+
+    data = {
+        id_utente: id_utente,
+        
+        serpente_arancione: serpente_arancione,
+        serpente_verde: serpente_verde,
+        serpente_blu: serpente_blu,
+        serpente_nero: serpente_nero,
+        serpente_rosa: serpente_rosa,
+        serpente_giallo: serpente_giallo,
+        serpente_grigio: serpente_grigio,
+        serpente_rosso: serpente_rosso,
+
+        cibo_arancione: cibo_arancione,
+        cibo_verde:  cibo_verde,
+        cibo_blu: cibo_blu,
+        cibo_nero: cibo_nero,
+        cibo_rosa: cibo_rosa,
+        cibo_giallo: cibo_giallo,
+        cibo_grigio: cibo_grigio,
+        cibo_rosso: cibo_rosso
+    };
+
+    const jsonData = JSON.stringify(data);
+    xhr.send(jsonData);
     
+    negozioContainer.style.display = "none";
 }
 
 function openLeaderBoards(id_utente) {

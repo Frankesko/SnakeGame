@@ -1,7 +1,3 @@
-http://localhost/index.html link gioco
-https://localhost/phpmyadmin/index.php?route=/sql&pos=0&db=snakedb&table=utenti
-
-
 recupero pass non può funzionare finchè non riesco a mandare la mail il check sulla mail presente nel db non funziona
 
 
@@ -25,12 +21,8 @@ buy colori che mettte si nel db e sottrae le monete
 
 immagini frutta per cibo
 
-
 controllo completamento gioco
 messaggio per completamento gioco
-
-
-
 
 
 fare un modifica account
