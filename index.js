@@ -137,7 +137,10 @@ document.addEventListener("DOMContentLoaded", function() {
                             playButton.addEventListener("click", function() {
                                 startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer
                                 loadSettings(id_utente);
-                                
+                                getTopScores(id_utente)
+                                .then(scores => {
+                                    console.log("punteggi:", scores);
+                                })
                                 gameStart(); // E poi avvierà il gioco
                                 login = true;
                             });
@@ -852,3 +855,27 @@ function inviaPunteggioAlServer(id_utente, score, numeroCibo, dimensioneSerpente
 const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
 }
+
+
+
+function getTopScores(id_utente) {
+    const url = `http://localhost/index.html/scores?id_utente=${id_utente}&limit=${5}`;
+  
+    return fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Errore nella richiesta: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Fai qualcosa con i dati restituiti (ad esempio, visualizzali nella console)
+        console.log(data);
+        return data; // Puoi restituire i dati se necessario
+      })
+      .catch(error => {
+        console.error('Errore durante la richiesta:', error);
+        throw error; // Puoi gestire l'errore o lanciarlo di nuovo
+      });
+  }
+  
