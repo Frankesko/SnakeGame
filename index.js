@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             .then(id => {
                                id_utente = id;
                             })
-                            
+                            console.log("bbbbbb");
                             getCoins(usernameUtenteLoggato);
                             playButton.addEventListener("click", function() {
                                 startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer
@@ -440,6 +440,7 @@ function displayGameOver() {
     running = false;    
     inviaPunteggioAlServer(id_utente, score, numFood, unitSize, speed);
     scoreInFinePartita.textContent = `Score: ${score}`;
+    getMyTopScore(id_utente);
     riepilogoPartitaFinita.style.display = "block";
     getCoins(usernameUtenteLoggato);
 }
@@ -494,12 +495,13 @@ function congratulations() {
 
 function pauseGame() {
     if (running && !isPaused) {
+        getMyTopScore(id_utente);
         isPaused = true;
         clearInterval(timerInterval);
         running = false;
-        pauseContainer.style.display = "block";
         document.querySelector("#actualScore").textContent = `Score: ${score}`;
-        //aggiungere il best score
+        pauseContainer.style.display = "block";
+        
     }
 }
 
@@ -732,6 +734,37 @@ function chiudiPasswordDimenticata(){
     loginRegistratiContainer.style.display = "flex";
 }
 
+function getMyTopScore(id_utente){
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "get_my_top_score.php", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                // Elabora la risposta del server
+                var response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    let topScore = response.score;
+                    if(score > topScore) {
+                        document.getElementById("pausaPersonalBest").textContent = ` My best: ${score}`;
+                        document.getElementById("personalBest").textContent = ` My best: ${score}`
+                    } else {
+                        document.getElementById("pausaPersonalBest").textContent = ` My best: ${topScore}`;
+                        document.getElementById("personalBest").textContent = ` My best: ${topScore}`
+                    }
+                } else {
+                    // Gestisci errori o situazioni in cui l'utente non è autenticato
+                }
+            }
+        }
+    };
+    const data = {
+        id_utente: id_utente
+    };
+    const jsonData = JSON.stringify(data);
+    xhr.send(jsonData);
+}
 
 
 

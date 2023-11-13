@@ -209,8 +209,8 @@ body {
     margin-bottom: -15px;
 }
 
-#personalBest {
-    font-size: 24px;
+#personalBest, #pausaPersonalBest {
+    font-size: 20px;
     color: #fff;
 }
 
@@ -326,14 +326,11 @@ body {
     max-width: 90%;
     max-height: 30%; 
     overflow-y: auto; 
-    
 }
 
 #coloriSerpente, #coloriCibo {
     column-count: 2; 
-    column-gap: 20px; 
-    
-    
+    column-gap: 20px;  
 }
 
 #shop-item {

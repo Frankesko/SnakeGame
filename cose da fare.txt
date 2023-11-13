@@ -24,6 +24,8 @@ logica:
 buy colori che mettte si nel db e sottrae le monete
 
 immagini frutta per cibo
+
+
 controllo completamento gioco
 messaggio per completamento gioco
 
