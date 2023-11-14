@@ -153,6 +153,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             playButton.addEventListener("click", function() {
                                 startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer
                                 loadSettings(id_utente);
+                                closeShop(id_utente);
                                 gameStart(); // E poi avvierà il gioco
                                 login = true;
                             });
