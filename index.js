@@ -40,7 +40,7 @@ const recuperoPasswordBtn = document.getElementById("recuperoPasswordBtn");
 const chiudiLoginPopUpButton = document.getElementById("chiudiLoginPopUpButton");
 const chiudiRegistratiPopUpButton = document.getElementById("chiudiRegistratiPopUpButton");
 const chiudiPasswordDimenticataPopUpButton = document.getElementById("chiudiPasswordDimenticataPopUpButton");
-const chiudiShopPopUpButton = document.getElementById("chiudiShopPopUpButton");
+
 const chiudiImpostazioniPopUpButton = document.getElementById("chiudiImpostazioniPopUpButton");
 
 
@@ -96,7 +96,7 @@ let cibo_giallo;
 let cibo_grigio;
 let cibo_rosso;
 
-
+let coins;
 
 
 window.addEventListener("keydown", changeDirection);
@@ -129,9 +129,6 @@ chiudiLeaderBoardsContainerBtn.addEventListener("click", closeLeaderBoards);
 chiudiLoginPopUpButton.addEventListener("click", chiudiLogin);
 chiudiRegistratiPopUpButton.addEventListener("click", chiudiRegistrati);
 chiudiPasswordDimenticataPopUpButton.addEventListener("click", chiudiPasswordDimenticata);
-chiudiShopPopUpButton.addEventListener("click", function() {
-    closeShop(id_utente);
-});
 chiudiImpostazioniPopUpButton.addEventListener("click", closeSettings)
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -173,11 +170,10 @@ document.addEventListener("DOMContentLoaded", function() {
                                id_utente = id;
                             })
                             console.log("cccc");
+                        
                             getCoins(usernameUtenteLoggato);
                             playButton.addEventListener("click", function() {
-                                startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer
-                                loadSettings(id_utente);
-                                closeShop(id_utente);
+                                startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer                
                                 gameStart(); // E poi avvierà il gioco
                                 login = true;
                             });
@@ -560,6 +556,7 @@ function continueGame() {
 
 
 function openSettings() {
+    loadSettings(id_utente);
     if (!running && !isPaused)
         impostazioniContainer.style.display = "block";
 
@@ -665,50 +662,187 @@ function loadSettings(id_utente){
 }
 
 
-function openShop(id_utente){
-    console.log("entrato");
+function openShop(id_utente) {
+    loadShop(id_utente);
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "carica_shop.php", true);
+    xhr.open("POST", "scarica_shop.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 let response = JSON.parse(xhr.responseText);
-                if(response.serpente_arancione && response.serpente_verde && response.serpente_blu && response.serpente_nero && 
-                   response.serpente_rosa && response.serpente_giallo &&  response.serpente_grigio &&  response.serpente_rosso && 
-                   response.cibo_arancione && response.cibo_verde && response.cibo_blu && response.cibo_nero && response.cibo_rosa 
-                   && response.cibo_giallo && response.cibo_grigio && response.cibo_rosso){
-                    serpente_arancione = response.serpente_arancione;
-                    serpente_verde = response.serpente_verde;
-                    serpente_blu = response.serpente_blu;
-                    serpente_nero = response.serpente_nero;
-                    serpente_rosa = response.serpente_rosa;
-                    serpente_giallo = response.serpente_giallo;
-                    serpente_grigio = response.serpente_grigio;
-                    serpente_rosso = response.serpente_rosso;
-                    cibo_arancione = response.cibo_arancione;
-                    cibo_verde = response.cibo_verde;
-                    cibo_blu = response.cibo_blu;
-                    cibo_nero = response.cibo_nero;
-                    cibo_rosa = response.cibo_rosa;
-                    cibo_giallo = response.cibo_giallo;
-                    cibo_grigio = response.cibo_grigio;
-                    cibo_rosso = response.cibo_rosso;
+                if (
+                    response.serpente_arancione &&
+                    response.serpente_verde &&
+                    response.serpente_blu &&
+                    response.serpente_nero &&
+                    response.serpente_rosa &&
+                    response.serpente_giallo &&
+                    response.serpente_grigio &&
+                    response.serpente_rosso &&
+                    response.cibo_arancione &&
+                    response.cibo_verde &&
+                    response.cibo_blu &&
+                    response.cibo_nero &&
+                    response.cibo_rosa &&
+                    response.cibo_giallo &&
+                    response.cibo_grigio &&
+                    response.cibo_rosso
+                ) {                  
 
-                    console.log("ricevuto dati", cibo_giallo);
+                    const coloriSerpenteArray = [
+                        { colore: 'orange', costo: 50, stato: response.serpente_arancione },
+                        { colore: 'green', costo: 50, stato: response.serpente_verde },
+                        { colore: 'blue', costo: 50, stato: response.serpente_blu },
+                        { colore: 'black', costo: 50, stato: response.serpente_nero },
+                        { colore: 'pink', costo: 50, stato: response.serpente_rosa },
+                        { colore: 'yellow', costo: 50, stato: response.serpente_giallo },
+                        { colore: 'gray', costo: 50, stato: response.serpente_grigio },
+                        { colore: 'red', costo: 50, stato: response.serpente_rosso },
+                    ];
+
+                    const coloriCiboArray = [
+                        { colore: 'orange', costo: 50, stato: response.cibo_arancione },
+                        { colore: 'green', costo: 50, stato: response.cibo_verde },
+                        { colore: 'blue', costo: 50, stato: response.cibo_blu },
+                        { colore: 'black', costo: 50, stato: response.cibo_nero },
+                        { colore: 'pink', costo: 50, stato: response.cibo_rosa },
+                        { colore: 'yellow', costo: 50, stato: response.cibo_giallo },
+                        { colore: 'gray', costo: 50, stato: response.cibo_grigio },
+                        { colore: 'red', costo: 50, stato: response.cibo_rosso },
+                    ];
+
                     
+                    const coloriSerpente = document.getElementById("coloriSerpente");
+                    const coloriCibo = document.getElementById("coloriCibo");
 
+                    coloriSerpente.innerHTML = '';
+                    coloriCibo.innerHTML = '';
 
-                    
+                    const createShopItemElement = (item, itemType) => {
+                        const shopItemElement = document.createElement('div');
+                        
 
+                        const itemNameElement = document.createElement('div');
+                        itemNameElement.style.color = item.colore;
+                        itemNameElement.style.fontWeight = "bold";
+                        itemNameElement.style.marginTop = "5px";
+                        itemNameElement.textContent = item.colore;
 
+                        const itemCostElement = document.createElement('div');
+                        itemCostElement.textContent = item.costo;
+                        itemCostElement.style.fontSize = "14px";
+
+                        const buyButton = document.createElement('button');
+                        if(item.stato == "no") {
+                            buyButton.textContent = 'Acquista'
+                            buyButton.style.backgroundColor = 'green';
+                        } else {
+                            if(item.colore == snakeColor || item.colore == foodColor) {
+                                buyButton.textContent = 'Impostato'
+                                buyButton.style.backgroundColor = 'grey';
+                            } else {
+                                buyButton.textContent = 'Imposta'
+                                buyButton.style.backgroundColor = 'blue';
+                            }
+                        }
+
+                        buyButton.style.color = 'white';
+                        buyButton.style.padding = "5px, 10px";
+                        buyButton.style.cursor = "pointer";
+
+                        buyButton.addEventListener('click', function () {
+                            if(item.stato == "no" && item.costo < coins){
+                                console.log("comprato");
+                                let xhr = new XMLHttpRequest();
+                                xhr.open("POST", "compra_colore.php", true);
+                                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                                xhr.onreadystatechange = function () {
+                                    if (xhr.readyState === 4) {
+                                        if (xhr.status === 200) {                                            
+                                            
+                                            
+                                            console.log("comprato davvero");
+                                            getCoins(id_utente);  //FORSE DARA' PROBLEMI
+                                            buyButton.textContent = 'Imposta'
+                                            buyButton.style.backgroundColor = 'blue';
+                                        } else {
+                                            console.log("fallito");
+                                        }
+                                    }    
+                                };
+                                if (itemType == 'serpente') {
+                                    data = {
+                                        id_utente: id_utente,
+                                        colore_sbloccato: item.colore,
+                                        type: "serpente"
+                                    };
+                                } else if (itemType == 'cibo') {
+                                    data = {
+                                        id_utente: id_utente,
+                                        colore_sbloccato: item.colore,
+                                        type: "cibo"
+                                    }
+                                }
+                                const jsonData = JSON.stringify(data);
+                                xhr.send(jsonData);
+                            
+                            } else if(item.stato == "no" && item.costo > coins){
+                                console.log("non hai abbastanza soldini");
+                            } else if (item.stato == "si" && item.colore != snakeColor || item.colore != foodColor) {
+                                console.log("impostato");
+                                let xhr = new XMLHttpRequest();
+                                xhr.open("POST", "imposta_colore.php", true);
+                                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                                xhr.onreadystatechange = function () {
+                                    if (xhr.readyState === 4) {
+                                        if (xhr.status === 200) {                                            
+                                            var response = JSON.parse(xhr.responseText);
+                                            
+                                            
+                                            buyButton.textContent = 'Impostato'
+                                            buyButton.style.backgroundColor = 'grey';
+                                        }
+                                    }
+                                };
+                                const jsonData = JSON.stringify(data);
+                                xhr.send(jsonData);
+                            } else if (item.stato == "si" && item.colore == snakeColor || item.colore == foodColor) {
+                                console.log("gia impostato")
+                            }
+
+                                console.log(`Bottone ${item.colore} cliccato!`);
+                        });
+
+                        shopItemElement.appendChild(itemNameElement);
+                        shopItemElement.appendChild(itemCostElement);
+                        shopItemElement.appendChild(buyButton);
+                        shopItemElement.classList.add('shopitem');
+                        return shopItemElement;
+                    };
+
+                    const textColoriSerpente = document.createElement('p');
+                    textColoriSerpente.textContent = "Snake colors";
+                    const textColoriCibo = document.createElement('p');
+                    textColoriCibo.textContent = "Food colors";
+
+                    coloriSerpente.appendChild(textColoriSerpente);
+                    coloriSerpenteArray.forEach(item => {
+                        const shopItemElement = createShopItemElement(item, 'serpente');
+                        coloriSerpente.appendChild(shopItemElement);
+                    });
+
+                    coloriCibo.appendChild(textColoriCibo);
+                    coloriCiboArray.forEach(item => {
+                        const shopItemElement = createShopItemElement(item, 'cibo');
+                        coloriCibo.appendChild(shopItemElement);
+                    });
 
                 } else {
                     console.log("non ricevuti dati");
                 }
 
-
-                console.log("andato")
+                //console.log("andato");
             } else {
                 // Gestisci gli errori
                 console.log("fallito");
@@ -716,62 +850,29 @@ function openShop(id_utente){
         }
     };
 
-
     data = {
-        id_utente: id_utente
+        id_utente: id_utente,
     };
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
     negozioContainer.style.display = "block";
 }
 
+
+
 function closeShop(){
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", "save_shop.php", true);
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                console.log("andato")
-            } else {
-                // Gestisci gli errori
-                console.log("fallito");
-            }
-        }
-    };
-
-
-    data = {
-        id_utente: id_utente,
-        serpente_arancione: serpente_arancione,
-        serpente_verde: serpente_verde,
-        serpente_blu: serpente_blu,
-        serpente_nero: serpente_nero,
-        serpente_rosa: serpente_rosa,
-        serpente_giallo: serpente_giallo,
-        serpente_grigio: serpente_grigio,
-        serpente_rosso: serpente_rosso,
-
-        cibo_arancione: cibo_arancione,
-        cibo_verde:  cibo_verde,
-        cibo_blu: cibo_blu,
-        cibo_nero: cibo_nero,
-        cibo_rosa: cibo_rosa,
-        cibo_giallo: cibo_giallo,
-        cibo_grigio: cibo_grigio,
-        cibo_rosso: cibo_rosso
-    };
     negozioContainer.style.display = "none";
 }
 
 function loadShop(id_utente){
+    
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "save_shop.php", true);
+    xhr.open("POST", "load_shop.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                
+                //console.log("Aaaa")
             } else {
                 // Gestisci gli errori
                 console.error("Errore nella richiesta AJAX");
@@ -796,8 +897,8 @@ function openLeaderBoards(id_utente) {
         fetch(myBestUrl).then(response => response.json())
     ])
     .then(([allBestData, myBestData]) => {
-        console.log('Dati dei punteggi generali:', allBestData);
-        console.log('Dati dei miei punteggi:', myBestData);
+        //console.log('Dati dei punteggi generali:', allBestData);
+        //console.log('Dati dei miei punteggi:', myBestData);
 
         // Ottieni il riferimento al container nel tuo HTML
         const generalBestLeaderBoard = document.getElementById('generalBestLeaderBoard');
@@ -995,7 +1096,7 @@ function getCoins(username) {
                 // Elabora la risposta del server
                 var response = JSON.parse(xhr.responseText);
                 if (response.success) {
-                    var coins = response.coins;
+                    coins = response.coins;
                     // Aggiorna l'elemento HTML per mostrare i coins
                     document.getElementById("coinsUtente").textContent = coins;
                 } else {

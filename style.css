@@ -329,40 +329,33 @@ body {
 }
 
 #coloriSerpente, #coloriCibo {
-    column-count: 2; 
-    column-gap: 20px;  
+    display: inline-block;
+    width: 100%;
+    padding: 5px;
+    padding-top: 0px;
+    border: 1px solid black;
+    box-sizing: border-box;
+    margin: 5px ;
+    border-radius: 10px;
+    background-color: #aeba93;
 }
 
-#shop-item {
-    margin: 3%;
+#containerTuttiIColori{
+    text-align: center;
+    column-count: 2;
+    column-gap: 20px;
+    display: flex;
+    align-items: flex-start; /* Allinea i leaderboard in alto */
+}
+
+.shopitem {
+    margin: 5px;
     padding: 10px;
     border: 1px solid black;
     border-radius: 5px;
     background-color: white;
 }
 
-#item-name {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-#item-price {
-    color: black;
-    font-size: 14px;
-}
-
-#buy-button {
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#buy-button:hover {
-    background-color: #45a049;
-}
 
 #chiudiNegozioBtn, #chiudiShopPopUpButton{
     background-color: #0074D9;
