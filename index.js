@@ -169,10 +169,12 @@ document.addEventListener("DOMContentLoaded", function() {
                             .then(id => {
                                id_utente = id;
                             })
-                            console.log("cccc");
+                            console.log("eeee");
                         
                             getCoins(usernameUtenteLoggato);
                             playButton.addEventListener("click", function() {
+                                loadShop(id_utente);
+                                loadSettings(id_utente);
                                 startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer                
                                 gameStart(); // E poi avvierà il gioco
                                 login = true;
@@ -294,6 +296,7 @@ function gameStart() {
 
 function startGame() {
     if(!isRestarted){
+        loadSettings(id_utente);
         playButton.disabled = false;
         foods.splice(0, foods.length); // Svuota l'array foods
         for (let i = 0; i < numFood; i++) {
@@ -457,9 +460,9 @@ function displayGameOver() {
     ctx.textAlign = "center";
     
     if (persoControIlMuro) {
-        ctx.fillText("Boink!", gameWidth / 2, gameHeight / 2);
+        ctx.fillText("Boink!", gameWidth / 2, gameHeight / 3);
     } else {
-        ctx.fillText("Gnam!", gameWidth / 2, gameHeight / 2);
+        ctx.fillText("Gnam!", gameWidth / 2, gameHeight / 3);
     }
 
     running = false;    
@@ -664,6 +667,7 @@ function loadSettings(id_utente){
 
 function openShop(id_utente) {
     loadShop(id_utente);
+    
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "scarica_shop.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -720,8 +724,7 @@ function openShop(id_utente) {
                     coloriCibo.innerHTML = '';
 
                     const createShopItemElement = (item, itemType) => {
-                        const shopItemElement = document.createElement('div');
-                        
+                        const shopItemElement = document.createElement('div');                        
 
                         const itemNameElement = document.createElement('div');
                         itemNameElement.style.color = item.colore;
@@ -738,7 +741,8 @@ function openShop(id_utente) {
                             buyButton.textContent = 'Acquista'
                             buyButton.style.backgroundColor = 'green';
                         } else {
-                            if(item.colore == snakeColor || item.colore == foodColor) {
+                            if((itemType === 'serpente' && item.colore === snakeColor) || 
+                              (itemType === 'cibo' && item.colore === foodColor)) {
                                 buyButton.textContent = 'Impostato'
                                 buyButton.style.backgroundColor = 'grey';
                             } else {
@@ -750,6 +754,7 @@ function openShop(id_utente) {
                         buyButton.style.color = 'white';
                         buyButton.style.padding = "5px, 10px";
                         buyButton.style.cursor = "pointer";
+                        buyButton.classList.add('buy-button');
 
                         buyButton.addEventListener('click', function () {
                             if(item.stato == "no" && item.costo < coins){
@@ -761,9 +766,8 @@ function openShop(id_utente) {
                                     if (xhr.readyState === 4) {
                                         if (xhr.status === 200) {                                            
                                             
-                                            
                                             console.log("comprato davvero");
-                                            getCoins(id_utente);  //FORSE DARA' PROBLEMI
+                                            getCoins(usernameUtenteLoggato);  //FORSE DARA' PROBLEMI
                                             buyButton.textContent = 'Imposta'
                                             buyButton.style.backgroundColor = 'blue';
                                         } else {
@@ -797,14 +801,47 @@ function openShop(id_utente) {
                                 xhr.onreadystatechange = function () {
                                     if (xhr.readyState === 4) {
                                         if (xhr.status === 200) {                                            
-                                            var response = JSON.parse(xhr.responseText);
+                                            var response = xhr.responseText;
                                             
+                                            if(itemType == 'serpente'){
+                                                console.log(response);
+                                                let specificItem = document.getElementById(`shop-item-serpente${response}`);
+                                                console.log(specificItem);
+                                                
+                                                const buyButtonPrecedente = specificItem.querySelector('.buy-button');
+                                                buyButtonPrecedente.textContent = 'Imposta'
+                                                buyButtonPrecedente.style.backgroundColor = 'blue';
+    
+                                                buyButton.textContent = 'Impostato'
+                                                buyButton.style.backgroundColor = 'grey';
+                                            } else {
+                                                let specificItem = document.getElementById(`shop-item-cibo${response}`);
                                             
-                                            buyButton.textContent = 'Impostato'
-                                            buyButton.style.backgroundColor = 'grey';
+                                                const buyButtonPrecedente = specificItem.querySelector('.buy-button');
+                                                buyButtonPrecedente.textContent = 'Imposta'
+                                                buyButtonPrecedente.style.backgroundColor = 'blue';
+    
+                                                buyButton.textContent = 'Impostato'
+                                                buyButton.style.backgroundColor = 'grey';
+                                            }
+                                            
                                         }
                                     }
                                 };
+
+                                if (itemType == 'serpente') {
+                                    data = {
+                                        id_utente: id_utente,
+                                        colore_impostato: item.colore,
+                                        type: "serpente"
+                                    };
+                                } else if (itemType == 'cibo') {
+                                    data = {
+                                        id_utente: id_utente,
+                                        colore_impostato: item.colore,
+                                        type: "cibo"
+                                    }
+                                }
                                 const jsonData = JSON.stringify(data);
                                 xhr.send(jsonData);
                             } else if (item.stato == "si" && item.colore == snakeColor || item.colore == foodColor) {
@@ -826,16 +863,21 @@ function openShop(id_utente) {
                     const textColoriCibo = document.createElement('p');
                     textColoriCibo.textContent = "Food colors";
 
-                    coloriSerpente.appendChild(textColoriSerpente);
-                    coloriSerpenteArray.forEach(item => {
+                    coloriSerpenteArray.forEach((item, index) => {
                         const shopItemElement = createShopItemElement(item, 'serpente');
+                        const itemId = `shop-item-serpente${item.colore}`; // Aggiungi un indice univoco
+                        shopItemElement.id = itemId; // Imposta l'ID dell'elemento
                         coloriSerpente.appendChild(shopItemElement);
+                        console.log(`ID dell'elemento: ${itemId}`);
                     });
-
-                    coloriCibo.appendChild(textColoriCibo);
-                    coloriCiboArray.forEach(item => {
+                    
+                    coloriCiboArray.forEach((item) => {
                         const shopItemElement = createShopItemElement(item, 'cibo');
+                        const itemId = `shop-item-cibo${item.colore}`;
+                        shopItemElement.id = itemId; // Imposta l'ID dell'elemento
                         coloriCibo.appendChild(shopItemElement);
+                        console.log(`ID dell'elemento: ${itemId}`);
+                        
                     });
 
                 } else {
@@ -861,6 +903,7 @@ function openShop(id_utente) {
 
 
 function closeShop(){
+    loadSettings(id_utente);
     negozioContainer.style.display = "none";
 }
 
