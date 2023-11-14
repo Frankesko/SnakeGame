@@ -1,25 +1,15 @@
 recupero pass non può funzionare finchè non riesco a mandare la mail il check sulla mail presente nel db non funziona
 
 
-html/css:
-immagini frutta per cibo (anche nello shop)
-
-
-
-nello shop:
-mostra "imposta" (in blu) se è "si" nel db  
-mostra "acquista" (in verde) se è "no" nel db
-
-fare un modifica account
-
+html/css 
+sistemare tutti i design
 FARE IL CSS IN BASE ALLA GRANDEZZA DELLO SCHERMO
 
 
+fare un modifica account
+
 
 logica:
-buy colori che mettte si nel db e sottrae le monete
-
-immagini frutta per cibo
 
 controllo completamento gioco
 messaggio per completamento gioco
@@ -29,4 +19,4 @@ fare un modifica account
 
 
 db:
-compra colori
+
