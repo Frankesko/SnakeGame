@@ -85,7 +85,9 @@ pauseBtn.addEventListener("click", pauseGame);
 riprendiBtn.addEventListener("click", continueGame);
 settingsBtn.addEventListener("click", openSettings);
 shopBtn.addEventListener("click", openShop);
-chiudiNegozioBtn.addEventListener("click", closeShop);
+chiudiNegozioBtn.addEventListener("click", function() {
+    closeShop(id_utente);
+});
 shopBtnInFinePartita.addEventListener("click", openShop);
 settingsBtnInFinePartita.addEventListener("click", openSettings);
 leaderBoardsButton.addEventListener("click", function() {
@@ -103,7 +105,9 @@ chiudiLeaderBoardsContainerBtn.addEventListener("click", closeLeaderBoards);
 chiudiLoginPopUpButton.addEventListener("click", chiudiLogin);
 chiudiRegistratiPopUpButton.addEventListener("click", chiudiRegistrati);
 chiudiPasswordDimenticataPopUpButton.addEventListener("click", chiudiPasswordDimenticata);
-chiudiShopPopUpButton.addEventListener("click", closeShop);
+chiudiShopPopUpButton.addEventListener("click", function() {
+    closeShop(id_utente);
+});
 chiudiImpostazioniPopUpButton.addEventListener("click", closeSettings)
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -144,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             .then(id => {
                                id_utente = id;
                             })
-                            console.log("bbbbbb");
+                            console.log("aaaa");
                             getCoins(usernameUtenteLoggato);
                             playButton.addEventListener("click", function() {
                                 startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer
@@ -641,24 +645,24 @@ function openShop(){
     negozioContainer.style.display = "block";
 }
 
-function closeShop(){
+function closeShop(id_utente){
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "save_shop.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-
+                console.log("andato")
             } else {
                 // Gestisci gli errori
-                console.error("Errore nella richiesta AJAX");
+                console.log("fallito");
             }
         }
     };
 
     data = {
-        id_utente: id_utente,
-        
+        id_utente: id_utente
+        /* ,
         serpente_arancione: serpente_arancione,
         serpente_verde: serpente_verde,
         serpente_blu: serpente_blu,
@@ -675,7 +679,7 @@ function closeShop(){
         cibo_rosa: cibo_rosa,
         cibo_giallo: cibo_giallo,
         cibo_grigio: cibo_grigio,
-        cibo_rosso: cibo_rosso
+        cibo_rosso: cibo_rosso */
     };
 
     const jsonData = JSON.stringify(data);
