@@ -38,30 +38,6 @@ if(!$data){
                         $id_utente]);
 
     } else {    
-        /*
-        $stmt = $conn->prepare("INSERT INTO colori_sbloccati 
-                                            id_utente = ?,
-                                            serpente_arancione = ?, 
-                                            serpente_verde = ?, 
-                                            serpente_blu = ?, 
-                                            serpente_nero = ?, 
-                                            serpente_rosa = ?, 
-                                            serpente_giallo = ?,
-                                            serpente_grigio = ?,
-                                            serpente_rosso = ?,
-
-                                            cibo_arancione = ?,
-                                            cibo_verde = ?,
-                                            cibo_blu = ?,
-                                            cibo_nero = ?,
-                                            cibo_rosa = ?,
-                                            cibo_giallo = ?,
-                                            cibo_grigio = ?,
-                                            cibo_rosso = ?");
-        $stmt->execute([$id_utente, 
-                        $serpente_arancione, $serpente_verde, $serpente_blu, $serpente_nero, $serpente_rosa, $serpente_giallo, $serpente_grigio, $serpente_rosso,
-                        $cibo_arancione, $cibo_verde, $cibo_blu, $cibo_nero, $cibo_rosa, $cibo_giallo, $cibo_grigio, $cibo_rosso]);
-        */
 
         $stmt = $conn->prepare("INSERT INTO colori_sbloccati (id_utente) values (?)");
         $stmt->execute([$id_utente]);

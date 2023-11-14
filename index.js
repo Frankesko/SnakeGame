@@ -79,16 +79,40 @@ let prevSpeed;
 let prevNumFood;
 let prevUnitSize;    
 
+let serpente_arancione;
+let serpente_verde;
+let serpente_blu;
+let serpente_nero;
+let serpente_rosa;
+let serpente_giallo;
+let serpente_grigio;
+let serpente_rosso;
+let cibo_arancione;
+let cibo_verde;
+let cibo_blu;
+let cibo_nero;
+let cibo_rosa;
+let cibo_giallo;
+let cibo_grigio;
+let cibo_rosso;
+
+
+
+
 window.addEventListener("keydown", changeDirection);
 resetBtn.addEventListener("click", resetGame);
 pauseBtn.addEventListener("click", pauseGame);
 riprendiBtn.addEventListener("click", continueGame);
 settingsBtn.addEventListener("click", openSettings);
-shopBtn.addEventListener("click", openShop);
+shopBtn.addEventListener("click", function(){
+    openShop(id_utente);
+});
 chiudiNegozioBtn.addEventListener("click", function() {
     closeShop(id_utente);
 });
-shopBtnInFinePartita.addEventListener("click", openShop);
+shopBtnInFinePartita.addEventListener("click", function(){
+    openShop(id_utente);
+});
 settingsBtnInFinePartita.addEventListener("click", openSettings);
 leaderBoardsButton.addEventListener("click", function() {
     openLeaderBoards(id_utente);
@@ -148,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             .then(id => {
                                id_utente = id;
                             })
-                            console.log("aaaa");
+                            console.log("cccc");
                             getCoins(usernameUtenteLoggato);
                             playButton.addEventListener("click", function() {
                                 startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer
@@ -570,7 +594,7 @@ function openSettings() {
 }
 
 
-function saveSettings(numFood, unitSize, speed, colore_cibo_selezionato, colore_serpente_selezionato){
+function saveSettings(numFood, unitSize, speed /*, colore_cibo_selezionato, colore_serpente_selezionato*/){
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "salva_impostazioni.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -589,9 +613,9 @@ function saveSettings(numFood, unitSize, speed, colore_cibo_selezionato, colore_
         id_utente: id_utente,
         numFood: numFood,
         unitSize: unitSize,
-        speed: speed,
-        colore_serpente_selezionato: colore_serpente_selezionato,
-        colore_cibo_selezionato: colore_cibo_selezionato
+        speed: speed
+        //, colore_serpente_selezionato: colore_serpente_selezionato,
+        //colore_cibo_selezionato: colore_cibo_selezionato
     };
 
     const jsonData = JSON.stringify(data);
@@ -641,12 +665,67 @@ function loadSettings(id_utente){
 }
 
 
-function openShop(){
-    
+function openShop(id_utente){
+    console.log("entrato");
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "carica_shop.php", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                let response = JSON.parse(xhr.responseText);
+                if(response.serpente_arancione && response.serpente_verde && response.serpente_blu && response.serpente_nero && 
+                   response.serpente_rosa && response.serpente_giallo &&  response.serpente_grigio &&  response.serpente_rosso && 
+                   response.cibo_arancione && response.cibo_verde && response.cibo_blu && response.cibo_nero && response.cibo_rosa 
+                   && response.cibo_giallo && response.cibo_grigio && response.cibo_rosso){
+                    serpente_arancione = response.serpente_arancione;
+                    serpente_verde = response.serpente_verde;
+                    serpente_blu = response.serpente_blu;
+                    serpente_nero = response.serpente_nero;
+                    serpente_rosa = response.serpente_rosa;
+                    serpente_giallo = response.serpente_giallo;
+                    serpente_grigio = response.serpente_grigio;
+                    serpente_rosso = response.serpente_rosso;
+                    cibo_arancione = response.cibo_arancione;
+                    cibo_verde = response.cibo_verde;
+                    cibo_blu = response.cibo_blu;
+                    cibo_nero = response.cibo_nero;
+                    cibo_rosa = response.cibo_rosa;
+                    cibo_giallo = response.cibo_giallo;
+                    cibo_grigio = response.cibo_grigio;
+                    cibo_rosso = response.cibo_rosso;
+
+                    console.log("ricevuto dati", cibo_giallo);
+                    
+
+
+                    
+
+
+
+                } else {
+                    console.log("non ricevuti dati");
+                }
+
+
+                console.log("andato")
+            } else {
+                // Gestisci gli errori
+                console.log("fallito");
+            }
+        }
+    };
+
+
+    data = {
+        id_utente: id_utente
+    };
+    const jsonData = JSON.stringify(data);
+    xhr.send(jsonData);
     negozioContainer.style.display = "block";
 }
 
-function closeShop(id_utente){
+function closeShop(){
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "save_shop.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -661,9 +740,9 @@ function closeShop(id_utente){
         }
     };
 
+
     data = {
-        id_utente: id_utente
-        /* ,
+        id_utente: id_utente,
         serpente_arancione: serpente_arancione,
         serpente_verde: serpente_verde,
         serpente_blu: serpente_blu,
@@ -680,13 +759,32 @@ function closeShop(id_utente){
         cibo_rosa: cibo_rosa,
         cibo_giallo: cibo_giallo,
         cibo_grigio: cibo_grigio,
-        cibo_rosso: cibo_rosso */
+        cibo_rosso: cibo_rosso
+    };
+    negozioContainer.style.display = "none";
+}
+
+function loadShop(id_utente){
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "save_shop.php", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                
+            } else {
+                // Gestisci gli errori
+                console.error("Errore nella richiesta AJAX");
+            }
+        }
+    };
+
+    data = {
+        id_utente: id_utente
     };
 
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
-    
-    negozioContainer.style.display = "none";
 }
 
 function openLeaderBoards(id_utente) {
