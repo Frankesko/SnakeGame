@@ -463,10 +463,11 @@ function displayGameOver() {
     scoreInFinePartita.textContent = `Score: ${score}`;
     getMyTopScore(id_utente);
     riepilogoPartitaFinita.style.display = "block";
+    //getCoins(usernameUtenteLoggato);
 }
 
 function resetGame() {
-    if(login && !running){
+    if(login){
         // Disabilita il tasto di reset
         resetBtn.disabled = true;
         riepilogoPartitaFinita.style.display = "none";
@@ -483,7 +484,6 @@ function resetGame() {
         ];
         timer = 3; // Reimposta il timer a 3 secondi
         gameStart();
-
         // Riabilita il tasto di reset dopo 6 secondi
         setTimeout(function() {
             resetBtn.disabled = false;
@@ -547,8 +547,6 @@ function continueGame() {
         running = true;
     }
 }
-
-
 
 function openSettings() {
     loadSettings(usernameUtenteLoggato);
@@ -892,8 +890,6 @@ function openShop(username) {
     negozioContainer.style.display = "block";
 }
 
-
-
 function closeShop(){
     loadSettings(usernameUtenteLoggato);
     negozioContainer.style.display = "none";
@@ -992,12 +988,9 @@ function openLeaderBoards(id_utente) {
     });
 }
 
-
-
 function closeLeaderBoards(){
     leaderBoardsContainer.style.display = "none";
 }
-
 function chiudiLogin(){
     loginPopUp.style.display = "none";
     loginRegistratiContainer.style.display = "flex";
