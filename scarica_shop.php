@@ -6,7 +6,13 @@ $data = json_decode(file_get_contents("php://input"));
 if (!$data) {
     echo "Dati non validi o mancanti.";
 } else {
-    $id_utente = $data->id_utente;
+    $username = $data->username;
+    $stmt = $conn->prepare("SELECT id_utente FROM utenti WHERE username = ?");
+    $stmt->execute([$username]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $id_utente = $row["id_utente"];
+
+
     $stmt = $conn->prepare("SELECT 
                             serpente_arancione, 
                             serpente_verde, 

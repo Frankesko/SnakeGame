@@ -6,9 +6,14 @@ $data = json_decode(file_get_contents("php://input"));
 if(!$data){
     echo "Dati non validi o mancanti.";
 }   else {
-    $id_utente = $data->id_utente;
+    $username = $data->username;
     $type = $data->type;
     $colore_impostato = $data->colore_impostato;
+
+    $stmt = $conn->prepare("SELECT id_utente FROM utenti WHERE username = ?");
+    $stmt->execute([$username]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $id_utente = $row["id_utente"];
 
     
     if($type == 'serpente') {

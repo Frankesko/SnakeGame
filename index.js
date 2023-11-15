@@ -105,13 +105,13 @@ pauseBtn.addEventListener("click", pauseGame);
 riprendiBtn.addEventListener("click", continueGame);
 settingsBtn.addEventListener("click", openSettings);
 shopBtn.addEventListener("click", function(){
-    openShop(id_utente);
+    openShop(usernameUtenteLoggato);
 });
 chiudiNegozioBtn.addEventListener("click", function() {
-    closeShop(id_utente);
+    closeShop(usernameUtenteLoggato);
 });
 shopBtnInFinePartita.addEventListener("click", function(){
-    openShop(id_utente);
+    openShop(usernameUtenteLoggato);
 });
 settingsBtnInFinePartita.addEventListener("click", openSettings);
 leaderBoardsButton.addEventListener("click", function() {
@@ -169,12 +169,12 @@ document.addEventListener("DOMContentLoaded", function() {
                             .then(id => {
                                id_utente = id;
                             })
-                            console.log("aaaa");
+                            console.log("cccc");
                         
                             getCoins(usernameUtenteLoggato);
                             playButton.addEventListener("click", function() {
-                                loadShop(id_utente);
-                                loadSettings(id_utente);
+                            loadShop(usernameUtenteLoggato);
+                            loadSettings(usernameUtenteLoggato);
                                 startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer                
                                 gameStart(); // E poi avvierà il gioco
                                 login = true;
@@ -296,7 +296,7 @@ function gameStart() {
 
 function startGame() {
     if(!isRestarted){
-        loadSettings(id_utente);
+        loadSettings(usernameUtenteLoggato);
         playButton.disabled = false;
         foods.splice(0, foods.length); // Svuota l'array foods
         for (let i = 0; i < numFood; i++) {
@@ -559,7 +559,7 @@ function continueGame() {
 
 
 function openSettings() {
-    loadSettings(id_utente);
+    loadSettings(usernameUtenteLoggato);
     if (!running && !isPaused)
         impostazioniContainer.style.display = "block";
 
@@ -631,7 +631,7 @@ function closeSettings(){
     impostazioniContainer.style.display = "none";
 }
 
-function loadSettings(id_utente){
+function loadSettings(username){
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "carica_impostazioni.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -658,15 +658,15 @@ function loadSettings(id_utente){
     };
 
     const data = {
-        id_utente: id_utente
+        username: username
     };
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
 }
 
 
-function openShop(id_utente) {
-    loadShop(id_utente);
+function openShop(username) {
+    loadShop(usernameUtenteLoggato);
     
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "scarica_shop.php", true);
@@ -777,13 +777,13 @@ function openShop(id_utente) {
                                 };
                                 if (itemType == 'serpente') {
                                     data = {
-                                        id_utente: id_utente,
+                                        username: username,
                                         colore_sbloccato: item.colore,
                                         type: "serpente"
                                     };
                                 } else if (itemType == 'cibo') {
                                     data = {
-                                        id_utente: id_utente,
+                                        username: username,
                                         colore_sbloccato: item.colore,
                                         type: "cibo"
                                     }
@@ -831,13 +831,13 @@ function openShop(id_utente) {
 
                                 if (itemType == 'serpente') {
                                     data = {
-                                        id_utente: id_utente,
+                                        username: username,
                                         colore_impostato: item.colore,
                                         type: "serpente"
                                     };
                                 } else if (itemType == 'cibo') {
                                     data = {
-                                        id_utente: id_utente,
+                                        username: username,
                                         colore_impostato: item.colore,
                                         type: "cibo"
                                     }
@@ -893,7 +893,7 @@ function openShop(id_utente) {
     };
 
     data = {
-        id_utente: id_utente,
+        username: username,
     };
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
@@ -903,11 +903,11 @@ function openShop(id_utente) {
 
 
 function closeShop(){
-    loadSettings(id_utente);
+    loadSettings(usernameUtenteLoggato);
     negozioContainer.style.display = "none";
 }
 
-function loadShop(id_utente){
+function loadShop(username){
     
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "load_shop.php", true);
@@ -924,7 +924,7 @@ function loadShop(id_utente){
     };
 
     data = {
-        id_utente: id_utente
+        username: username
     };
 
     const jsonData = JSON.stringify(data);

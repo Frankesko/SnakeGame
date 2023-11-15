@@ -10,5 +10,7 @@ dopo acquista non cambia il pulsante cliccando imposta
 recupero pass non può funzionare finchè non riesco a mandare la mail il check sulla mail presente nel db non funziona
 la prima apertura dello shop da problemi
 
+acquistato un colore lo mette direttamente su inmpoostato senza togliere il precedetne
+
 db:
 
