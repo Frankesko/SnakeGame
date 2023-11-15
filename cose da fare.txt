@@ -13,4 +13,6 @@ acquistato un colore lo mette direttamente su inmpoostato senza togliere il prec
 
 aggiornare il valore dei soldi invece che a fine partita a ogni cibo preso (mettendo la funzione nel next_tick penso)
 
+
+dividere il file index.js in piccoli file specifici
 db:
