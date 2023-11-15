@@ -169,12 +169,13 @@ document.addEventListener("DOMContentLoaded", function() {
                             .then(id => {
                                id_utente = id;
                             })
-                            console.log("cccc");
+                            console.log("aaa");
                         
                             getCoins(usernameUtenteLoggato);
-                            playButton.addEventListener("click", function() {
                             loadShop(usernameUtenteLoggato);
                             loadSettings(usernameUtenteLoggato);
+                            playButton.addEventListener("click", function() {
+                            
                                 startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer                
                                 gameStart(); // E poi avvierà il gioco
                                 login = true;
@@ -589,7 +590,7 @@ function openSettings() {
 
     chiudiImpostazioniContainerBtn.addEventListener("click", function() {
         // Chiamare la funzione di salvataggio con i parametri corretti
-        saveSettings(numFood, unitSize, speed, foodColor, snakeColor);
+        saveSettings(numFood, unitSize, speed /*, foodColor, snakeColor*/);
     });
 }
 
@@ -610,7 +611,7 @@ function saveSettings(numFood, unitSize, speed /*, colore_cibo_selezionato, colo
     };
 
     data = {
-        id_utente: id_utente,
+        username: usernameUtenteLoggato,
         numFood: numFood,
         unitSize: unitSize,
         speed: speed
