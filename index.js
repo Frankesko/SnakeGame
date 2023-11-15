@@ -161,7 +161,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             testoSpiegazioneGioco.style.display = "none";
                             mostraUsernameIfLoggato.style.display = "block";
                             mostraUsernameIfLoggato.textContent = usernameUtenteLoggato;
-                            containerFooter.style.display = "block";
+                            containerFooter.style.display = "flex";
                             startContainer.style.display = "block";
                             getIdUtente(usernameUtenteLoggato)
                             .then(id => {
