@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             .then(id => {
                                id_utente = id;
                             })
-                            console.log("aaa");
+                            console.log("bbb");
                         
                             getCoins(usernameUtenteLoggato);
                             loadShop(usernameUtenteLoggato);
@@ -309,7 +309,6 @@ function nextTick(){
             drawFood();
             moveSnake();
             drawSnake();
-            getCoins(usernameUtenteLoggato);
             checkGameOver();
             nextTick();
         }, speed)
@@ -359,6 +358,9 @@ function moveSnake() {
         if (snake[0].x === food.x && snake[0].y === food.y) {
             score += 1;
             scoreText.textContent = score;
+            actualCoins = coins + score;
+            document.getElementById("coinsUtente").textContent = actualCoins;
+            console.log(score, coins);
             congratulations();
 
             // Rimuovi il cibo mangiato dall'array
@@ -463,7 +465,7 @@ function displayGameOver() {
     scoreInFinePartita.textContent = `Score: ${score}`;
     getMyTopScore(id_utente);
     riepilogoPartitaFinita.style.display = "block";
-    //getCoins(usernameUtenteLoggato);
+    getCoins(usernameUtenteLoggato);
 }
 
 function resetGame() {
@@ -656,7 +658,7 @@ function loadSettings(username){
 
 
 function openShop(username) {
-    loadShop(usernameUtenteLoggato);
+    loadShop(username);
     
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "scarica_shop.php", true);
@@ -757,9 +759,12 @@ function openShop(username) {
                                         if (xhr.status === 200) {                                            
                                             
                                             console.log("comprato davvero");
-                                            getCoins(usernameUtenteLoggato);  //FORSE DARA' PROBLEMI
+                                            getCoins(username);  
+                                            openShop(username);
+                                            
                                             buyButton.textContent = 'Imposta'
                                             buyButton.style.backgroundColor = 'blue';
+                                            
                                         } else {
                                             console.log("fallito");
                                         }
@@ -896,7 +901,7 @@ function closeShop(){
 }
 
 function loadShop(username){
-    
+
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "load_shop.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
