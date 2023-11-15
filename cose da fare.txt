@@ -2,14 +2,15 @@ html/css:
 sistemare tutti i design
 FARE IL CSS IN BASE ALLA GRANDEZZA DELLO SCHERMO
 fare un modifica account
-
+modificare la forma del serpente
 
 logica:
 fare un modifica account
 dopo acquista non cambia il pulsante cliccando imposta
 recupero pass non può funzionare finchè non riesco a mandare la mail il check sulla mail presente nel db non funziona
 la prima apertura dello shop da problemi
-
 acquistato un colore lo mette direttamente su inmpoostato senza togliere il precedetne
+
+aggiornare il valore dei soldi invece che a fine partita a ogni cibo preso (mettendo la funzione nel next_tick penso)
 
 db:
