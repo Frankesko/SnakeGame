@@ -3,10 +3,3 @@ sistemare tutti i design
 FARE IL CSS IN BASE ALLA GRANDEZZA DELLO SCHERMO
 
 modificare la forma del serpente
-
-logica:
-recupero pass non può funzionare finchè non riesco a mandare la mail il check sulla mail presente nel db non funziona
-
-
-
-
