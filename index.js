@@ -20,19 +20,19 @@ const impostazioniContainer = document.getElementById("impostazioniContainer");
 const speedInput = document.getElementById("speed");
 const speedValue = document.getElementById("speedValue");
 const chiudiImpostazioniContainerBtn = document.getElementById("chiudiImpostazioniContainerBtn");
-const negozioContainer = document.querySelector("#negozioContainer");
-const chiudiNegozioBtn = document.querySelector("#chiudiNegozioBtn");
-const startContainer = document.querySelector("#startContainer");
-const riepilogoPartitaFinita = document.querySelector("#riepilogoPartitaFinita");
-const playButton = document.querySelector("#playButton");
-const scoreInFinePartita = document.querySelector("#scoreInFinePartita");
-const shopBtnInFinePartita = document.querySelector("#shopBtnInFinePartita");
-const settingsBtnInFinePartita = document.querySelector("#settingsBtnInFinePartita");
-const leaderBoardsButtonInFinePartita = document.querySelector("#leaderBoardsButtonInFinePartita");
-const leaderBoardsButton = document.querySelector("#leaderBoardsButton");
-const leaderBoardsContainer = document.querySelector("#container");
+const negozioContainer = document.getElementById("negozioContainer");
+const chiudiNegozioBtn = document.getElementById("chiudiNegozioBtn");
+const startContainer = document.getElementById("startContainer");
+const riepilogoPartitaFinita = document.getElementById("riepilogoPartitaFinita");
+const playButton = document.getElementById("playButton");
+const scoreInFinePartita = document.getElementById("scoreInFinePartita");
+const shopBtnInFinePartita = document.getElementById("shopBtnInFinePartita");
+const settingsBtnInFinePartita = document.getElementById("settingsBtnInFinePartita");
+const leaderBoardsButtonInFinePartita = document.getElementById("leaderBoardsButtonInFinePartita");
+const leaderBoardsButton = document.getElementById("leaderBoardsButton");
+const leaderBoardsContainer = document.getElementById("container");
 const sottocontaienrLeaderBoardsContainer = document.getElementById("leaderBoardsContainer");
-const chiudiLeaderBoardsContainerBtn = document.querySelector("#chiudiLeaderBoardsContainerBtn");
+const chiudiLeaderBoardsContainerBtn = document.getElementById("chiudiLeaderBoardsContainerBtn");
 const passwordDimenticataBtn = document.getElementById("passwordDimenticata");
 const passwordDimenticataPopUp = document.getElementById("passwordDimenticataPopUp");
 const recuperoPasswordBtn = document.getElementById("recuperoPasswordBtn");
@@ -400,49 +400,45 @@ function changeDirection(event){
     const RIGHT = 39;
     const DOWN = 40;
 
+    const W = 87;
+    const A = 65;
+    const S = 83;
+    const D = 68;
+
     const goingUp = (yVelocity == -unitSize);
     const goingDown = (yVelocity == unitSize);
     const goingRight = (xVelocity == unitSize);
     const goingLeft = (xVelocity == -unitSize);
 
-    switch(true){
-        case(keyPressed == UP && !goingDown):
+    switch (true) {
+        case (keyPressed == UP || keyPressed == W) && !goingDown:
             xVelocity = 0;
             yVelocity = -unitSize;
             break;
-        case(keyPressed == DOWN && !goingUp):
+        case (keyPressed == DOWN || keyPressed == S) && !goingUp:
             xVelocity = 0;
             yVelocity = unitSize;
             break;
-        case(keyPressed == LEFT && !goingRight):
+        case (keyPressed == LEFT || keyPressed == A) && !goingRight:
             xVelocity = -unitSize;
             yVelocity = 0;
             break;
-        case(keyPressed == RIGHT && !goingLeft):
+        case (keyPressed == RIGHT || keyPressed == D) && !goingLeft:
             xVelocity = unitSize;
             yVelocity = 0;
             break;
     } 
 };
 function checkGameOver(){
-    switch(true){
-        case(snake[0].x < 0):
+    switch (true) {
+        case (snake[0].x < 0):
+        case (snake[0].x >= gameWidth):
+        case (snake[0].y < 0):
+        case (snake[0].y >= gameHeight):
             running = false;
             persoControIlMuro = true;
             break;
-        case(snake[0].x >= gameWidth):
-            running = false;
-            persoControIlMuro = true;
-            break;
-        case(snake[0].y < 0):
-            running = false;
-            persoControIlMuro = true;
-            break;
-        case(snake[0].y >= gameWidth):
-            running = false;
-            persoControIlMuro = true;
-            break;
-    }
+    }   
     for(let i = 1; i < snake.length; i+=1){
         if(snake[i].x == snake[0].x && snake[i].y == snake[0].y){
             running = false;
