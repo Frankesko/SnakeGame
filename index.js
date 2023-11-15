@@ -309,6 +309,7 @@ function nextTick(){
             drawFood();
             moveSnake();
             drawSnake();
+            getCoins(usernameUtenteLoggato);
             checkGameOver();
             nextTick();
         }, speed)
@@ -462,7 +463,6 @@ function displayGameOver() {
     scoreInFinePartita.textContent = `Score: ${score}`;
     getMyTopScore(id_utente);
     riepilogoPartitaFinita.style.display = "block";
-    getCoins(usernameUtenteLoggato);
 }
 
 function resetGame() {
