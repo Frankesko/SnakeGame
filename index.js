@@ -1,25 +1,25 @@
-const gameBoard = document.querySelector("#gameBoard");
+const gameBoard = document.getElementById("gameBoard");
 const ctx = gameBoard.getContext("2d");
-const scoreText = document.querySelector("#scoreText");
+const scoreText = document.getElementById("scoreText");
 const resetBtn = document.getElementById("resetBtn");
-const pauseBtn = document.querySelector("#pauseBtn");
-const shopBtn = document.querySelector("#shopBtn");
-const loginRegistratiContainer = document.querySelector("#loginRegistratiButtons");
-const loginPopUp = document.querySelector("#loginPopUp");
-const registratiPopup = document.querySelector("#registratiPopup");
-const loginChoiceButton = document.querySelector("#loginChoiceButton");
-const loginSubmitButton = document.querySelector("#loginSubmitButton");
-const registratiChoiceButton = document.querySelector("#registratiChoiceButton");
-const registratiSubmitButton = document.querySelector("#registratiSubmitButton");
-const pauseContainer = document.querySelector("#pauseContainer");
-const riprendiBtn = document.querySelector("#riprendiBtn");
-const testoSpiegazioneGioco = document.querySelector("#testoSpiegazioneGioco");
-const mostraUsernameIfLoggato = document.querySelector("#mostraUsernameIfLoggato");
-const settingsBtn = document.querySelector("#settingsBtn");
-const impostazioniContainer = document.querySelector("#impostazioniContainer");
-const speedInput = document.querySelector("#speed");
-const speedValue = document.querySelector("#speedValue");
-const chiudiImpostazioniContainerBtn = document.querySelector("#chiudiImpostazioniContainerBtn");
+const pauseBtn = document.getElementById("pauseBtn");
+const shopBtn = document.getElementById("shopBtn");
+const loginRegistratiContainer = document.getElementById("loginRegistratiButtons");
+const loginPopUp = document.getElementById("loginPopUp");
+const registratiPopup = document.getElementById("registratiPopup");
+const loginChoiceButton = document.getElementById("loginChoiceButton");
+const loginSubmitButton = document.getElementById("loginSubmitButton");
+const registratiChoiceButton = document.getElementById("registratiChoiceButton");
+const registratiSubmitButton = document.getElementById("registratiSubmitButton");
+const pauseContainer = document.getElementById("pauseContainer");
+const riprendiBtn = document.getElementById("riprendiBtn");
+const testoSpiegazioneGioco = document.getElementById("testoSpiegazioneGioco");
+const mostraUsernameIfLoggato = document.getElementById("mostraUsernameIfLoggato");
+const settingsBtn = document.getElementById("settingsBtn");
+const impostazioniContainer = document.getElementById("impostazioniContainer");
+const speedInput = document.getElementById("speed");
+const speedValue = document.getElementById("speedValue");
+const chiudiImpostazioniContainerBtn = document.getElementById("chiudiImpostazioniContainerBtn");
 const negozioContainer = document.querySelector("#negozioContainer");
 const chiudiNegozioBtn = document.querySelector("#chiudiNegozioBtn");
 const startContainer = document.querySelector("#startContainer");
@@ -40,7 +40,6 @@ const containerFooter = document.getElementById("containerFooter");
 const chiudiLoginPopUpButton = document.getElementById("chiudiLoginPopUpButton");
 const chiudiRegistratiPopUpButton = document.getElementById("chiudiRegistratiPopUpButton");
 const chiudiPasswordDimenticataPopUpButton = document.getElementById("chiudiPasswordDimenticataPopUpButton");
-
 const chiudiImpostazioniPopUpButton = document.getElementById("chiudiImpostazioniPopUpButton");
 
 
@@ -72,6 +71,7 @@ let login = false;
 let isRestarted = false;
 let speed = 100;
 let numFood = 1;
+
 let usernameUtenteLoggato;
 let id_utente;
 
@@ -117,14 +117,12 @@ settingsBtnInFinePartita.addEventListener("click", openSettings);
 leaderBoardsButton.addEventListener("click", function() {
     openLeaderBoards(id_utente);
 });
-
 leaderBoardsButtonInFinePartita.addEventListener("click", function() {
     openLeaderBoards(id_utente);
 });
 
 passwordDimenticataBtn.addEventListener("click", passwordDimenticata);
 recuperoPasswordBtn.addEventListener("click", inviaRichiestaRecuperoPassword);
-
 chiudiLeaderBoardsContainerBtn.addEventListener("click", closeLeaderBoards);
 chiudiLoginPopUpButton.addEventListener("click", chiudiLogin);
 chiudiRegistratiPopUpButton.addEventListener("click", chiudiRegistrati);
@@ -148,7 +146,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 password: loginPassword
             };
 
-            
             let xhr = new XMLHttpRequest();
             xhr.open("POST", "verifica_accesso.php", true); // Assicurati che l'URL sia corretto
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -198,10 +195,7 @@ document.addEventListener("DOMContentLoaded", function() {
             // Converte l'oggetto dati in una stringa JSON e invialo al server
             let jsonDataLog = JSON.stringify(dataLogin);
             xhr.send(jsonDataLog);
-        
 
-            
-            
         });
     });
 
