@@ -33,7 +33,7 @@ const leaderBoardsButton = document.getElementById("leaderBoardsButton");
 const leaderBoardsContainer = document.getElementById("container");
 const sottocontaienrLeaderBoardsContainer = document.getElementById("leaderBoardsContainer");
 const chiudiLeaderBoardsContainerBtn = document.getElementById("chiudiLeaderBoardsContainerBtn");
-const passwordDimenticataBtn = document.getElementById("passwordDimenticata");
+//const passwordDimenticataBtn = document.getElementById("passwordDimenticata");
 const passwordDimenticataPopUp = document.getElementById("passwordDimenticataPopUp");
 const recuperoPasswordBtn = document.getElementById("recuperoPasswordBtn");
 const containerFooter = document.getElementById("containerFooter");
@@ -121,7 +121,7 @@ leaderBoardsButtonInFinePartita.addEventListener("click", function() {
     openLeaderBoards(id_utente);
 });
 
-passwordDimenticataBtn.addEventListener("click", passwordDimenticata);
+//passwordDimenticataBtn.addEventListener("click", passwordDimenticata);
 recuperoPasswordBtn.addEventListener("click", inviaRichiestaRecuperoPassword);
 chiudiLeaderBoardsContainerBtn.addEventListener("click", closeLeaderBoards);
 chiudiLoginPopUpButton.addEventListener("click", chiudiLogin);
