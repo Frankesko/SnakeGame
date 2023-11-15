@@ -36,7 +36,7 @@ const chiudiLeaderBoardsContainerBtn = document.querySelector("#chiudiLeaderBoar
 const passwordDimenticataBtn = document.getElementById("passwordDimenticata");
 const passwordDimenticataPopUp = document.getElementById("passwordDimenticataPopUp");
 const recuperoPasswordBtn = document.getElementById("recuperoPasswordBtn");
-
+const containerFooter = document.getElementById("containerFooter");
 const chiudiLoginPopUpButton = document.getElementById("chiudiLoginPopUpButton");
 const chiudiRegistratiPopUpButton = document.getElementById("chiudiRegistratiPopUpButton");
 const chiudiPasswordDimenticataPopUpButton = document.getElementById("chiudiPasswordDimenticataPopUpButton");
@@ -164,6 +164,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             testoSpiegazioneGioco.style.display = "none";
                             mostraUsernameIfLoggato.style.display = "block";
                             mostraUsernameIfLoggato.textContent = usernameUtenteLoggato;
+                            containerFooter.style.display = "block";
                             startContainer.style.display = "block";
                             getIdUtente(usernameUtenteLoggato)
                             .then(id => {

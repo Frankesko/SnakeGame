@@ -13,4 +13,3 @@ la prima apertura dello shop da problemi
 acquistato un colore lo mette direttamente su inmpoostato senza togliere il precedetne
 
 db:
-
