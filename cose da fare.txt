@@ -1,22 +1,14 @@
-recupero pass non può funzionare finchè non riesco a mandare la mail il check sulla mail presente nel db non funziona
-
-
-html/css 
+html/css: 
 sistemare tutti i design
 FARE IL CSS IN BASE ALLA GRANDEZZA DELLO SCHERMO
-
-
 fare un modifica account
 
 
 logica:
-
-controllo completamento gioco
-messaggio per completamento gioco
-
-
 fare un modifica account
-
+dopo acquista non cambia il pulsante cliccando imposta
+recupero pass non può funzionare finchè non riesco a mandare la mail il check sulla mail presente nel db non funziona
+la prima apertura dello shop da problemi
 
 db:
 

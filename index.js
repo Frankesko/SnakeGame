@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             .then(id => {
                                id_utente = id;
                             })
-                            console.log("eeee");
+                            console.log("aaaa");
                         
                             getCoins(usernameUtenteLoggato);
                             playButton.addEventListener("click", function() {
