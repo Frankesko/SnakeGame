@@ -42,7 +42,6 @@ const chiudiRegistratiPopUpButton = document.getElementById("chiudiRegistratiPop
 const chiudiPasswordDimenticataPopUpButton = document.getElementById("chiudiPasswordDimenticataPopUpButton");
 const chiudiImpostazioniPopUpButton = document.getElementById("chiudiImpostazioniPopUpButton");
 
-
 const gameWidth = gameBoard.width;
 const gameHeight = gameBoard.height;
 const boardBackground = "white";
@@ -64,6 +63,7 @@ let snake = [
     { x: unitSize, y: 225 },
     { x: 0, y: 225 }
 ];
+
 let timer = 3;
 let timerInterval;
 let persoControIlMuro;
@@ -97,7 +97,6 @@ let cibo_grigio;
 let cibo_rosso;
 
 let coins;
-
 
 window.addEventListener("keydown", changeDirection);
 resetBtn.addEventListener("click", resetGame);
@@ -135,9 +134,7 @@ document.addEventListener("DOMContentLoaded", function() {
         loginRegistratiContainer.style.display = "none";
         // Mostra il container di login
         loginPopUp.style.display = "block";
-        
         loginSubmitButton.addEventListener("click", function() {
-
             let loginUsername = document.querySelector("#loginUsername").value;
             let loginPassword = document.querySelector("#loginPassword").value;
             
@@ -168,17 +165,14 @@ document.addEventListener("DOMContentLoaded", function() {
                                id_utente = id;
                             })
                             console.log("bbb");
-                        
                             getCoins(usernameUtenteLoggato);
                             loadShop(usernameUtenteLoggato);
                             loadSettings(usernameUtenteLoggato);
                             playButton.addEventListener("click", function() {
-                            
                                 startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer                
                                 gameStart(); // E poi avvierà il gioco
                                 login = true;
-                            });
-                            
+                            });  
                         } else if (response === "usernameFalse") {
                             // Accesso negato, mostra un messaggio di errore
                             alert("Account inesistente");
@@ -191,11 +185,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     }
                 }
             };
-        
             // Converte l'oggetto dati in una stringa JSON e invialo al server
             let jsonDataLog = JSON.stringify(dataLogin);
             xhr.send(jsonDataLog);
-
         });
     });
 
@@ -204,7 +196,6 @@ document.addEventListener("DOMContentLoaded", function() {
         loginRegistratiContainer.style.display = "none";
         // Mostra il container di registrazione
         registratiPopup.style.display = "block";
-
         registratiSubmitButton.addEventListener("click", function() {
             let registratiUsername = document.querySelector("#registratiUsername").value;
             let email = document.querySelector("#registratiEmail").value;
@@ -212,10 +203,8 @@ document.addEventListener("DOMContentLoaded", function() {
             let confermaPassword = document.querySelector("#registratiConfirmPassword").value;
         
         if (isEmailValid(email)) {
-            // L'indirizzo email è valido
             // Esegui il resto della registrazione
         } else {
-            // L'indirizzo email non è valido
             alert("L'indirizzo email non è valido. Inserisci un indirizzo email valido.");
         }
         
@@ -240,21 +229,16 @@ document.addEventListener("DOMContentLoaded", function() {
                     xhr.onreadystatechange = function() {
                         if (xhr.readyState === 4) {
                             if (xhr.status === 200) {
-                                // Elabora la risposta dal server, se necessario
-                                
-                                // Chiudi il modulo di registrazione se la registrazione è avvenuta con successo
                                 registratiPopup.style.display = "none";
                                 registratiChoiceButton.style.display = "none";
                                 let successMessage = document.querySelector("#successMessage");
                                 successMessage.style.display = "block";
                                 loginRegistratiContainer.style.display = "flex";
                             } else {
-                                // Gestisci eventuali errori durante la richiesta AJAX
                                 console.error("Errore nella richiesta AJAX");
                             }
                         }
                     };
-    
                     // Converte l'oggetto dati in una stringa JSON e invialo al server
                     let jsonDataReg = JSON.stringify(dataRegistrati);
                     xhr.send(jsonDataReg);
@@ -267,8 +251,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 });
-
-
 
 function gameStart() {
     playButton.disabled = true;
@@ -302,6 +284,7 @@ function startGame() {
     }
     nextTick();
 }
+
 function nextTick(){
     if(running && !isPaused){
         setTimeout(()=>{
@@ -317,10 +300,12 @@ function nextTick(){
         displayGameOver();
     }
 };
+
 function clearBoard(){
     ctx.fillStyle = boardBackground;
     ctx.fillRect(0, 0, gameWidth, gameHeight);
 };
+
 function createFood() {
     function randomFoodCoordinate() {
         return Math.round(Math.random() * (gameWidth - unitSize) / unitSize) * unitSize;
@@ -335,25 +320,22 @@ function createFood() {
     } while (isFoodOnSnake(newFood.x, newFood.y) || foods.some(food => food.x === newFood.x && food.y === newFood.y));
 
     foods.push(newFood);
-}
-
+};
 
 function isFoodOnSnake(x, y) {
     return snake.some(segment => segment.x === x && segment.y === y);
-}
+};
 
 function drawFood() {
     ctx.fillStyle = foodColor;
     foods.forEach(food => {
         ctx.fillRect(food.x, food.y, unitSize, unitSize);
     });
-}
+};
 
 function moveSnake() {
     const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
-
     snake.unshift(head);
-
     foods.forEach((food, index) => {
         if (snake[0].x === food.x && snake[0].y === food.y) {
             score += 1;
@@ -374,10 +356,8 @@ function moveSnake() {
             snake.push(tail);
         }
     });
-
     snake.pop();
 }
-
 
 function drawSnake(){
     ctx.fillStyle = snakeColor; // Colore generale del serpente
@@ -394,7 +374,6 @@ function drawSnake(){
         ctx.strokeRect(snake[i].x, snake[i].y, unitSize, unitSize);
     }
 }
-
 
 function changeDirection(event){
     const keyPressed = event.keyCode;
@@ -432,6 +411,7 @@ function changeDirection(event){
             break;
     } 
 };
+
 function checkGameOver(){
     switch (true) {
         case (snake[0].x < 0):
@@ -449,6 +429,7 @@ function checkGameOver(){
         }
     }
 };
+
 function displayGameOver() {
     ctx.font = "50px MV Boli";
     ctx.fillStyle = "black";
@@ -466,7 +447,7 @@ function displayGameOver() {
     getMyTopScore(id_utente);
     riepilogoPartitaFinita.style.display = "block";
     getCoins(usernameUtenteLoggato);
-}
+};
 
 function resetGame() {
     if(login){
@@ -491,7 +472,7 @@ function resetGame() {
             resetBtn.disabled = false;
         }, 6000); // 6000 millisecondi (6 secondi)
     }
-}
+};
 
 function congratulations() {
     if (score % 10 === 0) {
@@ -513,7 +494,7 @@ function congratulations() {
             confettiContainer.appendChild(confetti);
         }
     }
-}
+};
 
 function pauseGame() {
     if (running && !isPaused) {
@@ -525,7 +506,7 @@ function pauseGame() {
         pauseContainer.style.display = "block";
         
     }
-}
+};
 
 function continueGame() {
     if (isPaused) {
@@ -548,7 +529,7 @@ function continueGame() {
         }, 1000);
         running = true;
     }
-}
+};
 
 function openSettings() {
     loadSettings(usernameUtenteLoggato);
@@ -583,8 +564,7 @@ function openSettings() {
         // Chiamare la funzione di salvataggio con i parametri corretti
         saveSettings(numFood, unitSize, speed /*, foodColor, snakeColor*/);
     });
-}
-
+};
 
 function saveSettings(numFood, unitSize, speed /*, colore_cibo_selezionato, colore_serpente_selezionato*/){
     let xhr = new XMLHttpRequest();
@@ -614,14 +594,14 @@ function saveSettings(numFood, unitSize, speed /*, colore_cibo_selezionato, colo
     xhr.send(jsonData);
     
     impostazioniContainer.style.display = "none";
-}
+};
 
 function closeSettings(){
     speed = prevSpeed;
     numFood = prevNumFood;
     unitSize = prevUnitSize;
     impostazioniContainer.style.display = "none";
-}
+};
 
 function loadSettings(username){
     let xhr = new XMLHttpRequest();
@@ -654,8 +634,7 @@ function loadSettings(username){
     };
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
-}
-
+};
 
 function openShop(username) {
     loadShop(username);
@@ -708,7 +687,6 @@ function openShop(username) {
                         { colore: 'red', costo: 50, stato: response.cibo_rosso },
                     ];
 
-                    
                     const coloriSerpente = document.getElementById("coloriSerpente");
                     const coloriCibo = document.getElementById("coloriCibo");
 
@@ -893,12 +871,12 @@ function openShop(username) {
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
     negozioContainer.style.display = "block";
-}
+};
 
 function closeShop(){
     loadSettings(usernameUtenteLoggato);
     negozioContainer.style.display = "none";
-}
+};
 
 function loadShop(username){
 
@@ -922,7 +900,7 @@ function loadShop(username){
 
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
-}
+};
 
 function openLeaderBoards(id_utente) {
     const allBestUrl = 'http://localhost/get_best_score.php';
@@ -991,23 +969,26 @@ function openLeaderBoards(id_utente) {
     .catch(error => {
         console.error('Errore durante la richiesta dei punteggi:', error);
     });
-}
+};
 
 function closeLeaderBoards(){
     leaderBoardsContainer.style.display = "none";
-}
+};
+
 function chiudiLogin(){
     loginPopUp.style.display = "none";
     loginRegistratiContainer.style.display = "flex";
-}
+};
+
 function chiudiRegistrati(){
     registratiPopup.style.display = "none";
     loginRegistratiContainer.style.display = "flex";
-}
+};
+
 function chiudiPasswordDimenticata(){
     passwordDimenticataPopUp.style.display = "none";
     loginRegistratiContainer.style.display = "flex";
-}
+};
 
 function getMyTopScore(id_utente){
     let xhr = new XMLHttpRequest();
@@ -1039,23 +1020,13 @@ function getMyTopScore(id_utente){
     };
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
-}
-
-
-
-
-
-
-
-
-
-
+};
 
 function passwordDimenticata(){
     loginPopUp.style.display = "none";
     passwordDimenticataPopUp.style.display = "block";
     event.preventDefault(); // Impedisci il comportamento predefinito del modulo HTML
-}
+};
 
 function inviaRichiestaRecuperoPassword() {
     // Recupera l'indirizzo email inserito dall'utente
@@ -1116,7 +1087,7 @@ function inviaRichiestaRecuperoPassword() {
     passwordDimenticataPopUp.style.display = "none";
     registratiChoiceButton.style.display = "none";
     loginRegistratiContainer.style.display = "flex";
-}
+};
 
 function getCoins(username) {
     let xhr = new XMLHttpRequest();
@@ -1143,8 +1114,7 @@ function getCoins(username) {
     };
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
-}
-
+};
 
 function checkUsernameAvailability(registratiUsername, callback) {
     let xhr = new XMLHttpRequest();
@@ -1163,7 +1133,6 @@ function checkUsernameAvailability(registratiUsername, callback) {
             }
         }
     };
-
     const data = {
         username: registratiUsername
     };
@@ -1177,8 +1146,7 @@ function isEmailValid(email) {
 
     // Verifica se l'indirizzo email corrisponde all'espressione regolare
     return emailRegex.test(email);
-}
-
+};
 
 function getIdUtente(usernameUtenteLoggato) {
     return new Promise((resolve, reject) => {
@@ -1210,15 +1178,9 @@ function getIdUtente(usernameUtenteLoggato) {
         const jsonData = JSON.stringify(data);
         xhr.send(jsonData);
     });
-}
+};
 
-
-function inviaPunteggioAlServer(id_utente, score, numeroCibo, dimensioneSerpente, speed) {
-    
-    
-    // Dati da inviare al server
-    
-
+function inviaPunteggioAlServer(id_utente, score, numeroCibo, dimensioneSerpente, speed) {   
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "salva_partita_in_db.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -1245,5 +1207,4 @@ function inviaPunteggioAlServer(id_utente, score, numeroCibo, dimensioneSerpente
 
 const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
-}
-
+};
