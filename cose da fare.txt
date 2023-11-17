@@ -1,5 +1,0 @@
-html/css: 
-sistemare tutti i design
-FARE IL CSS IN BASE ALLA GRANDEZZA DELLO SCHERMO
-
-modificare la forma del serpente

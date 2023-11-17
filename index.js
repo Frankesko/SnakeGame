@@ -866,22 +866,25 @@ function openShop(username) {
                     const textColoriCibo = document.createElement('p');
                     textColoriCibo.textContent = "Food colors";
 
-                    coloriSerpenteArray.forEach((item, index) => {
+                    coloriSerpente.appendChild(textColoriSerpente);
+                    coloriSerpenteArray.forEach((item) => {
                         const shopItemElement = createShopItemElement(item, 'serpente');
                         const itemId = `shop-item-serpente${item.colore}`; // Aggiungi un indice univoco
                         shopItemElement.id = itemId; // Imposta l'ID dell'elemento
                         coloriSerpente.appendChild(shopItemElement);
                         console.log(`ID dell'elemento: ${itemId}`);
                     });
-                    
+
+                    coloriCibo.appendChild(textColoriCibo);
                     coloriCiboArray.forEach((item) => {
                         const shopItemElement = createShopItemElement(item, 'cibo');
                         const itemId = `shop-item-cibo${item.colore}`;
                         shopItemElement.id = itemId; // Imposta l'ID dell'elemento
                         coloriCibo.appendChild(shopItemElement);
                         console.log(`ID dell'elemento: ${itemId}`);
-                        
                     });
+
+
 
                 } else {
                     console.log("non ricevuti dati");
