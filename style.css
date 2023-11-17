@@ -234,12 +234,16 @@ body {
 /* ISTRUZIONI E USERNAME */
 #testoSpiegazioneGioco {
     text-align: left;
-    padding: 10px;
+    padding: 5px;
     border: 2px solid #ccc;
     background-color: #f5f5f5;
     border-radius: 10px;
     width: 500px;
-    margin: -85px;
+    margin-bottom: -95px;
+    margin-top: 5px;
+}
+#testoSpiegazioneGioco span{
+    font-size: 10px;
 }
 
 #mostraUsernameIfLoggato {

@@ -34,17 +34,17 @@ const leaderBoardsContainer = document.getElementById("container");
 const sottocontaienrLeaderBoardsContainer = document.getElementById("leaderBoardsContainer");
 const chiudiLeaderBoardsContainerBtn = document.getElementById("chiudiLeaderBoardsContainerBtn");
 //const passwordDimenticataBtn = document.getElementById("passwordDimenticata");
-const passwordDimenticataPopUp = document.getElementById("passwordDimenticataPopUp");
-const recuperoPasswordBtn = document.getElementById("recuperoPasswordBtn");
+//const passwordDimenticataPopUp = document.getElementById("passwordDimenticataPopUp");
+//const recuperoPasswordBtn = document.getElementById("recuperoPasswordBtn");
 const containerFooter = document.getElementById("containerFooter");
 const chiudiLoginPopUpButton = document.getElementById("chiudiLoginPopUpButton");
 const chiudiRegistratiPopUpButton = document.getElementById("chiudiRegistratiPopUpButton");
-const chiudiPasswordDimenticataPopUpButton = document.getElementById("chiudiPasswordDimenticataPopUpButton");
+//const chiudiPasswordDimenticataPopUpButton = document.getElementById("chiudiPasswordDimenticataPopUpButton");
 const chiudiImpostazioniPopUpButton = document.getElementById("chiudiImpostazioniPopUpButton");
 
 const gameWidth = gameBoard.width;
 const gameHeight = gameBoard.height;
-const boardBackground = "white";
+const boardBackground = "immagine.png";
 let snakeColor = "orange";
 let snakeBorder = "orange";
 let foodColor = "red";
@@ -121,11 +121,11 @@ leaderBoardsButtonInFinePartita.addEventListener("click", function() {
 });
 
 //passwordDimenticataBtn.addEventListener("click", passwordDimenticata);
-recuperoPasswordBtn.addEventListener("click", inviaRichiestaRecuperoPassword);
+//recuperoPasswordBtn.addEventListener("click", inviaRichiestaRecuperoPassword);
 chiudiLeaderBoardsContainerBtn.addEventListener("click", closeLeaderBoards);
 chiudiLoginPopUpButton.addEventListener("click", chiudiLogin);
 chiudiRegistratiPopUpButton.addEventListener("click", chiudiRegistrati);
-chiudiPasswordDimenticataPopUpButton.addEventListener("click", chiudiPasswordDimenticata);
+//chiudiPasswordDimenticataPopUpButton.addEventListener("click", chiudiPasswordDimenticata);
 chiudiImpostazioniPopUpButton.addEventListener("click", closeSettings)
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             .then(id => {
                                id_utente = id;
                             })
-                            console.log("bbb");
+                            console.log("ffff");
                             getCoins(usernameUtenteLoggato);
                             loadShop(usernameUtenteLoggato);
                             loadSettings(usernameUtenteLoggato);
@@ -302,8 +302,9 @@ function nextTick(){
 };
 
 function clearBoard(){
-    ctx.fillStyle = boardBackground;
-    ctx.fillRect(0, 0, gameWidth, gameHeight);
+    var img = new Image();
+    img.src = boardBackground;
+    ctx.drawImage(img, 0, 0, gameWidth, gameHeight);
 };
 
 function createFood() {
@@ -984,12 +985,12 @@ function chiudiRegistrati(){
     registratiPopup.style.display = "none";
     loginRegistratiContainer.style.display = "flex";
 };
-
+/*
 function chiudiPasswordDimenticata(){
     passwordDimenticataPopUp.style.display = "none";
     loginRegistratiContainer.style.display = "flex";
 };
-
+*/
 function getMyTopScore(id_utente){
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "get_my_top_score.php", true);
@@ -1021,7 +1022,7 @@ function getMyTopScore(id_utente){
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
 };
-
+/*
 function passwordDimenticata(){
     loginPopUp.style.display = "none";
     passwordDimenticataPopUp.style.display = "block";
@@ -1088,7 +1089,7 @@ function inviaRichiestaRecuperoPassword() {
     registratiChoiceButton.style.display = "none";
     loginRegistratiContainer.style.display = "flex";
 };
-
+*/
 function getCoins(username) {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "get_coins.php", true);
