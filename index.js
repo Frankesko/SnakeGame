@@ -367,21 +367,43 @@ function moveSnake() {
     snake.pop();
 }
 
-function drawSnake(){
+function drawSnake() {
     ctx.fillStyle = snakeColor; // Colore generale del serpente
     ctx.strokeStyle = snakeBorder;
-    
+
     // Disegna la testa del serpente (cambia il colore e la forma)
     ctx.beginPath();
     ctx.arc(snake[0].x + unitSize / 2, snake[0].y + unitSize / 2, unitSize / 2, 0, Math.PI * 2);
     ctx.fill();
-    
+
     // Disegna il corpo del serpente
     for (let i = 1; i < snake.length; i++) {
-        ctx.fillRect(snake[i].x, snake[i].y, unitSize, unitSize);
-        ctx.strokeRect(snake[i].x, snake[i].y, unitSize, unitSize);
+        // Utilizza linee rette per il corpo del serpente in linea retta
+        if (snake[i].x === snake[i - 1].x || snake[i].y === snake[i - 1].y) {
+            ctx.beginPath();
+            ctx.moveTo(snake[i - 1].x + unitSize / 2, snake[i - 1].y + unitSize / 2);
+            ctx.lineTo(snake[i].x + unitSize / 2, snake[i].y + unitSize / 2);
+            ctx.lineWidth = unitSize * 0.7; // Riduci la larghezza delle linee
+            ctx.lineCap = 'round';
+            ctx.stroke();
+            ctx.lineWidth = 1; // Ripristina la larghezza della linea
+        } else {
+            // Utilizza curve quadratiche per arrotondare le curve
+            let midX = (snake[i].x + snake[i - 1].x) / 2;
+            let midY = (snake[i].y + snake[i - 1].y) / 2;
+
+            ctx.beginPath();
+            ctx.moveTo(snake[i - 1].x + unitSize / 2, snake[i - 1].y + unitSize / 2);
+            ctx.quadraticCurveTo(midX, midY, snake[i].x + unitSize / 2, snake[i].y + unitSize / 2);
+            ctx.lineWidth = unitSize * 0.7; // Riduci la larghezza delle linee
+            ctx.lineCap = 'round';
+            ctx.stroke();
+            ctx.lineWidth = 1; // Ripristina la larghezza della linea
+        }
     }
 }
+
+
 
 function changeDirection(event){
     const keyPressed = event.keyCode;

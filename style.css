@@ -274,6 +274,7 @@ body {
     position: fixed;
     top: 50%;
     left: 50%;
+    align-items: center;
     transform: translate(-50%, -50%);
     background-color: #aeba93;
     border: 2px solid black;
@@ -281,6 +282,7 @@ body {
     z-index: 2; /* Posiziona sopra il contenitore del gioco */
     display: none; /* Nasconde il container per impostazione predefinita */
     border-radius: 18px;
+    text-align: center;
 }
 
 #setVelocità, #setDimensione {
