@@ -41,6 +41,7 @@ const chiudiLoginPopUpButton = document.getElementById("chiudiLoginPopUpButton")
 const chiudiRegistratiPopUpButton = document.getElementById("chiudiRegistratiPopUpButton");
 //const chiudiPasswordDimenticataPopUpButton = document.getElementById("chiudiPasswordDimenticataPopUpButton");
 const chiudiImpostazioniPopUpButton = document.getElementById("chiudiImpostazioniPopUpButton");
+const gameContainer = document.getElementById("gameContainer");
 
 const gameWidth = gameBoard.width;
 const gameHeight = gameBoard.height;
@@ -154,12 +155,15 @@ document.addEventListener("DOMContentLoaded", function() {
                         if (response === "true") {
                             // Accesso consentito, reindirizza o esegui altre azioni
                             loginPopUp.style.display = "none";
+                            gameContainer.style.display = "block";
                             usernameUtenteLoggato = loginUsername;
                             testoSpiegazioneGioco.style.display = "none";
                             mostraUsernameIfLoggato.style.display = "block";
                             mostraUsernameIfLoggato.textContent = usernameUtenteLoggato;
+                            
                             containerFooter.style.display = "flex";
                             startContainer.style.display = "block";
+
                             getIdUtente(usernameUtenteLoggato)
                             .then(id => {
                                id_utente = id;
@@ -168,6 +172,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             getCoins(usernameUtenteLoggato);
                             loadShop(usernameUtenteLoggato);
                             loadSettings(usernameUtenteLoggato);
+                            
                             playButton.addEventListener("click", function() {
                                 startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer                
                                 gameStart(); // E poi avvierà il gioco
@@ -330,9 +335,11 @@ function isFoodOnSnake(x, y) {
 function drawFood() {
     ctx.fillStyle = foodColor;
     foods.forEach(food => {
-        ctx.fillRect(food.x, food.y, unitSize, unitSize);
+        ctx.beginPath();
+        ctx.arc(food.x + unitSize / 2, food.y + unitSize / 2, unitSize / 2, 0, 2 * Math.PI);
+        ctx.fill();
     });
-};
+}
 
 function moveSnake() {
     const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
@@ -929,12 +936,12 @@ function openLeaderBoards(id_utente) {
             scoreContainer.setAttribute('class', 'scoreContainer');
 
             const usernameElement = document.createElement('span');
-            usernameElement.textContent = `Utente: ${score.username}`;
+            usernameElement.textContent = `User: ${score.username}`;
 
             const spaceElement = document.createElement('br');
 
             const scoreElement = document.createElement('span');
-            scoreElement.textContent = `Punteggio: ${score.score}`;
+            scoreElement.textContent = `Score: ${score.score}`;
 
             scoreContainer.appendChild(usernameElement);
             scoreContainer.appendChild(spaceElement);

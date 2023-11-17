@@ -25,11 +25,53 @@
             <span>puoi modificare la <b>velocità</b> del serprente, la sua <b>dimensione</b>, e la <b>quantià di cibo</b> con cui giocare.</span> <br>
             <span>Dallo shop, con le monetine guadagnate giocando, puoi acquistare il colore del serpente e</span>
             <span>e il colore del cibo a tuo piacimento!</span> <br>
-            <span>"Vince" chi fa più punti!</span>
+            <span>"Vince" chi fa più punti!</span> <br>
             <span><b>Buon divertimento!</b></span>
         </div> 
+        
+
+
+        <div id="loginRegistratiButtons">
+            <button id="loginChoiceButton">Login</button>
+            <button id="registratiChoiceButton">Registrati</button>
+            <div id="successMessage" class="hidden">
+                Registrazione avvenuta con successo!
+            </div>
+            <div id="recuperoPasswordSuccessMessage" class="hidden"></div>
+        </div>
+        <div id="loginPopUp" class="hidden">
+            <button id="chiudiLoginPopUpButton">x</button>
+            <form id="loginForm">
+                <input type="text" id="loginUsername" placeholder="Username">
+                <input type="password" id="loginPassword" placeholder="Password">
+                <button  type="button" id="loginSubmitButton">Login</button>
+                <!--
+                <br>
+                <br>
+                <button id="passwordDimenticata">Password dimenticata?</button> -->
+            </form>
+        </div>
+        <div id="registratiPopup" class="hidden">
+            <button id="chiudiRegistratiPopUpButton">x</button>
+            <form id="registratiForm">
+                <input type="text" id="registratiUsername" placeholder="Username" required>
+                <input type="email" id="registratiEmail" placeholder="Email" required>
+                <input type="password" id="registratiPassword" placeholder="Password" required>
+                <input type="password" id="registratiConfirmPassword" placeholder="Conferma Password" required>
+                <button type="button" id="registratiSubmitButton">Registrati</button>
+            </form>
+        </div>       
+<!--    <div id="passwordDimenticataPopUp" class="hidden">
+            <button id="chiudiPasswordDimenticataPopUpButton">x</button>
+            <form id="passwordDimenticataForm">
+                <input type="email" id="passwordDimenticataEmail" placeholder="Email" required>
+                <button id="recuperoPasswordBtn" type="button">Recupera password</button>
+            </form>
+        </div>       -->
+
         <div class="confetti-container"></div>
-        <div id="gameContainer">
+        <div id="gameContainer" class="hidden">
+            
             <div id="mostraUsernameIfLoggato" class="hidden"></div>
             <canvas id="gameBoard" width="500" height="500"></canvas>
             <div id="containerFooter" style="display:none">
@@ -47,43 +89,7 @@
                 </div>  
             </div>
 
-            <div id="loginRegistratiButtons">
-                <button id="loginChoiceButton">Login</button>
-                <button id="registratiChoiceButton">Registrati</button>
-                <div id="successMessage" class="hidden">
-                    Registrazione avvenuta con successo!
-                </div>
-                <div id="recuperoPasswordSuccessMessage" class="hidden"></div>
-            </div>
-            <div id="loginPopUp" class="hidden">
-                <button id="chiudiLoginPopUpButton">x</button>
-                <form id="loginForm">
-                    <input type="text" id="loginUsername" placeholder="Username">
-                    <input type="password" id="loginPassword" placeholder="Password">
-                    <button  type="button" id="loginSubmitButton">Login</button>
-                    <!--
-                    <br>
-                    <br>
-                    <button id="passwordDimenticata">Password dimenticata?</button> -->
-                </form>
-            </div>
-            <div id="registratiPopup" class="hidden">
-                <button id="chiudiRegistratiPopUpButton">x</button>
-                <form id="registratiForm">
-                    <input type="text" id="registratiUsername" placeholder="Username" required>
-                    <input type="email" id="registratiEmail" placeholder="Email" required>
-                    <input type="password" id="registratiPassword" placeholder="Password" required>
-                    <input type="password" id="registratiConfirmPassword" placeholder="Conferma Password" required>
-                    <button type="button" id="registratiSubmitButton">Registrati</button>
-                </form>
-            </div>       
-    <!--    <div id="passwordDimenticataPopUp" class="hidden">
-                <button id="chiudiPasswordDimenticataPopUpButton">x</button>
-                <form id="passwordDimenticataForm">
-                    <input type="email" id="passwordDimenticataEmail" placeholder="Email" required>
-                    <button id="recuperoPasswordBtn" type="button">Recupera password</button>
-                </form>
-            </div>       -->
+            
 
             <div id="startContainer" class="hidden">
                 <div id="playButtonContainer">
