@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             .then(id => {
                                id_utente = id;
                             })
-                            console.log("ffff");
+                            console.log("aaa");
                             getCoins(usernameUtenteLoggato);
                             loadShop(usernameUtenteLoggato);
                             loadSettings(usernameUtenteLoggato);
@@ -261,12 +261,25 @@ function gameStart() {
     playButton.disabled = true;
     running = true;    
     impostazioniContainer.style.display = "none";
+
+    // Imposta una variabile per tenere traccia dello stato della riproduzione del suono
+    var soundPlayed = false;
+
     // Avvia un intervallo per il timer
     timerInterval = setInterval(() => {
         ctx.clearRect(0, 0, gameWidth, gameHeight); // Cancella il canvas
         ctx.font = "50px MV Boli";
         ctx.fillStyle = "black";
         ctx.textAlign = "center";
+        
+        var countDown = document.getElementById("countDown");
+
+        // Verifica se il suono non è ancora stato riprodotto
+        if (!soundPlayed) {
+            countDown.play();
+            soundPlayed = true; // Imposta la variabile su true per indicare che il suono è stato riprodotto
+        }
+
         if (timer === 0) {
             clearInterval(timerInterval); // Ferma il timer quando raggiunge 0
             startGame(); // Avvia il gioco effettivo
@@ -276,6 +289,7 @@ function gameStart() {
         timer--;
     }, 1000); // Intervallo di 1 secondo (1000 millisecondi)
 }
+
 
 function startGame() {
     if(!isRestarted){
@@ -346,6 +360,10 @@ function moveSnake() {
     snake.unshift(head);
     foods.forEach((food, index) => {
         if (snake[0].x === food.x && snake[0].y === food.y) {
+            
+            var eatSound = document.getElementById("eatSound");
+            eatSound.play();
+                        
             score += 1;
             scoreText.textContent = score;
             actualCoins = coins + score;
@@ -422,6 +440,11 @@ function changeDirection(event){
     const goingRight = (xVelocity == unitSize);
     const goingLeft = (xVelocity == -unitSize);
 
+    if(login){
+        var changeDirection = document.getElementById("changeDirection");
+        changeDirection.play();
+    }    
+
     switch (true) {
         case (keyPressed == UP || keyPressed == W) && !goingDown:
             xVelocity = 0;
@@ -464,7 +487,9 @@ function displayGameOver() {
     ctx.font = "50px MV Boli";
     ctx.fillStyle = "black";
     ctx.textAlign = "center";
-    
+    var loseSound = document.getElementById("loseSound");
+    loseSound.play()
+
     if (persoControIlMuro) {
         ctx.fillText("Boink!", gameWidth / 2, gameHeight / 3);
     } else {
@@ -543,7 +568,19 @@ function continueGame() {
         isPaused = false;
         pauseContainer.style.display = "none";
         timer = 3;
+
+        // Imposta una variabile per tenere traccia dello stato della riproduzione del suono
+        var soundPlayed = false;
+
         timerInterval = setInterval(() => {
+            var countDown = document.getElementById("countDown");
+
+            // Verifica se il suono non è ancora stato riprodotto
+            if (!soundPlayed) {
+                countDown.play();
+                soundPlayed = true; // Imposta la variabile su true per indicare che il suono è stato riprodotto
+            }
+
             if (timer <= 0) {
                 clearInterval(timerInterval);
                 isRestarted = true;
@@ -560,6 +597,7 @@ function continueGame() {
         running = true;
     }
 };
+
 
 function openSettings() {
     loadSettings(usernameUtenteLoggato);
