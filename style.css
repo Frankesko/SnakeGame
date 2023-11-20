@@ -60,7 +60,7 @@
     cursor: pointer;
     border-color: black;
 }
-#pauseBtn {
+#pauseBtn, #soundSwitcher {
     margin-left: 6px; /* Spazio tra i due pulsanti */
     margin-right: 6px;
 }

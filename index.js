@@ -43,6 +43,15 @@ const chiudiRegistratiPopUpButton = document.getElementById("chiudiRegistratiPop
 const chiudiImpostazioniPopUpButton = document.getElementById("chiudiImpostazioniPopUpButton");
 const gameContainer = document.getElementById("gameContainer");
 
+var countDown = document.getElementById("countDown");
+var eatSound = document.getElementById("eatSound");
+var changeDirectionV = document.getElementById("changeDirection");
+var loseSound = document.getElementById("loseSound");
+let isSoundOn = true;
+// Ottieni il bottone e l'icona
+var soundSwitcher = document.getElementById("soundSwitcher");
+var soundIcon = document.getElementById("soundIcon");
+
 const gameWidth = gameBoard.width;
 const gameHeight = gameBoard.height;
 const boardBackground = "immagine.png";
@@ -127,7 +136,8 @@ chiudiLeaderBoardsContainerBtn.addEventListener("click", closeLeaderBoards);
 chiudiLoginPopUpButton.addEventListener("click", chiudiLogin);
 chiudiRegistratiPopUpButton.addEventListener("click", chiudiRegistrati);
 //chiudiPasswordDimenticataPopUpButton.addEventListener("click", chiudiPasswordDimenticata);
-chiudiImpostazioniPopUpButton.addEventListener("click", closeSettings)
+chiudiImpostazioniPopUpButton.addEventListener("click", closeSettings);
+soundSwitcher.addEventListener("click", toggleSound);
 
 document.addEventListener("DOMContentLoaded", function() {
     loginChoiceButton.addEventListener("click", function() {
@@ -272,7 +282,7 @@ function gameStart() {
         ctx.fillStyle = "black";
         ctx.textAlign = "center";
         
-        var countDown = document.getElementById("countDown");
+        
 
         // Verifica se il suono non è ancora stato riprodotto
         if (!soundPlayed) {
@@ -361,7 +371,7 @@ function moveSnake() {
     foods.forEach((food, index) => {
         if (snake[0].x === food.x && snake[0].y === food.y) {
             
-            var eatSound = document.getElementById("eatSound");
+            
             eatSound.play();
                         
             score += 1;
@@ -441,8 +451,7 @@ function changeDirection(event){
     const goingLeft = (xVelocity == -unitSize);
 
     if(login){
-        var changeDirection = document.getElementById("changeDirection");
-        changeDirection.play();
+        changeDirectionV.play();
     }    
 
     switch (true) {
@@ -487,7 +496,7 @@ function displayGameOver() {
     ctx.font = "50px MV Boli";
     ctx.fillStyle = "black";
     ctx.textAlign = "center";
-    var loseSound = document.getElementById("loseSound");
+    
     loseSound.play()
 
     if (persoControIlMuro) {
@@ -573,7 +582,7 @@ function continueGame() {
         var soundPlayed = false;
 
         timerInterval = setInterval(() => {
-            var countDown = document.getElementById("countDown");
+            
 
             // Verifica se il suono non è ancora stato riprodotto
             if (!soundPlayed) {
@@ -1279,3 +1288,30 @@ function inviaPunteggioAlServer(id_utente, score, numeroCibo, dimensioneSerpente
 const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
 };
+
+function toggleSound() {
+    isSoundOn = !isSoundOn; // Cambia lo stato del suono
+    soundSwitch(isSoundOn); // Chiama la funzione soundSwitch con il nuovo stato
+}
+
+function soundSwitch(isSoundOn) {
+    if (isSoundOn) {
+        // Attiva il suono
+        changeDirectionV.volume = 1;
+        loseSound.volume = 1;
+        eatSound.volume = 1;
+        countDown.volume = 1;
+
+        // Cambia l'aspetto dell'icona
+        soundIcon.src = "audio_on.png";
+    } else {
+        // Disattiva il suono
+        changeDirectionV.volume = 0;
+        loseSound.volume = 0;
+        eatSound.volume = 0;
+        countDown.volume = 0;
+
+        // Cambia l'aspetto dell'icona
+        soundIcon.src = "audio_off.png";
+    }
+}
