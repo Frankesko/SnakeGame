@@ -1,1 +1,5 @@
 sistemare la faccina del serpente
+
+fare modificare la dimensione della board
+
+fare il congratulation quando si finisce il cibo
