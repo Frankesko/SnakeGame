@@ -108,6 +108,8 @@ let cibo_rosso;
 
 let coins;
 
+let vinto;
+
 window.addEventListener("keydown", changeDirection);
 resetBtn.addEventListener("click", resetGame);
 pauseBtn.addEventListener("click", pauseGame);
@@ -270,6 +272,7 @@ document.addEventListener("DOMContentLoaded", function() {
 function gameStart() {
     playButton.disabled = true;
     running = true;    
+    vinto = false;
     impostazioniContainer.style.display = "none";
 
     // Imposta una variabile per tenere traccia dello stato della riproduzione del suono
@@ -341,16 +344,41 @@ function createFood() {
         return Math.round(Math.random() * (gameWidth - unitSize) / unitSize) * unitSize;
     }
 
+    // Calcola il numero totale di posizioni sulla board
+    const totalPositions = (gameWidth / unitSize) * (gameHeight / unitSize);
+
+    // Se non ci sono più posizioni disponibili, esci senza creare cibo
+    if (snake.length >= totalPositions) {
+        return;
+    }
+
+    // Ottieni tutte le coordinate occupate dai cibi
+    const occupiedCoordinates = foods.map(food => `${food.x}-${food.y}`);
+
     let newFood;
+    let attempts = 0;
+    const maxAttempts = 100; // Numero massimo di tentativi per trovare una posizione libera
+
     do {
         newFood = {
             x: randomFoodCoordinate(),
             y: randomFoodCoordinate()
         };
-    } while (isFoodOnSnake(newFood.x, newFood.y) || foods.some(food => food.x === newFood.x && food.y === newFood.y));
+
+        const newFoodCoordinates = `${newFood.x}-${newFood.y}`;
+
+        attempts++;
+
+        // Se il numero di tentativi supera il massimo consentito, esci senza creare cibo
+        if (attempts > maxAttempts) {
+            console.warn("Impossibile trovare posizione per il cibo. La board potrebbe essere completamente riempita.");
+            return;
+        }
+    } while (isFoodOnSnake(newFood.x, newFood.y) || occupiedCoordinates.includes(`${newFood.x}-${newFood.y}`));
 
     foods.push(newFood);
-};
+}
+
 
 function isFoodOnSnake(x, y) {
     return snake.some(segment => segment.x === x && segment.y === y);
@@ -490,6 +518,10 @@ function checkGameOver(){
             persoControIlMuro = false;
         }
     }
+    if(score >= 395){
+        running = false;
+        vinto = true;
+    }
 };
 
 function displayGameOver() {
@@ -499,10 +531,13 @@ function displayGameOver() {
     
     loseSound.play()
 
-    if (persoControIlMuro) {
+    if (persoControIlMuro && !vinto) {
         ctx.fillText("Boink!", gameWidth / 2, gameHeight / 3);
-    } else {
+    } else if (!persoControIlMuro && !vinto) {
         ctx.fillText("Gnam!", gameWidth / 2, gameHeight / 3);
+    } else if (vinto) {
+        ctx.fillText("Hai vinto!", gameWidth / 2, gameHeight / 3);
+        congratulations();
     }
 
     running = false;    
@@ -539,7 +574,7 @@ function resetGame() {
 };
 
 function congratulations() {
-    if (score % 10 === 0) {
+    if (score % 10 === 0 || vinto) {
         const confettiContainer = document.querySelector('.confetti-container');
         const colors = ['#f06', '#0f6', '#60f', '#ff0', '#f0f', '#0ff']; // Definisci una serie di colori
         const confettiCount = 100; // Numero di coriandoli
@@ -1292,7 +1327,7 @@ const jsonData = JSON.stringify(data);
 function toggleSound() {
     isSoundOn = !isSoundOn; // Cambia lo stato del suono
     soundSwitch(isSoundOn); // Chiama la funzione soundSwitch con il nuovo stato
-}
+};
 
 function soundSwitch(isSoundOn) {
     if (isSoundOn) {
@@ -1314,4 +1349,4 @@ function soundSwitch(isSoundOn) {
         // Cambia l'aspetto dell'icona
         soundIcon.src = "audio_off.png";
     }
-}
+};
