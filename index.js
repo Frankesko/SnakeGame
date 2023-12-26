@@ -518,7 +518,9 @@ function checkGameOver(){
             persoControIlMuro = false;
         }
     }
-    if(score >= 395){
+    if((unitSize = 25 && score == 395) ||
+      (unitSize =  5 && score == 1995) ||
+      (unitSize =  1 && score == 9995)) {
         running = false;
         vinto = true;
     }
