@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (isEmailValid(email)) {
             // Esegui il resto della registrazione
         } else {
-            alert("L'indirizzo email non è valido. Inserisci un indirizzo email valido.");
+            alert("L'indirizzo email sembra non essere valido. Vuoi proseguire lo stesso?.");
         }
         
         if (registratiUsername.trim() === "" || email.trim() === "" || registratiPassword.trim() === "" || confermaPassword.trim() === "") {
@@ -272,7 +272,7 @@ document.addEventListener("DOMContentLoaded", function() {
 function gameStart() {
     playButton.disabled = true;
     running = true;    
-    vinto = false;
+    
     impostazioniContainer.style.display = "none";
 
     // Imposta una variabile per tenere traccia dello stato della riproduzione del suono
@@ -306,6 +306,7 @@ function gameStart() {
 
 function startGame() {
     if(!isRestarted){
+        vinto = false;
         loadSettings(usernameUtenteLoggato);
         playButton.disabled = false;
         foods.splice(0, foods.length); // Svuota l'array foods
@@ -518,9 +519,10 @@ function checkGameOver(){
             persoControIlMuro = false;
         }
     }
-    if((unitSize = 25 && score == 395) ||
-      (unitSize =  5 && score == 1995) ||
-      (unitSize =  1 && score == 9995)) {
+    
+    if((unitSize == 25 && score == 395) ||
+      (unitSize ==  5 && score == 1995) ||
+      (unitSize == 1 && score == 9995)) {
         running = false;
         vinto = true;
     }
@@ -540,7 +542,7 @@ function displayGameOver() {
     } else if (vinto) {
         ctx.fillText("Hai vinto!", gameWidth / 2, gameHeight / 3);
         congratulations();
-    }
+    } 
 
     running = false;    
     inviaPunteggioAlServer(id_utente, score, numFood, unitSize, speed);
