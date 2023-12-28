@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (isEmailValid(email)) {
             // Esegui il resto della registrazione
         } else {
-            alert("L'indirizzo email sembra non essere valido. Vuoi proseguire lo stesso?.");
+            alert("L'indirizzo email sembra non essere valido. Vuoi proseguire lo stesso?");
         }
         
         if (registratiUsername.trim() === "" || email.trim() === "" || registratiPassword.trim() === "" || confermaPassword.trim() === "") {
