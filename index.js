@@ -819,7 +819,7 @@ function openShop(username) {
                         itemNameElement.textContent = item.colore;
 
                         const itemCostElement = document.createElement('div');
-                        itemCostElement.textContent = item.costo;
+                        itemCostElement.textContent = "Prezzo: " + item.costo;
                         itemCostElement.style.fontSize = "14px";
 
                         const buyButton = document.createElement('button');
@@ -881,7 +881,7 @@ function openShop(username) {
                                 xhr.send(jsonData);
                             
                             } else if(item.stato == "no" && item.costo > coins){
-                                console.log("non hai abbastanza soldini");
+                                alert("Coins insufficienti per proseguire con l'acquisto");
                             } else if (item.stato == "si" && item.colore != snakeColor || item.colore != foodColor) {
                                 console.log("impostato");
                                 let xhr = new XMLHttpRequest();
