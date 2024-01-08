@@ -43,14 +43,14 @@ const chiudiRegistratiPopUpButton = document.getElementById("chiudiRegistratiPop
 const chiudiImpostazioniPopUpButton = document.getElementById("chiudiImpostazioniPopUpButton");
 const gameContainer = document.getElementById("gameContainer");
 
-var countDown = document.getElementById("countDown");
-var eatSound = document.getElementById("eatSound");
-var changeDirectionV = document.getElementById("changeDirection");
-var loseSound = document.getElementById("loseSound");
+let countDown = document.getElementById("countDown");
+let eatSound = document.getElementById("eatSound");
+let changeDirectionV = document.getElementById("changeDirection");
+let loseSound = document.getElementById("loseSound");
 let isSoundOn = true;
-// Ottieni il bottone e l'icona
-var soundSwitcher = document.getElementById("soundSwitcher");
-var soundIcon = document.getElementById("soundIcon");
+
+let soundSwitcher = document.getElementById("soundSwitcher");
+let soundIcon = document.getElementById("soundIcon");
 
 const gameWidth = gameBoard.width;
 const gameHeight = gameBoard.height;
@@ -143,9 +143,9 @@ soundSwitcher.addEventListener("click", toggleSound);
 
 document.addEventListener("DOMContentLoaded", function() {
     loginChoiceButton.addEventListener("click", function() {
-        // Nascondi il container di registrazione
+        //nasconde container di registrazione
         loginRegistratiContainer.style.display = "none";
-        // Mostra il container di login
+        //mostra container di login
         loginPopUp.style.display = "block";
         loginSubmitButton.addEventListener("click", function() {
             let loginUsername = document.querySelector("#loginUsername").value;
@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function() {
             };
 
             let xhr = new XMLHttpRequest();
-            xhr.open("POST", "verifica_accesso.php", true); // Assicurati che l'URL sia corretto
+            xhr.open("POST", "verifica_accesso.php", true); 
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         // Elabora la risposta dal server
                         var response = xhr.responseText;
                         if (response === "true") {
-                            // Accesso consentito, reindirizza o esegui altre azioni
+                            // Accesso consentito 
                             loginPopUp.style.display = "none";
                             gameContainer.style.display = "block";
                             usernameUtenteLoggato = loginUsername;
@@ -186,8 +186,8 @@ document.addEventListener("DOMContentLoaded", function() {
                             loadSettings(usernameUtenteLoggato);
                             
                             playButton.addEventListener("click", function() {
-                                startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer                
-                                gameStart(); // E poi avvierà il gioco
+                                startContainer.style.display = "none";          
+                                gameStart(); 
                                 login = true;
                             });  
                         } else if (response === "usernameFalse") {
@@ -197,21 +197,20 @@ document.addEventListener("DOMContentLoaded", function() {
                             alert("Password errata");
                         }
                     } else {
-                        // Gestisci eventuali errori durante la richiesta AJAX
                         console.error("Errore nella richiesta AJAX");
                     }
                 }
             };
-            // Converte l'oggetto dati in una stringa JSON e invialo al server
+            // Converte l'oggetto dati in una stringa JSON e lo invia al server
             let jsonDataLog = JSON.stringify(dataLogin);
             xhr.send(jsonDataLog);
         });
     });
 
     registratiChoiceButton.addEventListener("click", function() {
-        // Nascondi il container di login
+        //nasconde il container di login
         loginRegistratiContainer.style.display = "none";
-        // Mostra il container di registrazione
+        //mostra il container di registrazione
         registratiPopup.style.display = "block";
         registratiSubmitButton.addEventListener("click", function() {
             let registratiUsername = document.querySelector("#registratiUsername").value;
@@ -220,7 +219,7 @@ document.addEventListener("DOMContentLoaded", function() {
             let confermaPassword = document.querySelector("#registratiConfirmPassword").value;
         
         if (isEmailValid(email)) {
-            // Esegui il resto della registrazione
+            //ok
         } else {
             alert("L'indirizzo email sembra non essere valido. Vuoi proseguire lo stesso?");
         }
@@ -230,10 +229,10 @@ document.addEventListener("DOMContentLoaded", function() {
         } else if (registratiPassword !== confermaPassword) {
             alert("Le password non corrispondono.");
         } else {
-            // Verifica l'unicità dello username prima di procedere con la registrazione
+            //verifica unicità username prima di procedere con registrazione
             checkUsernameAvailability(registratiUsername, function(isAvailable) {
                 if (isAvailable) {
-                    // Lo username è disponibile, invia i dati al server
+                    //username ok
                     const dataRegistrati = {
                         username: registratiUsername,
                         email: email,
@@ -256,11 +255,11 @@ document.addEventListener("DOMContentLoaded", function() {
                             }
                         }
                     };
-                    // Converte l'oggetto dati in una stringa JSON e invialo al server
+                    // Converte in stringa JSON e invia al server
                     let jsonDataReg = JSON.stringify(dataRegistrati);
                     xhr.send(jsonDataReg);
                 } else {
-                    // Lo username non è disponibile, mostra un messaggio di errore
+                    //username non disp
                     alert("Lo username non è disponibile. Scegli un altro username.");
                 }
             });
@@ -269,38 +268,37 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 });
 
-function gameStart() {
+function gameStart() {   
     playButton.disabled = true;
     running = true;    
     
     impostazioniContainer.style.display = "none";
 
-    // Imposta una variabile per tenere traccia dello stato della riproduzione del suono
-    var soundPlayed = false;
+    let soundPlayed = false;
 
-    // Avvia un intervallo per il timer
+    //timer
     timerInterval = setInterval(() => {
-        ctx.clearRect(0, 0, gameWidth, gameHeight); // Cancella il canvas
+        ctx.clearRect(0, 0, gameWidth, gameHeight);
         ctx.font = "50px MV Boli";
         ctx.fillStyle = "black";
         ctx.textAlign = "center";
         
         
 
-        // Verifica se il suono non è ancora stato riprodotto
+        //verifica suono non riprodotto
         if (!soundPlayed) {
             countDown.play();
-            soundPlayed = true; // Imposta la variabile su true per indicare che il suono è stato riprodotto
+            soundPlayed = true; //imposta su true perche il suono è stato riprodotto
         }
 
         if (timer === 0) {
-            clearInterval(timerInterval); // Ferma il timer quando raggiunge 0
-            startGame(); // Avvia il gioco effettivo
+            clearInterval(timerInterval);
+            startGame(); //avvio il gioco effettivo
         } else {
             ctx.fillText(`${timer}`, gameWidth / 2, gameHeight / 2);
         }
         timer--;
-    }, 1000); // Intervallo di 1 secondo (1000 millisecondi)
+    }, 1000); //intervallo di 1 sec
 }
 
 
@@ -309,9 +307,9 @@ function startGame() {
         vinto = false;
         loadSettings(usernameUtenteLoggato);
         playButton.disabled = false;
-        foods.splice(0, foods.length); // Svuota l'array foods
+        foods.splice(0, foods.length); //cancella array foods
         for (let i = 0; i < numFood; i++) {
-            createFood(); // Chiamata alla funzione per creare il cibo
+            createFood(); 
             drawFood();
         }             
     }
@@ -345,20 +343,20 @@ function createFood() {
         return Math.round(Math.random() * (gameWidth - unitSize) / unitSize) * unitSize;
     }
 
-    // Calcola il numero totale di posizioni sulla board
+    //calcolo numero totale di posizioni
     const totalPositions = (gameWidth / unitSize) * (gameHeight / unitSize);
 
-    // Se non ci sono più posizioni disponibili, esci senza creare cibo
+    //se non ci sono più posizioni disponibili, non crea cibo
     if (snake.length >= totalPositions) {
         return;
     }
 
-    // Ottieni tutte le coordinate occupate dai cibi
+    //ottieni tutte le coordinate occupate dai cibi
     const occupiedCoordinates = foods.map(food => `${food.x}-${food.y}`);
 
     let newFood;
     let attempts = 0;
-    const maxAttempts = 100; // Numero massimo di tentativi per trovare una posizione libera
+    const maxAttempts = 100;
 
     do {
         newFood = {
@@ -370,9 +368,9 @@ function createFood() {
 
         attempts++;
 
-        // Se il numero di tentativi supera il massimo consentito, esci senza creare cibo
+        
         if (attempts > maxAttempts) {
-            console.warn("Impossibile trovare posizione per il cibo. La board potrebbe essere completamente riempita.");
+            console.log("pieno");
             return;
         }
     } while (isFoodOnSnake(newFood.x, newFood.y) || occupiedCoordinates.includes(`${newFood.x}-${newFood.y}`));
@@ -400,7 +398,6 @@ function moveSnake() {
     foods.forEach((food, index) => {
         if (snake[0].x === food.x && snake[0].y === food.y) {
             
-            
             eatSound.play();
                         
             score += 1;
@@ -410,13 +407,13 @@ function moveSnake() {
             console.log(score, coins);
             congratulations();
 
-            // Rimuovi il cibo mangiato dall'array
+            //rimuove il cibo mangiato dall'array
             foods.splice(index, 1);
 
-            // Crea un nuovo cibo
+           
             createFood();
 
-            // Aggiungi un nuovo segmento alla coda del serpente
+            //aggiungi nuovo pezzo alla coda del serpente
             const tail = { x: snake[snake.length - 1].x, y: snake[snake.length - 1].y };
             snake.push(tail);
         }
@@ -425,37 +422,37 @@ function moveSnake() {
 }
 
 function drawSnake() {
-    ctx.fillStyle = snakeColor; // Colore generale del serpente
+    ctx.fillStyle = snakeColor; //colore serpente
     ctx.strokeStyle = snakeBorder;
 
-    // Disegna la testa del serpente (cambia il colore e la forma)
+    //testa serpente
     ctx.beginPath();
     ctx.arc(snake[0].x + unitSize / 2, snake[0].y + unitSize / 2, unitSize / 2, 0, Math.PI * 2);
     ctx.fill();
 
-    // Disegna il corpo del serpente
+    //corpo del serpente
     for (let i = 1; i < snake.length; i++) {
-        // Utilizza linee rette per il corpo del serpente in linea retta
+        
         if (snake[i].x === snake[i - 1].x || snake[i].y === snake[i - 1].y) {
             ctx.beginPath();
             ctx.moveTo(snake[i - 1].x + unitSize / 2, snake[i - 1].y + unitSize / 2);
             ctx.lineTo(snake[i].x + unitSize / 2, snake[i].y + unitSize / 2);
-            ctx.lineWidth = unitSize * 0.7; // Riduci la larghezza delle linee
+            ctx.lineWidth = unitSize * 0.7; //rende piccolo il corpo
             ctx.lineCap = 'round';
             ctx.stroke();
-            ctx.lineWidth = 1; // Ripristina la larghezza della linea
+            ctx.lineWidth = 1; 
         } else {
-            // Utilizza curve quadratiche per arrotondare le curve
+            //curve quadratiche per arrotondare le curve
             let midX = (snake[i].x + snake[i - 1].x) / 2;
             let midY = (snake[i].y + snake[i - 1].y) / 2;
 
             ctx.beginPath();
             ctx.moveTo(snake[i - 1].x + unitSize / 2, snake[i - 1].y + unitSize / 2);
             ctx.quadraticCurveTo(midX, midY, snake[i].x + unitSize / 2, snake[i].y + unitSize / 2);
-            ctx.lineWidth = unitSize * 0.7; // Riduci la larghezza delle linee
+            ctx.lineWidth = unitSize * 0.7; //rende piccolo il corpo
             ctx.lineCap = 'round';
             ctx.stroke();
-            ctx.lineWidth = 1; // Ripristina la larghezza della linea
+            ctx.lineWidth = 1;
         }
     }
 }
@@ -554,11 +551,11 @@ function displayGameOver() {
 
 function resetGame() {
     if(login){
-        // Disabilita il tasto di reset
+        
         resetBtn.disabled = true;
         riepilogoPartitaFinita.style.display = "none";
         score = 0;
-        scoreText.textContent = "0"; // Assegna una stringa vuota per nascondere il testo
+        scoreText.textContent = "0"; //stringa vuota per nascondere il testo
         xVelocity = unitSize;
         yVelocity = 0;
         snake = [
@@ -568,29 +565,29 @@ function resetGame() {
             { x: unitSize, y: 225 },
             { x: 0, y: 225 }
         ];
-        timer = 3; // Reimposta il timer a 3 secondi
+        timer = 3; 
         gameStart();
-        // Riabilita il tasto di reset dopo 6 secondi
+        //riabilita il tasto di reset dopo 6 secondi
         setTimeout(function() {
             resetBtn.disabled = false;
-        }, 6000); // 6000 millisecondi (6 secondi)
+        }, 6000);
     }
 };
 
 function congratulations() {
     if (score % 10 === 0 || vinto) {
         const confettiContainer = document.querySelector('.confetti-container');
-        const colors = ['#f06', '#0f6', '#60f', '#ff0', '#f0f', '#0ff']; // Definisci una serie di colori
-        const confettiCount = 100; // Numero di coriandoli
+        const colors = ['#f06', '#0f6', '#60f', '#ff0', '#f0f', '#0ff']; //colori
+        const confettiCount = 100; //num coriandoli
 
-        // Crea i coriandoli
+        //coriandoli
         for (let i = 0; i < confettiCount; i++) {
             const confetti = document.createElement('div');
             confetti.className = 'confetti';
             confetti.style.left = Math.random() * 100 + 'vw';
             confetti.style.animationDelay = Math.random() * 2 + 's';
 
-            // Assegna un colore casuale dai colori definiti
+            //colore casuale tra i colori definiti
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
             confetti.style.backgroundColor = randomColor;
 
@@ -617,16 +614,15 @@ function continueGame() {
         pauseContainer.style.display = "none";
         timer = 3;
 
-        // Imposta una variabile per tenere traccia dello stato della riproduzione del suono
-        var soundPlayed = false;
+        let soundPlayed = false;
 
         timerInterval = setInterval(() => {
             
 
-            // Verifica se il suono non è ancora stato riprodotto
+            //verifica suono non riprodotto
             if (!soundPlayed) {
                 countDown.play();
-                soundPlayed = true; // Imposta la variabile su true per indicare che il suono è stato riprodotto
+                soundPlayed = true; //imposta su true perche il suono è stato riprodotto
             }
 
             if (timer <= 0) {
@@ -656,20 +652,20 @@ function openSettings() {
     prevNumFood = numFood;
     prevUnitSize = unitSize;
 
-    // Inverti il valore di speed prima di visualizzarlo
-    speedValue.textContent = 251 - speed; // Mostra il valore in modo invertito
+    //inverte valore di speed prima di visualizzarlo
+    speedValue.textContent = 251 - speed;
 
     speedInput.addEventListener("input", function() {
-        // Inverti il valore di speed quando lo imposti
-        speed = 251 - this.value; // Aggiorna il valore della variabile speed
-        // Inverti nuovamente il valore prima di visualizzarlo
-        speedValue.textContent = 251 - speed; // Mostra il valore aggiornato in modo invertito
+        //inverti valore di speed quando impostato
+        speed = 251 - this.value; 
+        //inverti nuovamente prima di visualizz
+        speedValue.textContent = 251 - speed; 
     });
 
     const dimensioneSelect = document.querySelector("#dimensione");
     dimensioneSelect.addEventListener("change", function() {
         unitSize = parseInt(this.value);
-        // Esegui le azioni desiderate con il valore di unitSize
+        
     });
     const ciboSelect = document.querySelector("#cibo")
     ciboSelect.addEventListener("change", function() {
@@ -677,7 +673,7 @@ function openSettings() {
     });
 
     chiudiImpostazioniContainerBtn.addEventListener("click", function() {
-        // Chiamare la funzione di salvataggio con i parametri corretti
+        //funzione di salvataggio con i parametri corretti
         saveSettings(numFood, unitSize, speed /*, foodColor, snakeColor*/);
     });
 };
@@ -691,7 +687,7 @@ function saveSettings(numFood, unitSize, speed /*, colore_cibo_selezionato, colo
             if (xhr.status === 200) {
 
             } else {
-                // Gestisci gli errori
+                
                 console.error("Errore nella richiesta AJAX");
             }
         }
@@ -702,7 +698,7 @@ function saveSettings(numFood, unitSize, speed /*, colore_cibo_selezionato, colo
         numFood: numFood,
         unitSize: unitSize,
         speed: speed
-        //, colore_serpente_selezionato: colore_serpente_selezionato,
+        //,colore_serpente_selezionato: colore_serpente_selezionato,
         //colore_cibo_selezionato: colore_cibo_selezionato
     };
 
@@ -726,7 +722,7 @@ function loadSettings(username){
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                // Elabora la risposta del server
+                
                 var response = JSON.parse(xhr.responseText);
                 if (response.numero_cibo && response.dimensione_serpente
                 && response.speed && response.colore_cibo_selezionato && response.colore_serpente_selezionato) {
@@ -955,8 +951,8 @@ function openShop(username) {
                     coloriSerpente.appendChild(textColoriSerpente);
                     coloriSerpenteArray.forEach((item) => {
                         const shopItemElement = createShopItemElement(item, 'serpente');
-                        const itemId = `shop-item-serpente${item.colore}`; // Aggiungi un indice univoco
-                        shopItemElement.id = itemId; // Imposta l'ID dell'elemento
+                        const itemId = `shop-item-serpente${item.colore}`; 
+                        shopItemElement.id = itemId; 
                         coloriSerpente.appendChild(shopItemElement);
                         console.log(`ID dell'elemento: ${itemId}`);
                     });
@@ -965,7 +961,7 @@ function openShop(username) {
                     coloriCiboArray.forEach((item) => {
                         const shopItemElement = createShopItemElement(item, 'cibo');
                         const itemId = `shop-item-cibo${item.colore}`;
-                        shopItemElement.id = itemId; // Imposta l'ID dell'elemento
+                        shopItemElement.id = itemId; 
                         coloriCibo.appendChild(shopItemElement);
                         console.log(`ID dell'elemento: ${itemId}`);
                     });
@@ -978,7 +974,7 @@ function openShop(username) {
 
                 //console.log("andato");
             } else {
-                // Gestisci gli errori
+               
                 console.log("fallito");
             }
         }
@@ -1007,7 +1003,7 @@ function loadShop(username){
             if (xhr.status === 200) {
                 //console.log("Aaaa")
             } else {
-                // Gestisci gli errori
+                
                 console.error("Errore nella richiesta AJAX");
             }
         }
@@ -1033,15 +1029,15 @@ function openLeaderBoards(id_utente) {
         //console.log('Dati dei punteggi generali:', allBestData);
         //console.log('Dati dei miei punteggi:', myBestData);
 
-        // Ottieni il riferimento al container nel tuo HTML
+        
         const generalBestLeaderBoard = document.getElementById('generalBestLeaderBoard');
         const personalBestLeaderBoard = document.getElementById('personalBestLeaderBoard');
 
-        // Rimuovi eventuali elementi esistenti nei container
+        //rimuovi eventuali elementi esistenti nei container
         generalBestLeaderBoard.innerHTML = '';
         personalBestLeaderBoard.innerHTML = '';
 
-        // Funzione per creare gli elementi HTML
+        //creare gli elementi HTML
         const createScoreElement = (score) => {
             const scoreContainer = document.createElement('div');
             scoreContainer.setAttribute('class', 'scoreContainer');
@@ -1066,21 +1062,21 @@ function openLeaderBoards(id_utente) {
         const textMyBest = document.createElement('p');
         textMyBest.textContent = "My best score";
 
-        // Itera attraverso i dati generali e crea gli elementi HTML
+        //itera attraverso i dati generali e crea gli elementi HTML
         generalBestLeaderBoard.appendChild(textBest);
         allBestData.forEach(score => {
             const scoreContainer = createScoreElement(score);
             generalBestLeaderBoard.appendChild(scoreContainer);
         });
 
-        // Itera attraverso i dati personali e crea gli elementi HTML
+        //itera attraverso i dati personali e crea gli elementi HTML
         personalBestLeaderBoard.appendChild(textMyBest);
         myBestData.forEach(score => {
             const scoreContainer = createScoreElement(score);
             personalBestLeaderBoard.appendChild(scoreContainer);
         });
 
-        // Mostra i container dei leaderboard
+        //mostra i container dei leaderboard
         generalBestLeaderBoard.style.display = 'block';
         personalBestLeaderBoard.style.display = 'block';
         leaderBoardsContainer.style.display = 'block';
@@ -1117,7 +1113,7 @@ function getMyTopScore(id_utente){
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                // Elabora la risposta del server
+               
                 var response = JSON.parse(xhr.responseText);
                 if (response.success) {
                     let topScore = response.score;
@@ -1129,7 +1125,7 @@ function getMyTopScore(id_utente){
                         document.getElementById("personalBest").textContent = ` My best: ${topScore}`
                     }
                 } else {
-                    // Gestisci errori o situazioni in cui l'utente non è autenticato
+                    
                 }
             }
         }
@@ -1220,10 +1216,10 @@ function getCoins(username) {
                 var response = JSON.parse(xhr.responseText);
                 if (response.success) {
                     coins = response.coins;
-                    // Aggiorna l'elemento HTML per mostrare i coins
+                    
                     document.getElementById("coinsUtente").textContent = coins;
                 } else {
-                    // Gestisci errori o situazioni in cui l'utente non è autenticato
+                    
                 }
             }
         }
@@ -1242,13 +1238,13 @@ function checkUsernameAvailability(registratiUsername, callback) {
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                // Elabora la risposta dal server
+                
                 const response = JSON.parse(xhr.responseText);
                 callback(response.available);
             } else {
-                // Gestisci eventuali errori durante la richiesta AJAX
+                
                 console.error("Errore nella richiesta AJAX");
-                callback(false); // Assume che ci siano problemi nel server
+                callback(false); //assume che ci siano problemi nel server
             }
         }
     };
@@ -1260,10 +1256,9 @@ function checkUsernameAvailability(registratiUsername, callback) {
 }
 
 function isEmailValid(email) {
-    // Definisci un'espressione regolare per verificare l'indirizzo email
+    
     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
-    // Verifica se l'indirizzo email corrisponde all'espressione regolare
     return emailRegex.test(email);
 };
 
@@ -1304,13 +1299,13 @@ function inviaPunteggioAlServer(id_utente, score, numeroCibo, dimensioneSerpente
     xhr.open("POST", "salva_partita_in_db.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
-    // Callback che verrà eseguita quando lo stato della richiesta cambia
+    
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                // La richiesta al server è stata completata con successo
+                
             } else {
-                // Gestisci gli errori
+               
                 console.error("Errore nella richiesta AJAX");
             }
         }
@@ -1329,28 +1324,28 @@ const jsonData = JSON.stringify(data);
 };
 
 function toggleSound() {
-    isSoundOn = !isSoundOn; // Cambia lo stato del suono
-    soundSwitch(isSoundOn); // Chiama la funzione soundSwitch con il nuovo stato
+    isSoundOn = !isSoundOn; //cambia lo stato del suono
+    soundSwitch(isSoundOn); //chiama la funzione soundSwitch con il nuovo stato
 };
 
 function soundSwitch(isSoundOn) {
     if (isSoundOn) {
-        // Attiva il suono
+        //attiva il suono
         changeDirectionV.volume = 1;
         loseSound.volume = 1;
         eatSound.volume = 1;
         countDown.volume = 1;
 
-        // Cambia l'aspetto dell'icona
+        //cambia icona
         soundIcon.src = "audio_on.png";
     } else {
-        // Disattiva il suono
+        //disattiva il suono
         changeDirectionV.volume = 0;
         loseSound.volume = 0;
         eatSound.volume = 0;
         countDown.volume = 0;
 
-        // Cambia l'aspetto dell'icona
+        // Cambia icona
         soundIcon.src = "audio_off.png";
     }
 };
