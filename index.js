@@ -162,10 +162,10 @@ document.addEventListener("DOMContentLoaded", function() {
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
-                        // Elabora la risposta dal server
+                        
                         var response = xhr.responseText;
                         if (response === "true") {
-                            // Accesso consentito 
+                            //accesso consentito 
                             loginPopUp.style.display = "none";
                             gameContainer.style.display = "block";
                             usernameUtenteLoggato = loginUsername;
@@ -191,9 +191,10 @@ document.addEventListener("DOMContentLoaded", function() {
                                 login = true;
                             });  
                         } else if (response === "usernameFalse") {
-                            // Accesso negato, mostra un messaggio di errore
+                            //accesso negato
                             alert("Account inesistente");
                         } else if (response === "passwordFalse") {
+                            //accesso negato
                             alert("Password errata");
                         }
                     } else {
@@ -201,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     }
                 }
             };
-            // Converte l'oggetto dati in una stringa JSON e lo invia al server
+            //converte l'oggetto dati in una stringa JSON e lo invia al server
             let jsonDataLog = JSON.stringify(dataLogin);
             xhr.send(jsonDataLog);
         });
