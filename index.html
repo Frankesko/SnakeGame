@@ -211,23 +211,26 @@
                 <button id="calcolaTotPartiteGiocate">Calcola partite giocate</button>
                 <button id="modificaPassword">Modifica password</button>               
                 <button id="eliminaAccount" style="background-color: red">Elimina account</button>
-                <button id="chudiProfilo" >Esci</button>
+                <button id="chudiProfilo">Esci</button>
             </div>
             
             <div id="inserisciBioDiv" class="hidden">
                 <input id="BioIns" placeholder="Bio" required>
-                <button id="modificaPwBtn">Conferma</button>
+                <button type="button" id="POST">Conferma</button>
             </div>
 
             <div id="modificaPasswordDiv" class="hidden">
                 <form>
                     <input type="password" id="modificaPassword" placeholder="Password" required>
                     <input type="password" id="modificaPasswordConfirm" placeholder="Conferma Password" required>
-                    <button id="modificaPwBtn">Conferma</button>
+                    <button type="button" id="GET">Conferma</button>
                 </form>
             </div>
         </div>
     </div>
+
+    <p id="ajaxres"></p>
+
     <script src="index.js"> </script>
 </body>
 

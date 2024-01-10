@@ -1380,10 +1380,43 @@ function chudiProfiloFunct(){
     modificaUtente.style.display = "none";
 }
 
-function inserisciBioFunct(){
+function inserisciBioFunct() {
     modificaUtente.style.display = "none";
     const inserisciBioDiv = document.getElementById("inserisciBioDiv");
     inserisciBioDiv.style.display = "block";
+
+    const POST = document.getElementById("POST");
+    POST.addEventListener("click", function () {
+        
+        const data = {
+            id: id_utente,
+            bioIns: document.getElementById("BioIns").value
+        };
+
+        var jsondata = JSON.stringify(data);
+        console.log(jsondata);
+        var oReq = new XMLHttpRequest();
+        oReq.open("POST", "api.php/bie/", true);
+        oReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        oReq.onload = function () {
+            // Verifica se la richiesta è andata a buon fine
+            if (oReq.status === 200 && oReq.readyState === 4) {
+                // Mostra il messaggio di successo
+                document.getElementById("ajaxres").innerHTML = oReq.responseText;
+            } else {
+                // Se la richiesta non è andata a buon fine, mostra un messaggio di errore
+                var response = JSON.parse(oReq.responseText);
+                if (response.error) {
+                    document.getElementById("ajaxres").innerHTML = "Errore: " + response.message;
+                } else if (response.errorssss) {
+                    document.getElementById("ajaxres").innerHTML = "File non ricevuto";
+                }
+            }
+        };
+
+        // Invia la richiesta con i dati
+        oReq.send(jsondata);
+    });
 }
 
 function modificaPasswordFunct(){
