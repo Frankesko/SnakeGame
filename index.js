@@ -44,6 +44,7 @@ const chiudiImpostazioniPopUpButton = document.getElementById("chiudiImpostazion
 const gameContainer = document.getElementById("gameContainer");
 
 const modificaUtente = document.getElementById("modificaUtente");
+const chudiProfilo = document.getElementById("chudiProfilo");
 
 var countDown = document.getElementById("countDown");
 var eatSound = document.getElementById("eatSound");
@@ -114,6 +115,7 @@ let vinto;
 
 window.addEventListener("keydown", changeDirection);
 mostraUsernameIfLoggato.addEventListener("click", modificaUtenteFunct);
+chudiProfilo.addEventListener("click", chudiProfiloFunct);
 resetBtn.addEventListener("click", resetGame);
 pauseBtn.addEventListener("click", pauseGame);
 riprendiBtn.addEventListener("click", continueGame);
@@ -1361,4 +1363,31 @@ function soundSwitch(isSoundOn) {
 function modificaUtenteFunct(){
     modificaUtente.style.display = "flex";
     console.log("dadadadada");
+
+
+    const inserisciBio = document.getElementById("inserisciBio");
+    const calcolaTotPartiteGiocate = document.getElementById("calcolaTotPartiteGiocate");
+    const modificaPassword = document.getElementById("modificaPassword");
+    const eliminaAccount = document.getElementById("eliminaAccount");
+
+    inserisciBio.addEventListener("click", inserisciBioFunct);
+    //calcolaTotPartiteGiocate.addEventListener("click", calcolaTotPartiteGiocate);
+    modificaPassword.addEventListener("click", modificaPasswordFunct);
+    //eliminaAccount.addEventListener("click", eliminaAccount);
+}
+
+function chudiProfiloFunct(){
+    modificaUtente.style.display = "none";
+}
+
+function inserisciBioFunct(){
+    modificaUtente.style.display = "none";
+    const inserisciBioDiv = document.getElementById("inserisciBioDiv");
+    inserisciBioDiv.style.display = "block";
+}
+
+function modificaPasswordFunct(){
+    modificaUtente.style.display = "none";
+    const modificaPasswordDiv = document.getElementById("modificaPasswordDiv");
+    modificaPasswordDiv.style.display = "block";
 }

@@ -564,7 +564,7 @@ body {
     color: black;
 }
 
-#modificaUtente {
+#modificaUtente, #inserisciBioDiv, #modificaPasswordDiv {
     position: fixed;
     top: 50%;
     left: 50%;
