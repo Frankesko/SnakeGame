@@ -1370,7 +1370,7 @@ function modificaUtenteFunct(){
     const modificaPassword = document.getElementById("modificaPassword");
     const eliminaAccount = document.getElementById("eliminaAccount");
 
-    inserisciBio.addEventListener("click", inserisciBioFunct);
+    //inserisciBio.addEventListener("click", inserisciBioFunct);
     calcolaTotPartiteGiocate.addEventListener("click", calcolaTotPartiteGiocateFunct);
     modificaPassword.addEventListener("click", modificaPasswordFunct);
     eliminaAccount.addEventListener("click", eliminaAccountFunct);
@@ -1380,6 +1380,7 @@ function chudiProfiloFunct(){
     modificaUtente.style.display = "none";
 }
 
+/*
 function inserisciBioFunct() {
     modificaUtente.style.display = "none";
     const inserisciBioDiv = document.getElementById("inserisciBioDiv");
@@ -1397,22 +1398,32 @@ function inserisciBioFunct() {
             console.log(data);
             let xhr = new XMLHttpRequest();
             xhr.onload = function () {
-            if (xhr.status === 200 && xhr.readyState === 4) {
-                try {
-                    console.log(xhr.responseText);
-                    var response = JSON.parse(xhr.responseText);
-                    // Handle the parsed JSON response here
-                } catch (error) {
-                    console.error("Error parsing JSON response:", error);
-                    // Handle the error appropriately
+                if (xhr.status === 200 && xhr.readyState === 4) {
+                    try {
+                        console.log(xhr.responseText);
+            
+                        // Utilizza il metodo split per ottenere il secondo elemento
+                        let response = JSON.parse(xhr.responseText);
+                        let arrayFromSplit = response.inserito.split(',');
+                        let secondoElemento = arrayFromSplit[1].trim();
+                        secondoElemento = secondoElemento.slice(1, -1);
+
+                        console.log(secondoElemento);
+                        const bio = document.getElementById("bio");
+                        bio.textContent = secondoElemento;
+                        bio.style.display = "Block";
+
+                        
+                    } catch (error) {
+                        console.error("Error parsing JSON response:", error);
+                        console.log(xhr.responseText);
+                    }
+                } else {
+                    console.log("non entrato nel file // richiesta non andata a buon fine");
                     console.log(xhr.responseText);
                 }
-            } else {
-                console.log("non entrato nel file // richiesta non andata a buon fine");
-                console.log(xhr.responseText);
-            }
             };
-
+            
             xhr.open("POST", "/api.php/bie", true); // Cambiato in POST
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
@@ -1422,6 +1433,7 @@ function inserisciBioFunct() {
     });
     
 }
+*/
 
 function modificaPasswordFunct(){
     modificaUtente.style.display = "none";

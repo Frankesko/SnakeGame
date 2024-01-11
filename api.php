@@ -53,7 +53,7 @@ function handleGetRequest($table, $key, $pdo) {
   }
 }
 
-
+/*
 function handlePostRequest($table, $json_data, $pdo) {
   $set = json_decode($json_data, true);
   $columns = preg_replace('/[^a-z0-9_]+/i', '', array_keys($set));
@@ -70,7 +70,7 @@ function handlePostRequest($table, $json_data, $pdo) {
       $stmt = $pdo->prepare($sql);
       $stmt->execute();
       $lastInsertId = $pdo->lastInsertId();
-      $response = array('status' => 'success', 'message' => 'INSERT OK', 'inserted_id' => $lastInsertId);
+      $response = array('status' => 'success', 'message' => 'INSERT OK', 'inserted_id' => $lastInsertId, 'inserito' => $values_string);
       header('Content-Type: application/json');
       echo json_encode($response);
   } catch (PDOException $e) {
@@ -80,6 +80,7 @@ function handlePostRequest($table, $json_data, $pdo) {
       echo json_encode($response);
   }
 }
+*/
 
 function handlePutRequest($table, $input, $key, $pdo){
   $sql = "UPDATE $table SET password = :campo WHERE id_utente = :id_utente";
@@ -131,7 +132,7 @@ switch ($method) {
       handleGetRequest($table, $key, $connessione);
       break;
   case 'POST':
-      handlePostRequest($table, file_get_contents('php://input'), $connessione);
+      //handlePostRequest($table, file_get_contents('php://input'), $connessione);
       break;
   case 'PUT':
       handlePutRequest($table, $input, $key, $connessione);
