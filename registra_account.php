@@ -12,7 +12,7 @@ if (!$data) {
 
     $username = trim(strtolower($username));
     // Esegui eventuali controlli sulla validità dei dati (validazione)
-
+    //$password = password_hash($password, PASSWORD_DEFAULT);
     // Esegui l'inserimento nel database
     $stmt = $conn->prepare("INSERT INTO utenti (username, email, password) VALUES (?, ?, ?)");
     $stmt->execute([$username, $email, $password]);
