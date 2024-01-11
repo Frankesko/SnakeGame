@@ -1,14 +1,15 @@
 <?php
 
 // connect to the mysql database
-$connessione = require('db_conn.php');
+$connessione = require __DIR__ . "/db_conn.php";
 
 define('DEBUG', false);
 
 // get the HTTP method, path, and body of the request
 $method = $_SERVER['REQUEST_METHOD'];
 $request = explode('/', trim($_SERVER['PATH_INFO'], '/'));
-$input = json_decode(file_get_contents("php://input"));
+$input = json_decode(file_get_contents('php://input'), true);
+
 
 
 // retrieve the table and key from the path
@@ -19,7 +20,7 @@ $key = $_key;
 
 // escape the columns and values from the input object
 if (isset($input)) {
-  $columns = preg_replace('/[^a-z0-9_]+/i', '', is_array($input) ? array_keys($input) : []);
+  $columns = preg_replace('/[^a-z0-9_]+/i', '', array_keys($input));
   $values = array_map(function ($value) use ($connessione) {
       if ($value === null) return null;
       return $connessione->quote($value);
@@ -35,20 +36,23 @@ if (isset($input)) {
   }
 }
 
-function handleGetRequest($table, $key, $pdo){
+function handleGetRequest($table, $key, $pdo) {
   $sql = "SELECT * FROM `$table`" . ($key ? " WHERE ID = " . $pdo->quote($key) : '');
 
   try {
       $statement = $pdo->query($sql);
       $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-      // Ritorna i risultati invece di stamparli
-      return json_encode(['status' => 'success', 'data' => $result]);
+      // Invia la risposta al client
+      header('Content-Type: application/json');
+      echo json_encode(['status' => 'success', 'data' => $result]);
   } catch (PDOException $e) {
-      // In caso di errore, ritorna un messaggio di errore
-      return json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+      // In caso di errore, invia una risposta di errore al client
+      http_response_code(404);
+      echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
   }
 }
+
 
 function handlePostRequest($table, $json_data, $pdo) {
   $set = json_decode($json_data, true);

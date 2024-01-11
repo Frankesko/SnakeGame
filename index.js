@@ -1389,29 +1389,36 @@ function inserisciBioFunct() {
     POST.addEventListener("click", function () {
         
         const data = {
-            id: id_utente,
-            bioIns: document.getElementById("BioIns").value
+            id_utente: id_utente,
+            info_bio: document.getElementById("BioIns").value
         };
-        const jsonData = JSON.stringify(data);
-
-        let xhr = new XMLHttpRequest();
         
-        xhr.onload = function () {
-            // Verifica se la richiesta è andata a buon fine
-            if (xhr.readyState === 4){
-                if(xhr.status === 200) {
-                // Mostra il messaggio di successo
-                 console.log(xhr.responseText); 
-                 console.log("sucesso");
-                } else {
-                console.log("errore");
+        var jsondata = JSON.stringify(data);
+            console.log(data);
+            var oReq = new XMLHttpRequest();
+            oReq.onload = function () {
+            if (oReq.status === 200 && oReq.readyState === 4) {
+                try {
+                    console.log(oReq.responseText);
+                    var response = JSON.parse(oReq.responseText);
+                    // Handle the parsed JSON response here
+                } catch (error) {
+                    console.error("Error parsing JSON response:", error);
+                    // Handle the error appropriately
+                    console.log(oReq.responseText);
                 }
+            } else {
+                console.log("non entrato nel file // richiesta non andata a buon fine");
+                console.log(oReq.responseText);
             }
-        };
-        xhr.open("POST", "api.php/bie/", true);
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhr.send(jsonData);
-        inserisciBioDiv.style.display = "none";
+            };
+
+            oReq.open("POST", "/api.php/bie", true); // Cambiato in POST
+            oReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+            // Cambiato in inviare una richiesta POST
+            oReq.send(jsondata);
+        
     });
     
 }
@@ -1426,12 +1433,12 @@ function modificaPasswordFunct(){
         console.log("in");
 
         pw = document.getElementById("modificaPasswordIns").value;
-        pwConf = document.getElementById("modificaPasswordConfirmIns").value
+        password = document.getElementById("modificaPasswordConfirmIns").value
 
-        if(pw == pwConf) {
+        if(pw == password) {
             const data = {
-                id: id_utente,
-                password: pwConf
+                id_utente: id_utente,
+                password: password
             };
             console.log("pw == pwcofn");
             const jsonData = JSON.stringify(data);
@@ -1450,7 +1457,7 @@ function modificaPasswordFunct(){
                     }
                 }
             };
-            xhr.open("PUT", "api.php/utenti/", true);
+            xhr.open("PUT", "/api.php/utenti", true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.send(jsonData);
             modificaPasswordDiv.style.display = "none";
