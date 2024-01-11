@@ -1371,9 +1371,9 @@ function modificaUtenteFunct(){
     const eliminaAccount = document.getElementById("eliminaAccount");
 
     inserisciBio.addEventListener("click", inserisciBioFunct);
-    //calcolaTotPartiteGiocate.addEventListener("click", calcolaTotPartiteGiocate);
+    calcolaTotPartiteGiocate.addEventListener("click", calcolaTotPartiteGiocateFunct);
     modificaPassword.addEventListener("click", modificaPasswordFunct);
-    //eliminaAccount.addEventListener("click", eliminaAccount);
+    eliminaAccount.addEventListener("click", eliminaAccountFunct);
 }
 
 function chudiProfiloFunct(){
@@ -1383,16 +1383,20 @@ function chudiProfiloFunct(){
 function inserisciBioFunct() {
     modificaUtente.style.display = "none";
     const inserisciBioDiv = document.getElementById("inserisciBioDiv");
-    inserisciBioDiv.style.display = "block";
+    inserisciBioDiv.style.display = "flex";
 
     const POST = document.getElementById("POST");
     POST.addEventListener("click", function () {
         
+        const data = {
+            id: id_utente,
+            bioIns: document.getElementById("BioIns").value
+        };
+        const jsonData = JSON.stringify(data);
 
         let xhr = new XMLHttpRequest();
-        xhr.open("POST", "api.php/bie/", true);
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhr.onreadystatechange = function () {
+        
+        xhr.onload = function () {
             // Verifica se la richiesta è andata a buon fine
             if (xhr.readyState === 4){
                 if(xhr.status === 200) {
@@ -1404,17 +1408,103 @@ function inserisciBioFunct() {
                 }
             }
         };
-        const data = {
-            id: id_utente,
-            bioIns: document.getElementById("BioIns").value
-        };
-        const jsonData = JSON.stringify(data);
+        xhr.open("POST", "api.php/bie/", true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.send(jsonData);
+        inserisciBioDiv.style.display = "none";
     });
+    
 }
 
 function modificaPasswordFunct(){
     modificaUtente.style.display = "none";
     const modificaPasswordDiv = document.getElementById("modificaPasswordDiv");
-    modificaPasswordDiv.style.display = "block";
+    modificaPasswordDiv.style.display = "flex";
+
+    const PUT = document.getElementById("PUT");
+    PUT.addEventListener("click", function () {
+        console.log("in");
+
+        pw = document.getElementById("modificaPasswordIns").value;
+        pwConf = document.getElementById("modificaPasswordConfirmIns").value
+
+        if(pw == pwConf) {
+            const data = {
+                id: id_utente,
+                password: pwConf
+            };
+            console.log("pw == pwcofn");
+            const jsonData = JSON.stringify(data);
+
+            let xhr = new XMLHttpRequest();
+            
+            xhr.onload = function () {
+                // Verifica se la richiesta è andata a buon fine
+                if (xhr.readyState === 4){
+                    if(xhr.status === 200) {
+                    // Mostra il messaggio di successo
+                    console.log(xhr.responseText); 
+                    console.log("sucesso");
+                    } else {
+                    console.log("errore");
+                    }
+                }
+            };
+            xhr.open("PUT", "api.php/utenti/", true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.send(jsonData);
+            modificaPasswordDiv.style.display = "none";
+        } else {
+            alert("Password non corrispondenti");
+        }
+    });
+    
+}
+
+function eliminaAccountFunct(){
+    
+    let xhr = new XMLHttpRequest();
+            
+            xhr.onload = function () {
+                // Verifica se la richiesta è andata a buon fine
+                if (xhr.readyState === 4){
+                    if(xhr.status === 200) {
+                    // Mostra il messaggio di successo
+                    console.log(xhr.responseText); 
+                    console.log("sucesso");
+                    } else {
+                    console.log("errore");
+                    }
+                }
+            };
+            xhr.open("DELETE", "api.php/utenti/" + id_utente, true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.send();
+}
+
+function calcolaTotPartiteGiocateFunct() {
+    let xhr = new XMLHttpRequest();
+
+    xhr.onload = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                // Parsa la risposta JSON
+                const response = JSON.parse(xhr.responseText);
+
+                // Accedi ai dati della risposta
+                if (response.status === 'success') {
+                    const data = response.data;
+                    console.log(data);
+                    console.log("successo");
+                } else {
+                    console.log("errore: " + response.message);
+                }
+            } else {
+                console.log("errore");
+            }
+        }
+    };
+
+    xhr.open("GET", "api.php/partite/" + id_utente, true);
+    xhr.send();
 }

@@ -157,7 +157,7 @@ body {
     align-items: center; /* Allinea gli input al centro orizzontalmente */
 }
 
-#loginForm input, #registratiForm input, #passwordDimenticataForm input{
+#loginForm input, #registratiForm input, #passwordDimenticataForm input, #inserisciBioDiv input, #modificaPasswordDiv input{
     width: 80%;
     margin: 5px 0; /* Aggiunto un margine tra gli input */
     padding: 10px;
@@ -580,7 +580,9 @@ body {
 }
 
 
-#modificaUtente button {
+#modificaUtente button,
+#inserisciBioDiv button,
+#modificaPasswordDiv button {
     margin: 5px; /* Aggiungi margine tra i bottoni per migliorare la leggibilità */
     padding: 7px 14px;
     margin-top: 10px;

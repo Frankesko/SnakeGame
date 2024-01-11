@@ -10,24 +10,12 @@ $method = $_SERVER['REQUEST_METHOD'];
 $request = explode('/', trim($_SERVER['PATH_INFO'], '/'));
 $input = json_decode(file_get_contents("php://input"));
 
-if (DEBUG) {
-    var_dump($method);
-    var_dump($request);
-    var_dump($input);
-}
-
 
 // retrieve the table and key from the path
 $table = preg_replace('/[^a-z0-9_]+/i', '', array_shift($request));
 $_key = array_shift($request);
 $key = $_key;
-//$key = $_key + 0;
 
-if (DEBUG) {
-    var_dump($table);
-    var_dump($_key);
-    var_dump($key);
-}
 
 // escape the columns and values from the input object
 if (isset($input)) {
@@ -36,11 +24,6 @@ if (isset($input)) {
       if ($value === null) return null;
       return $connessione->quote($value);
   }, array_values($input));
-}
-
-if (DEBUG) {
-    var_dump($columns);
-    var_dump($values);
 }
 
 // build the SET part of the SQL command
@@ -53,14 +36,17 @@ if (isset($input)) {
 }
 
 function handleGetRequest($table, $key, $pdo){
-  $sql = "SELECT COUNT (*) FROM `$table`" . ($key ? " WHERE ID = " . $pdo->quote($key) : '');
+  $sql = "SELECT * FROM `$table`" . ($key ? " WHERE ID = " . $pdo->quote($key) : '');
+
   try {
-    $statement = $pdo->query($sql);
-    $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-    return $result;
+      $statement = $pdo->query($sql);
+      $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+      // Ritorna i risultati invece di stamparli
+      return json_encode(['status' => 'success', 'data' => $result]);
   } catch (PDOException $e) {
-      http_response_code(404);
-      die($e->getMessage());
+      // In caso di errore, ritorna un messaggio di errore
+      return json_encode(['status' => 'error', 'message' => $e->getMessage()]);
   }
 }
 
@@ -144,16 +130,4 @@ switch ($method) {
   default:
     break;
 }
-
-
-if(DEBUG){
-  var_dump($sql);
-}
-
-// die if SQL statement failed
-if (!$result) {
-  http_response_code(404);
-}
-
-
 ?>
