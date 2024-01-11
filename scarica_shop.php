@@ -2,17 +2,20 @@
 $conn = require('db_conn.php');
 // Ricevi i dati inviati dal client (JavaScript)
 $data = json_decode(file_get_contents("php://input"));
-
+//verifica se i dati sono validi
 if (!$data) {
     echo "Dati non validi o mancanti.";
 } else {
+    //estrae lo username dai dati
     $username = $data->username;
+
+    //prende l'id
     $stmt = $conn->prepare("SELECT id_utente FROM utenti WHERE username = ?");
     $stmt->execute([$username]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $id_utente = $row["id_utente"];
 
-
+    //seleziona i colori
     $stmt = $conn->prepare("SELECT 
                             serpente_arancione, 
                             serpente_verde, 
@@ -34,9 +37,11 @@ if (!$data) {
                             FROM colori_sbloccati
                             where id_utente = ?");
     $stmt->execute([$id_utente]);
+    //se c'è una riga di risultato
     if ($stmt->rowCount() > 0) {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        //estrae i valori dei colori
         $serpente_arancione = $row["serpente_arancione"];
         $serpente_verde = $row["serpente_verde"];
         $serpente_blu = $row["serpente_blu"];
@@ -56,7 +61,7 @@ if (!$data) {
         $cibo_rosso = $row["cibo_rosso"];
 
 
-
+        //crea un array associativo con i risultati dei valori
         $response = array(
             "serpente_arancione" => $serpente_arancione,
             "serpente_verde" => $serpente_verde,
@@ -77,9 +82,10 @@ if (!$data) {
             "cibo_rosso" => $cibo_rosso
         );
     } else {
+        //nessun dato trovato
         echo json_encode(array("error" => "Nessun dato trovato per l'utente con ID: $id_utente"));
     }
-    
+    //converte l'array in JSON
     echo json_encode($response);
 
 }

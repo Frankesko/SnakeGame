@@ -1,11 +1,14 @@
 <?php
-// Connessione al database
+//connessione al database
 $conn = require('db_conn.php');
-
+//ricevi i dati inviati dal client
 $data = json_decode(file_get_contents("php://input"));
+
+//verifica se i dati sono arrivati
 if (!$data) {
     echo json_encode(["success" => false, "message" => "Dati non validi o mancanti."]);
 } else {
+    //estrae lo username dai dati
     $username = $data->username;
     $username = trim(strtolower($username));
 
@@ -17,7 +20,7 @@ if (!$data) {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $coins = $row["coins"];
 
-        // Restituisci i coins come risposta JSON
+        //restituisci i coins come risposta JSON
         echo json_encode(["success" => true, "coins" => $coins]);
     } else {
         echo json_encode(["success" => false, "message" => "Utente non trovato o non autenticato"]);

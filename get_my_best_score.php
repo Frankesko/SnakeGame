@@ -1,17 +1,17 @@
 <?php
-// Connessione al database
+//connessione al database
 require('db_conn.php');
 
-// Verifica della connessione
+//verifica della connessione
 if (!$conn) {
     die("Connessione al database fallita: " . $conn->errorInfo()[2]);
 }
 $id_utente = isset($_GET['id_utente']) ? $_GET['id_utente'] : null;
-// Controlla se l'ID utente è stato fornito
+//controlla se l'ID utente è stato fornito
 if ($id_utente === null) {
     die("ID utente mancante nella richiesta.");
 }
-// Query per ottenere i punteggi
+//query per ottenere i punteggi
 $query = "
 SELECT partite.score, utenti.username
 FROM partite
@@ -21,22 +21,22 @@ ORDER BY partite.score DESC
 LIMIT 5
 ";
 
-// Prepara la query
+//prepara la query
 $stmt = $conn->prepare($query);
 
-// Esegui la query sostituendo il parametro :id_utente
+//esegui la query
 $stmt->execute(['id_utente' => $id_utente]);
 
-// Elabora i risultati
+//elabora i risultati
 $scores = array();
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $scores[] = $row;
 }
 
-// Chiudi la connessione al database
+//chiudi la connessione al database
 $conn = null;
 
-// Restituisci i risultati come JSON
+//restituisci i risultati come JSON
 header('Content-Type: application/json');
 echo json_encode($scores);
 ?>

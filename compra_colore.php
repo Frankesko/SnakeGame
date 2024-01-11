@@ -1,33 +1,38 @@
 <?php
+//connessione
 $conn = require('db_conn.php');
 // Ricevi i dati inviati dal client (JavaScript)
 $data = json_decode(file_get_contents("php://input"));
 
+//verifica se i dati sono validi
 if(!$data){
     echo "Dati non validi o mancanti.";
 } else {
+    //estrae lo username dai dati
     $username = $data->username; 
+
+    //esegue la query per ottenere l'id utente
     $stmt = $conn->prepare("SELECT id_utente FROM utenti WHERE username = ?");
     $stmt->execute([$username]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $id_utente = $row["id_utente"];
 
-
+    //esegue una query per ottenere i coins dell'utente
     $stmt = $conn->prepare("SELECT coins FROM utenti WHERE id_utente = ?");
     $stmt->execute([$id_utente]);
-
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $coins = $row["coins"];
 
+    //sottrae il prezzo del colore acquistato
     $new_coins_amount = $coins - 50;
 
+    //aggiorna il valore dei coins nel db
     $stmt = $conn->prepare("UPDATE utenti SET coins = ? WHERE id_utente = ?");
     $stmt->execute([$new_coins_amount, $id_utente]);
-
     $type = $data->type;
     $colore_sbloccato = $data->colore_sbloccato;
 
-
+    //aggiorna il colore sbloccato nella tabella
     if($type == 'serpente'){
         switch($colore_sbloccato){
             case 'green':

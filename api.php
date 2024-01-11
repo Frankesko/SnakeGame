@@ -1,18 +1,18 @@
 <?php
 
-// connect to the mysql database
+//connessione
 $connessione = require __DIR__ . "/db_conn.php";
 
 define('DEBUG', false);
 
-// get the HTTP method, path, and body of the request
+//prende HTTP METODO, percorso, e la richiesta
 $method = $_SERVER['REQUEST_METHOD'];
 $request = explode('/', trim($_SERVER['PATH_INFO'], '/'));
 $input = json_decode(file_get_contents('php://input'), true);
 
 
 
-// retrieve the table and key from the path
+// divide la table dalla key
 $table = preg_replace('/[^a-z0-9_]+/i', '', array_shift($request));
 $_key = array_shift($request);
 $key = $_key;
@@ -27,7 +27,7 @@ if (isset($input)) {
   }, array_values($input));
 }
 
-// build the SET part of the SQL command
+// costruisce la parte SET del comand SQL 
 if (isset($input)) {
   $set = '';
   for ($i = 0; $i < count($columns); $i++) {
@@ -36,6 +36,7 @@ if (isset($input)) {
   }
 }
 
+//richiesta get per prendere le partite giocate
 function handleGetRequest($table, $key, $pdo) {
   $sql = "SELECT * FROM `$table`" . ($key ? " WHERE id_utente = " . $pdo->quote($key) : '');
 
@@ -82,6 +83,7 @@ function handlePostRequest($table, $json_data, $pdo) {
 }
 */
 
+//richiesta put per la modifica della password
 function handlePutRequest($table, $input, $key, $pdo){
   $sql = "UPDATE $table SET password = :campo WHERE id_utente = :id_utente";
   try {
@@ -100,7 +102,7 @@ function handlePutRequest($table, $input, $key, $pdo){
   }
 }
 
-
+//richiesta delete per l'eliminazione dell'account
 function handleDeleteRequest($table, $key, $pdo) {
   $sql1 = "DELETE FROM partite WHERE id_utente = " . $pdo->quote($key);
   $sql2 = "DELETE FROM bie WHERE id_utente = " . $pdo->quote($key);

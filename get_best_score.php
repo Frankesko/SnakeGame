@@ -1,13 +1,13 @@
 <?php
-// Connessione al database
+//connessione al database
 require('db_conn.php');
 
-// Verifica della connessione
+//verifica della connessione
 if (!$conn) {
     die("Connessione al database fallita: " . $conn->errorInfo()[2]);
 }
 
-// Query per ottenere i punteggi
+//query per ottenere i punteggi
 $query = "
 SELECT partite.score, utenti.username
 FROM partite
@@ -18,16 +18,16 @@ LIMIT 5
 
 $result = $conn->query($query);
 
-// Elabora i risultati
+//elabora i risultati
 $scores = array();
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
     $scores[] = $row;
 }
 
-// Chiudi la connessione al database
+//chiudi la connessione al database
 $conn = null;
 
-// Restituisci i risultati come JSON
+//restituisci i risultati come JSON
 header('Content-Type: application/json');
 echo json_encode($scores);
 ?>
