@@ -17,7 +17,7 @@ if (!$data) {
     if ($stmt->rowCount() > 0) {
         $storedPassword = $stmt->fetchColumn();
 
-        if ($password === $storedPassword) {
+        if (password_verify($password, $storedPassword)) {
             echo "true";
         } else {
             echo "passwordFalse";
