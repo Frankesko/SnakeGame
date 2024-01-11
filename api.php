@@ -101,8 +101,16 @@ function handlePutRequest($table, $input, $key, $pdo){
 
 
 function handleDeleteRequest($table, $key, $pdo) {
+  $sql1 = "DELETE FROM partite WHERE id_utente = " . $pdo->quote($key);
+  $sql2 = "DELETE FROM bie WHERE id_utente = " . $pdo->quote($key);
+  $sql3 = "DELETE FROM colori_sbloccati WHERE id_utente = " . $pdo->quote($key);
+  $sql4 = "DELETE FROM impostazioni WHERE id_utente = " . $pdo->quote($key);
   $sql = "DELETE FROM `$table` WHERE id_utente = " . $pdo->quote($key);
   try {
+      $statement1 = $pdo->query($sql1);
+      $statement2 = $pdo->query($sql2);
+      $statement3 = $pdo->query($sql3);
+      $statement4 = $pdo->query($sql4);
       $statement = $pdo->query($sql);
       $response = array('status' => 'success', 'message' => 'DELETE OK');
       header('Content-Type: application/json');

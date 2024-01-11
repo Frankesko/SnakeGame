@@ -1486,6 +1486,7 @@ function eliminaAccountFunct(){
             // Mostra il messaggio di successo
             console.log(xhr.responseText); 
             console.log("sucesso");
+            
             } else {
             console.log("errore");
             console.log(xhr.responseText);
@@ -1498,6 +1499,7 @@ function eliminaAccountFunct(){
     xhr.open("DELETE", "/api.php/utenti/" + id_utente, true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.send();
+    location.reload();
 }
 
 function calcolaTotPartiteGiocateFunct() {
