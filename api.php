@@ -1,11 +1,14 @@
 <?php
 
+// connect to the mysql database
+$connessione = require('db_conn.php');
+
 define('DEBUG', false);
 
 // get the HTTP method, path, and body of the request
 $method = $_SERVER['REQUEST_METHOD'];
 $request = explode('/', trim($_SERVER['PATH_INFO'], '/'));
-$input = json_decode(file_get_contents('php://input'), true);
+$input = json_decode(file_get_contents("php://input"));
 
 if (DEBUG) {
     var_dump($method);
@@ -13,8 +16,6 @@ if (DEBUG) {
     var_dump($input);
 }
 
-// connect to the mysql database
-$connessione = require('db_conn.php');
 
 // retrieve the table and key from the path
 $table = preg_replace('/[^a-z0-9_]+/i', '', array_shift($request));
@@ -30,7 +31,7 @@ if (DEBUG) {
 
 // escape the columns and values from the input object
 if (isset($input)) {
-  $columns = preg_replace('/[^a-z0-9_]+/i', '', array_keys($input));
+  $columns = preg_replace('/[^a-z0-9_]+/i', '', is_array($input) ? array_keys($input) : []);
   $values = array_map(function ($value) use ($connessione) {
       if ($value === null) return null;
       return $connessione->quote($value);
@@ -63,28 +64,25 @@ function handleGetRequest($table, $key, $pdo){
   }
 }
 
+function handlePostRequest($table, $json_data, $pdo) {
+  $set = json_decode($json_data, true);
+  $columns = preg_replace('/[^a-z0-9_]+/i', '', array_keys($set));
+  $values = array_map(function ($value) use ($pdo) {
+      return $pdo->quote($value);
+  }, array_values($set));
 
-function handlePostRequest($input, $pdo){
+  $columns_string = implode(', ', $columns);
+  $values_string = implode(', ', $values);
 
-
-  
-    $columns = preg_replace('/[^a-z0-9_]+/i', '', array_keys($input));
-    $values = array_map(function ($value) use ($pdo) {
-        return $pdo->quote($value);
-    }, array_values($input));
-
-    $columns_string = implode(', ', $columns);
-    $values_string = implode(', ', $values);
-
-  $sql = "INSERT INTO bie ($columns_string) VALUES ($values_string)";
+  $sql = "INSERT INTO `$table` ($columns_string) VALUES ($values_string)";
 
   try {
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    $lastInsertId = $pdo->lastInsertId();
-    $response = array('status' => 'success', 'message' => 'INSERT OK', 'inserted_id' => $lastInsertId);
-    header('Content-Type: application/json');
-    echo json_encode($response);
+      $stmt = $pdo->prepare($sql);
+      $stmt->execute();
+      $lastInsertId = $pdo->lastInsertId();
+      $response = array('status' => 'success', 'message' => 'INSERT OK', 'inserted_id' => $lastInsertId);
+      header('Content-Type: application/json');
+      echo json_encode($response);
   } catch (PDOException $e) {
       http_response_code(404);
       $response = array('status' => 'error', 'message' => $e->getMessage());
@@ -92,8 +90,6 @@ function handlePostRequest($input, $pdo){
       echo json_encode($response);
   }
 }
-
-
 
 function handlePutRequest($table, $input, $key, $pdo){
   $sql = "UPDATE $table SET password = :campo WHERE id = :id";
@@ -137,7 +133,7 @@ switch ($method) {
       handleGetRequest($table, $key, $connessione);
       break;
   case 'POST':
-      handlePostRequest($input, $connessione);
+      handlePostRequest($table, file_get_contents('php://input'), $connessione);
       break;
   case 'PUT':
       handlePutRequest($table, $input, $key, $connessione);
@@ -148,9 +144,6 @@ switch ($method) {
   default:
     break;
 }
-
-// excecute SQL statement
-$result = mysqli_query($connessione,$sql);
 
 
 if(DEBUG){

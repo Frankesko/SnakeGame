@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", function() {
             };
 
             let xhr = new XMLHttpRequest();
-            xhr.open("POST", "verifica_accesso.php", true); // Assicurati che l'URL sia corretto
+            xhr.open("POST", "verifica_accesso.php", true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
@@ -1388,34 +1388,28 @@ function inserisciBioFunct() {
     const POST = document.getElementById("POST");
     POST.addEventListener("click", function () {
         
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "api.php/bie/", true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onreadystatechange = function () {
+            // Verifica se la richiesta è andata a buon fine
+            if (xhr.readyState === 4){
+                if(xhr.status === 200) {
+                // Mostra il messaggio di successo
+                 console.log(xhr.responseText); 
+                 console.log("sucesso");
+                } else {
+                console.log("errore");
+                }
+            }
+        };
         const data = {
             id: id_utente,
             bioIns: document.getElementById("BioIns").value
         };
-
-        var jsondata = JSON.stringify(data);
-        console.log(jsondata);
-        var oReq = new XMLHttpRequest();
-        oReq.open("POST", "api.php/bie/", true);
-        oReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        oReq.onload = function () {
-            // Verifica se la richiesta è andata a buon fine
-            if (oReq.status === 200 && oReq.readyState === 4) {
-                // Mostra il messaggio di successo
-                document.getElementById("ajaxres").innerHTML = oReq.responseText;
-            } else {
-                // Se la richiesta non è andata a buon fine, mostra un messaggio di errore
-                var response = JSON.parse(oReq.responseText);
-                if (response.error) {
-                    document.getElementById("ajaxres").innerHTML = "Errore: " + response.message;
-                } else if (response.errorssss) {
-                    document.getElementById("ajaxres").innerHTML = "File non ricevuto";
-                }
-            }
-        };
-
-        // Invia la richiesta con i dati
-        oReq.send(jsondata);
+        const jsonData = JSON.stringify(data);
+        xhr.send(jsonData);
     });
 }
 
