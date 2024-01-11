@@ -37,7 +37,7 @@ if (isset($input)) {
 }
 
 function handleGetRequest($table, $key, $pdo) {
-  $sql = "SELECT * FROM `$table`" . ($key ? " WHERE ID = " . $pdo->quote($key) : '');
+  $sql = "SELECT * FROM `$table`" . ($key ? " WHERE id_utente = " . $pdo->quote($key) : '');
 
   try {
       $statement = $pdo->query($sql);
@@ -82,13 +82,13 @@ function handlePostRequest($table, $json_data, $pdo) {
 }
 
 function handlePutRequest($table, $input, $key, $pdo){
-  $sql = "UPDATE $table SET password = :campo WHERE id = :id";
+  $sql = "UPDATE $table SET password = :campo WHERE id_utente = :id_utente";
   try {
       $stmt = $pdo->prepare($sql);
       $stmt->bindParam(':campo', $input['password'], PDO::PARAM_STR);
-      $stmt->bindParam(':id', $key, PDO::PARAM_INT);
+      $stmt->bindParam(':id_utente', $key, PDO::PARAM_INT);
       $stmt->execute();
-      $response = array('status' => 'success', 'message' => 'PUT OK');
+      $response = array('status' => 'success', 'message' => 'Password aggiornata');
       header('Content-Type: application/json');
       echo json_encode($response);
   } catch (PDOException $e) {
@@ -101,7 +101,7 @@ function handlePutRequest($table, $input, $key, $pdo){
 
 
 function handleDeleteRequest($table, $key, $pdo) {
-  $sql = "DELETE FROM `$table` WHERE id = " . $pdo->quote($key);
+  $sql = "DELETE FROM `$table` WHERE id_utente = " . $pdo->quote($key);
   try {
       $statement = $pdo->query($sql);
       $response = array('status' => 'success', 'message' => 'DELETE OK');

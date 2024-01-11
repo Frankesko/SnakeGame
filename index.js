@@ -1395,30 +1395,30 @@ function inserisciBioFunct() {
         
         var jsondata = JSON.stringify(data);
             console.log(data);
-            var oReq = new XMLHttpRequest();
-            oReq.onload = function () {
-            if (oReq.status === 200 && oReq.readyState === 4) {
+            let xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+            if (xhr.status === 200 && xhr.readyState === 4) {
                 try {
-                    console.log(oReq.responseText);
-                    var response = JSON.parse(oReq.responseText);
+                    console.log(xhr.responseText);
+                    var response = JSON.parse(xhr.responseText);
                     // Handle the parsed JSON response here
                 } catch (error) {
                     console.error("Error parsing JSON response:", error);
                     // Handle the error appropriately
-                    console.log(oReq.responseText);
+                    console.log(xhr.responseText);
                 }
             } else {
                 console.log("non entrato nel file // richiesta non andata a buon fine");
-                console.log(oReq.responseText);
+                console.log(xhr.responseText);
             }
             };
 
-            oReq.open("POST", "/api.php/bie", true); // Cambiato in POST
-            oReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.open("POST", "/api.php/bie", true); // Cambiato in POST
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
             // Cambiato in inviare una richiesta POST
-            oReq.send(jsondata);
-        
+            xhr.send(jsondata);
+            inserisciBioDiv.style.display = "none";
     });
     
 }
@@ -1437,9 +1437,9 @@ function modificaPasswordFunct(){
 
         if(pw == password) {
             const data = {
-                id_utente: id_utente,
+                
                 password: password
-            };
+            };  
             console.log("pw == pwcofn");
             const jsonData = JSON.stringify(data);
 
@@ -1452,12 +1452,18 @@ function modificaPasswordFunct(){
                     // Mostra il messaggio di successo
                     console.log(xhr.responseText); 
                     console.log("sucesso");
+                    console.log(password);
                     } else {
                     console.log("errore");
+                    
+                    console.log(xhr.responseText);
                     }
+                } else {
+                    console.log("non entrato nel file // richiesta non andata a buon fine");
+                    console.log(xhr.responseText);
                 }
             };
-            xhr.open("PUT", "/api.php/utenti", true);
+            xhr.open("PUT", "/api.php/utenti/" + id_utente, true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.send(jsonData);
             modificaPasswordDiv.style.display = "none";
@@ -1471,22 +1477,27 @@ function modificaPasswordFunct(){
 function eliminaAccountFunct(){
     
     let xhr = new XMLHttpRequest();
-            
-            xhr.onload = function () {
-                // Verifica se la richiesta è andata a buon fine
-                if (xhr.readyState === 4){
-                    if(xhr.status === 200) {
-                    // Mostra il messaggio di successo
-                    console.log(xhr.responseText); 
-                    console.log("sucesso");
-                    } else {
-                    console.log("errore");
-                    }
-                }
-            };
-            xhr.open("DELETE", "api.php/utenti/" + id_utente, true);
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            xhr.send();
+    
+    xhr.onload = function () {
+        console.log("entrato nel click");
+        // Verifica se la richiesta è andata a buon fine
+        if (xhr.readyState === 4){
+            if(xhr.status === 200) {
+            // Mostra il messaggio di successo
+            console.log(xhr.responseText); 
+            console.log("sucesso");
+            } else {
+            console.log("errore");
+            console.log(xhr.responseText);
+            }
+        } else{
+            console.log("non entrato nel file // richiesta non andata a buon fine");
+            console.log(xhr.responseText);
+        }
+    };
+    xhr.open("DELETE", "/api.php/utenti/" + id_utente, true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send();
 }
 
 function calcolaTotPartiteGiocateFunct() {
@@ -1501,8 +1512,13 @@ function calcolaTotPartiteGiocateFunct() {
                 // Accedi ai dati della risposta
                 if (response.status === 'success') {
                     const data = response.data;
+                    let partite = data.length;
                     console.log(data);
                     console.log("successo");
+                    const partiteGiocate = document.getElementById("partiteGiocate");
+                    partiteGiocate.textContent = "Hai giocato " + partite + " partite.";
+                    partiteGiocate.style.display = "block";
+
                 } else {
                     console.log("errore: " + response.message);
                 }
@@ -1512,6 +1528,6 @@ function calcolaTotPartiteGiocateFunct() {
         }
     };
 
-    xhr.open("GET", "api.php/partite/" + id_utente, true);
+    xhr.open("GET", "/api.php/partite/" + id_utente, true);
     xhr.send();
 }
