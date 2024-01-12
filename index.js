@@ -952,8 +952,8 @@ function openShop(username) {
                         
                         //funzione al click del tasto di buy
                         buyButton.addEventListener('click', function () {
-                            if(item.stato == "no" && item.costo < coins){
-                                console.log("comprato");
+                            if(item.stato == "no" && item.costo < coins){ //ho abbastanza coins per comprarlo
+                                
                                 let xhr = new XMLHttpRequest();
                                 xhr.open("POST", "compra_colore.php", true);
                                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -992,11 +992,13 @@ function openShop(username) {
                                 //converte in stringa e manda
                                 const jsonData = JSON.stringify(data);
                                 xhr.send(jsonData);
-                            
-                            } else if(item.stato == "no" && item.costo > coins){
+                                
+                            } else if(item.stato == "no" && item.costo > coins){ //non ho abbastanza coins
                                 alert("Coins insufficienti per proseguire con l'acquisto");
+                              //se già l'ho comprato e non è impostato  
                             } else if (item.stato == "si" && item.colore != snakeColor || item.colore != foodColor) {
-                                console.log("impostato");
+
+                                //lo imposto                                
                                 let xhr = new XMLHttpRequest();
                                 xhr.open("POST", "imposta_colore.php", true);
                                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -1005,18 +1007,22 @@ function openShop(username) {
                                         if (xhr.status === 200) {                                            
                                             var response = xhr.responseText;
                                             
+                                            //se era tipo serpente prendo il tasto del serpente
                                             if(itemType == 'serpente'){
                                                 console.log(response);
                                                 let specificItem = document.getElementById(`shop-item-serpente${response}`);
                                                 console.log(specificItem);
                                                 
+                                                //e ne cambio il colore e il testo da impostato e blu
                                                 const buyButtonPrecedente = specificItem.querySelector('.buy-button');
                                                 buyButtonPrecedente.textContent = 'Imposta'
                                                 buyButtonPrecedente.style.backgroundColor = 'blue';
-    
+
+                                                //a impostato e grigio
                                                 buyButton.textContent = 'Impostato'
                                                 buyButton.style.backgroundColor = 'grey';
                                             } else {
+                                                //altrimenti, stessa cosa ma per il cibo
                                                 let specificItem = document.getElementById(`shop-item-cibo${response}`);
                                             
                                                 const buyButtonPrecedente = specificItem.querySelector('.buy-button');
@@ -1031,6 +1037,7 @@ function openShop(username) {
                                     }
                                 };
 
+                                //mando i dati in base al tipo
                                 if (itemType == 'serpente') {
                                     data = {
                                         username: username,
@@ -1044,27 +1051,30 @@ function openShop(username) {
                                         type: "cibo"
                                     }
                                 }
+                                //converto e mando
                                 const jsonData = JSON.stringify(data);
                                 xhr.send(jsonData);
+                              //altrimenti era già impostato e non faccio niente
                             } else if (item.stato == "si" && item.colore == snakeColor || item.colore == foodColor) {
                                 console.log("gia impostato")
                             }
-
-                                console.log(`Bottone ${item.colore} cliccato!`);
+                            //controllo per debug
+                            console.log(`Bottone ${item.colore} cliccato!`);
                         });
-
+                        //aggiungo gli elementi al container
                         shopItemElement.appendChild(itemNameElement);
                         shopItemElement.appendChild(itemCostElement);
                         shopItemElement.appendChild(buyButton);
                         shopItemElement.classList.add('shopitem');
                         return shopItemElement;
                     };
-
+                    //aggiungo due descrizioni al negozio
                     const textColoriSerpente = document.createElement('p');
                     textColoriSerpente.textContent = "Snake colors";
                     const textColoriCibo = document.createElement('p');
                     textColoriCibo.textContent = "Food colors";
 
+                    //aggiungo tutti i container dei colori all'elemento colorisperpente
                     coloriSerpente.appendChild(textColoriSerpente);
                     coloriSerpenteArray.forEach((item) => {
                         const shopItemElement = createShopItemElement(item, 'serpente');
@@ -1074,6 +1084,7 @@ function openShop(username) {
                         console.log(`ID dell'elemento: ${itemId}`);
                     });
 
+                    //aggiungo tutti i container dei colori all'elemento coloricibo
                     coloriCibo.appendChild(textColoriCibo);
                     coloriCiboArray.forEach((item) => {
                         const shopItemElement = createShopItemElement(item, 'cibo');
@@ -1086,32 +1097,37 @@ function openShop(username) {
 
 
                 } else {
-                    console.log("non ricevuti dati");
+                    //errore
+                    console.log("Errore ricevimento dati");
                 }
 
-                //console.log("andato");
+                
             } else {
                 // Gestisci gli errori
-                console.log("fallito");
+                console.log("Errore ricevimento dati");
             }
         }
     };
 
+
     data = {
         username: username,
     };
+    //converto i dati e mando
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
+    //mostro il negozio
     negozioContainer.style.display = "block";
 };
 
 function closeShop(){
+    //chiudo il negozio e carico i dati salvati (ovvero il cabmio di colore nel caso fosse stato fatto)
     loadSettings(usernameUtenteLoggato);
     negozioContainer.style.display = "none";
 };
 
 function loadShop(username){
-
+    //carico lo shop affinchè all'apertura risultino gli elementi
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "load_shop.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -1129,32 +1145,32 @@ function loadShop(username){
     data = {
         username: username
     };
-
+    //mando i dati
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
 };
 
+//questa funzione apre la classifica visualizzando i punteggi generali e personali migliori
 function openLeaderBoards(id_utente) {
+    //definizione degli URL per ottenere i putenggi
     const allBestUrl = 'http://localhost/get_best_score.php';
     const myBestUrl = `http://localhost/get_my_best_score.php?id_utente=${id_utente}`;
 
+    //utilizzo promise per gestire più richieste asincrone contemporaneamente
     Promise.all([
         fetch(allBestUrl).then(response => response.json()),
         fetch(myBestUrl).then(response => response.json())
     ])
     .then(([allBestData, myBestData]) => {
-        //console.log('Dati dei punteggi generali:', allBestData);
-        //console.log('Dati dei miei punteggi:', myBestData);
-
-        // Ottieni il riferimento al container nel tuo HTML
+        //ottiengo il riferimento ai container
         const generalBestLeaderBoard = document.getElementById('generalBestLeaderBoard');
         const personalBestLeaderBoard = document.getElementById('personalBestLeaderBoard');
 
-        // Rimuovi eventuali elementi esistenti nei container
+        //rimuovo eventuali elementi esistenti nei container
         generalBestLeaderBoard.innerHTML = '';
         personalBestLeaderBoard.innerHTML = '';
 
-        // Funzione per creare gli elementi HTML
+        //funzione per creare gli elementi HTML
         const createScoreElement = (score) => {
             const scoreContainer = document.createElement('div');
             scoreContainer.setAttribute('class', 'scoreContainer');
@@ -1174,45 +1190,50 @@ function openLeaderBoards(id_utente) {
             return scoreContainer;
         };
 
+        //piccola descrizione 
         const textBest = document.createElement('p');
         textBest.textContent = "Best score";
         const textMyBest = document.createElement('p');
         textMyBest.textContent = "My best score";
 
-        // Itera attraverso i dati generali e crea gli elementi HTML
+        //itera attraverso i dati generali e crea gli elementi HTML
         generalBestLeaderBoard.appendChild(textBest);
         allBestData.forEach(score => {
             const scoreContainer = createScoreElement(score);
             generalBestLeaderBoard.appendChild(scoreContainer);
         });
 
-        // Itera attraverso i dati personali e crea gli elementi HTML
+        //itera attraverso i dati personali e crea gli elementi HTML
         personalBestLeaderBoard.appendChild(textMyBest);
         myBestData.forEach(score => {
             const scoreContainer = createScoreElement(score);
             personalBestLeaderBoard.appendChild(scoreContainer);
         });
 
-        // Mostra i container dei leaderboard
+        //mostra i container dei leaderboard
         generalBestLeaderBoard.style.display = 'block';
         personalBestLeaderBoard.style.display = 'block';
         leaderBoardsContainer.style.display = 'block';
     })
     .catch(error => {
+        //messaggio di errore
         console.error('Errore durante la richiesta dei punteggi:', error);
     });
 };
 
 function closeLeaderBoards(){
+    //chiudi classifica
     leaderBoardsContainer.style.display = "none";
 };
 
 function chiudiLogin(){
+    //chiudi login
     loginPopUp.style.display = "none";
     loginRegistratiContainer.style.display = "flex";
 };
 
 function chiudiRegistrati(){
+    //chiudi registrati
     registratiPopup.style.display = "none";
     loginRegistratiContainer.style.display = "flex";
 };
@@ -1223,6 +1244,7 @@ function chiudiPasswordDimenticata(){
 };
 */
 function getMyTopScore(id_utente){
+    //prende punteggio migliore
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "get_my_top_score.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -1233,6 +1255,7 @@ function getMyTopScore(id_utente){
                 // Elabora la risposta del server
                 var response = JSON.parse(xhr.responseText);
                 if (response.success) {
+                    //fa un controllo col punteggio di fine partita per vedere quale mostrare dei due
                     let topScore = response.score;
                     if(score > topScore) {
                         document.getElementById("pausaPersonalBest").textContent = ` My best: ${score}`;
@@ -1242,7 +1265,7 @@ function getMyTopScore(id_utente){
                         document.getElementById("personalBest").textContent = ` My best: ${topScore}`
                     }
                 } else {
-                    // Gestisci errori o situazioni in cui l'utente non è autenticato
+                    //errore
                 }
             }
         }
@@ -1250,6 +1273,7 @@ function getMyTopScore(id_utente){
     const data = {
         id_utente: id_utente
     };
+    //converte e manda
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
 };
@@ -1322,6 +1346,7 @@ function inviaRichiestaRecuperoPassword() {
 };
 */
 function getCoins(username) {
+    //prende i coin dell'utente
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "get_coins.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -1329,14 +1354,14 @@ function getCoins(username) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                // Elabora la risposta del server
+                //elabora la risposta del server
                 var response = JSON.parse(xhr.responseText);
                 if (response.success) {
                     coins = response.coins;
-                    // Aggiorna l'elemento HTML per mostrare i coins
+                    //aggiorna l'elemento HTML per mostrare i coins
                     document.getElementById("coinsUtente").textContent = coins;
                 } else {
-                    // Gestisci errori o situazioni in cui l'utente non è autenticato
+                    //errore
                 }
             }
         }
@@ -1344,22 +1369,24 @@ function getCoins(username) {
     const data = {
         username: username
     };
+    //converte e manda
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
 };
 
 function checkUsernameAvailability(registratiUsername, callback) {
+    //funzione per verificare la disponibilità dello username nel database
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "verifica_username.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                // Elabora la risposta dal server
+                //elabora la risposta dal server
                 const response = JSON.parse(xhr.responseText);
                 callback(response.available);
             } else {
-                // Gestisci eventuali errori durante la richiesta AJAX
+                //errore
                 console.error("Errore nella richiesta AJAX");
                 callback(false); // Assume che ci siano problemi nel server
             }
@@ -1368,19 +1395,21 @@ function checkUsernameAvailability(registratiUsername, callback) {
     const data = {
         username: registratiUsername
     };
+    //converte i dati e manda
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
 }
 
 function isEmailValid(email) {
-    // Definisci un'espressione regolare per verificare l'indirizzo email
+    //definizione della REG_EXP per verificare l'indirizzo email
     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
-    // Verifica se l'indirizzo email corrisponde all'espressione regolare
+    //verifica se l'indirizzo email corrisponde alla REG_EXP
     return emailRegex.test(email);
 };
 
 function getIdUtente(usernameUtenteLoggato) {
+    //prende id_utente attraverso lo username
     return new Promise((resolve, reject) => {
         let xhr = new XMLHttpRequest();
         xhr.open("POST", "prendi_id_utente.php", true);
@@ -1413,17 +1442,18 @@ function getIdUtente(usernameUtenteLoggato) {
 };
 
 function inviaPunteggioAlServer(id_utente, score, numeroCibo, dimensioneSerpente, speed) {   
+    //salva la partita nel db
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "salva_partita_in_db.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
-    // Callback che verrà eseguita quando lo stato della richiesta cambia
+    //callback che verrà eseguita quando lo stato della richiesta cambia
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                // La richiesta al server è stata completata con successo
+                //successo
             } else {
-                // Gestisci gli errori
+                //errore
                 console.error("Errore nella richiesta AJAX");
             }
         }
@@ -1437,47 +1467,50 @@ function inviaPunteggioAlServer(id_utente, score, numeroCibo, dimensioneSerpente
         speed: speed
     };
 
-const jsonData = JSON.stringify(data);
+    const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
 };
 
 function toggleSound() {
-    isSoundOn = !isSoundOn; // Cambia lo stato del suono
-    soundSwitch(isSoundOn); // Chiama la funzione soundSwitch con il nuovo stato
+    isSoundOn = !isSoundOn; //cambia lo stato del suono
+    soundSwitch(isSoundOn); //chiama la funzione soundSwitch con il nuovo stato
 };
 
 function soundSwitch(isSoundOn) {
     if (isSoundOn) {
-        // Attiva il suono
+        //attiva il suono
         changeDirectionV.volume = 1;
         loseSound.volume = 1;
         eatSound.volume = 1;
         countDown.volume = 1;
 
-        // Cambia l'aspetto dell'icona
+        //cambia l'aspetto dell'icona
         soundIcon.src = "audio_on.png";
     } else {
-        // Disattiva il suono
+        //disattiva il suono
         changeDirectionV.volume = 0;
         loseSound.volume = 0;
         eatSound.volume = 0;
         countDown.volume = 0;
 
-        // Cambia l'aspetto dell'icona
+        //cambia l'aspetto dell'icona
         soundIcon.src = "audio_off.png";
     }
 };
 
 function modificaUtenteFunct(){
+    //apre il div di modifica utente
     modificaUtente.style.display = "flex";
-    console.log("dadadadada");
 
+    //prende gli elementi
 
-    const inserisciBio = document.getElementById("inserisciBio");
+    //const inserisciBio = document.getElementById("inserisciBio");
     const calcolaTotPartiteGiocate = document.getElementById("calcolaTotPartiteGiocate");
     const modificaPassword = document.getElementById("modificaPassword");
     const eliminaAccount = document.getElementById("eliminaAccount");
 
+
+    //event listner
     //inserisciBio.addEventListener("click", inserisciBioFunct);
     calcolaTotPartiteGiocate.addEventListener("click", calcolaTotPartiteGiocateFunct);
     modificaPassword.addEventListener("click", modificaPasswordFunct);
@@ -1485,6 +1518,7 @@ function modificaUtenteFunct(){
 }
 
 function chudiProfiloFunct(){
+    //nasconde il modifica utente
     modificaUtente.style.display = "none";
 }
 
@@ -1543,33 +1577,37 @@ function inserisciBioFunct() {
 }
 */
 
+//funzione per gestire la modifica della password
 function modificaPasswordFunct(){
+    //nasconde il modifica utente e mostra il modifica password
     modificaUtente.style.display = "none";
     const modificaPasswordDiv = document.getElementById("modificaPasswordDiv");
     modificaPasswordDiv.style.display = "flex";
 
+    //gestione del click sul pulsante di conferma (PUT)
     const PUT = document.getElementById("PUT");
     PUT.addEventListener("click", function () {
-        console.log("in");
-
+        
+        //ottieni i valori inseriti
         pw = document.getElementById("modificaPasswordIns").value;
         password = document.getElementById("modificaPasswordConfirmIns").value
 
+        //verifica se le password corrispondono tra loro
         if(pw == password) {
             const data = {
                 
                 password: password
             };  
-            console.log("pw == pwcofn");
+            console.log("pw == pwcofn");  //controlli per debug
             const jsonData = JSON.stringify(data);
 
             let xhr = new XMLHttpRequest();
             
             xhr.onload = function () {
-                // Verifica se la richiesta è andata a buon fine
+                //verifica se la richiesta è andata a buon fine
                 if (xhr.readyState === 4){
                     if(xhr.status === 200) {
-                    // Mostra il messaggio di successo
+                    //debug
                     console.log(xhr.responseText); 
                     console.log("sucesso");
                     console.log(password);
@@ -1594,16 +1632,18 @@ function modificaPasswordFunct(){
     
 }
 
+
+//funzione per eliminare l'account dell'utente
 function eliminaAccountFunct(){
     
     let xhr = new XMLHttpRequest();
     
     xhr.onload = function () {
         console.log("entrato nel click");
-        // Verifica se la richiesta è andata a buon fine
+        //verifica se la richiesta è andata a buon fine
         if (xhr.readyState === 4){
             if(xhr.status === 200) {
-            // Mostra il messaggio di successo
+            //debug
             console.log(xhr.responseText); 
             console.log("sucesso");
             
@@ -1619,27 +1659,29 @@ function eliminaAccountFunct(){
     xhr.open("DELETE", "/api.php/utenti/" + id_utente, true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.send();
-    location.reload();
+    location.reload(); //aggiorna la pagina per riportare al login / registrazione
 }
 
+//funzione per calcolare e visualizzare il numero totale di partite giocate
 function calcolaTotPartiteGiocateFunct() {
     let xhr = new XMLHttpRequest();
 
     xhr.onload = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                // Parsa la risposta JSON
+                //covnerte la risposta JSON
                 const response = JSON.parse(xhr.responseText);
 
-                // Accedi ai dati della risposta
+                //accedi ai dati della risposta
                 if (response.status === 'success') {
                     const data = response.data;
+                    //prende la lunghezza dell'array che corrisponde al num partite
                     let partite = data.length;
-                    console.log(data);
-                    console.log("successo");
-                    const partiteGiocate = document.getElementById("partiteGiocate");
-                    partiteGiocate.textContent = "Hai giocato " + partite + " partite.";
-                    partiteGiocate.style.display = "block";
+                    console.log(data);  //debug
+                    console.log("successo");  //debug
+                    const partiteGiocate = document.getElementById("partiteGiocate");  //prende l'elemento html
+                    partiteGiocate.textContent = "Hai giocato " + partite + " partite."; //ne aggiorna il testo
+                    partiteGiocate.style.display = "block";   //lo mostra
 
                 } else {
                     console.log("errore: " + response.message);
