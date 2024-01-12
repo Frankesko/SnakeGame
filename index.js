@@ -1,3 +1,4 @@
+//prendo gli elementi html e li salvo in una variabile
 const gameBoard = document.getElementById("gameBoard");
 const ctx = gameBoard.getContext("2d");
 const scoreText = document.getElementById("scoreText");
@@ -51,13 +52,14 @@ var eatSound = document.getElementById("eatSound");
 var changeDirectionV = document.getElementById("changeDirection");
 var loseSound = document.getElementById("loseSound");
 let isSoundOn = true;
-// Ottieni il bottone e l'icona
+
 var soundSwitcher = document.getElementById("soundSwitcher");
 var soundIcon = document.getElementById("soundIcon");
 
 const gameWidth = gameBoard.width;
 const gameHeight = gameBoard.height;
 const boardBackground = "immagine.png";
+//impostazioni di base
 let snakeColor = "orange";
 let snakeBorder = "orange";
 let foodColor = "red";
@@ -69,6 +71,7 @@ let yVelocity = 0;
 let foods = [];
 
 let score = 0;
+//serpente a inizio partita
 let snake = [
     { x: unitSize * 4, y: 225 },
     { x: unitSize * 3, y: 225 },
@@ -92,6 +95,7 @@ let prevSpeed;
 let prevNumFood;
 let prevUnitSize;    
 
+//colori disponibili
 let serpente_arancione;
 let serpente_verde;
 let serpente_blu;
@@ -113,6 +117,7 @@ let coins;
 
 let vinto;
 
+//dichiarazione degli event listner
 window.addEventListener("keydown", changeDirection);
 mostraUsernameIfLoggato.addEventListener("click", modificaUtenteFunct);
 chudiProfilo.addEventListener("click", chudiProfiloFunct);
@@ -147,125 +152,148 @@ chiudiImpostazioniPopUpButton.addEventListener("click", closeSettings);
 soundSwitcher.addEventListener("click", toggleSound);
 
 document.addEventListener("DOMContentLoaded", function() {
+    //click sul login
     loginChoiceButton.addEventListener("click", function() {
-        // Nascondi il container di registrazione
+        //nascondi il container di login/registrazione
         loginRegistratiContainer.style.display = "none";
-        // Mostra il container di login
+        //mostra il container di login
         loginPopUp.style.display = "block";
+        //click su login
         loginSubmitButton.addEventListener("click", function() {
+
+            //prende i valori inseriti
             let loginUsername = document.querySelector("#loginUsername").value;
             let loginPassword = document.querySelector("#loginPassword").value;
-            
+
+            //prepara l'array da inviare al server
             let dataLogin = {
                 username: loginUsername,
                 password: loginPassword
             };
 
+            //richiesta al server
             let xhr = new XMLHttpRequest();
             xhr.open("POST", "verifica_accesso.php", true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
-                        // Elabora la risposta dal server
+                        //elabora la risposta dal server
                         var response = xhr.responseText;
                         if (response === "true") {
-                            // Accesso consentito, reindirizza o esegui altre azioni
+                            //accesso consentito
+                            //nasconde il popup di login e mostra quello di gioco
                             loginPopUp.style.display = "none";
                             gameContainer.style.display = "block";
+                            //mostra lo username
                             usernameUtenteLoggato = loginUsername;
                             testoSpiegazioneGioco.style.display = "none";
                             mostraUsernameIfLoggato.style.display = "block";
                             mostraUsernameIfLoggato.textContent = usernameUtenteLoggato;
                             
+                            //mostra il footer e i tasti centrali
                             containerFooter.style.display = "flex";
                             startContainer.style.display = "block";
 
+                            //prende l'id utente
                             getIdUtente(usernameUtenteLoggato)
-                            .then(id => {
+                            .then(id => { //promises risolta con successo quindi assegna a id_utente l'id preso
                                id_utente = id;
                             })
-                            console.log("aaa");
-                            getCoins(usernameUtenteLoggato);
-                            loadShop(usernameUtenteLoggato);
-                            loadSettings(usernameUtenteLoggato);
                             
+                            getCoins(usernameUtenteLoggato);  //prende i coin dell'utente per mostrarli in basso a sinistra
+                            loadShop(usernameUtenteLoggato);  //carica gli elementi del negozio 
+                            loadSettings(usernameUtenteLoggato);    //carica le precedenti impostazioni dell'utente
+                            
+                            //listner del tasto gioca
                             playButton.addEventListener("click", function() {
-                                startContainer.style.display = "none"; // Questa riga nasconderà lo startContainer                
-                                gameStart(); // E poi avvierà il gioco
-                                login = true;
+                                startContainer.style.display = "none"; //nascondo lo startContainer                
+                                gameStart(); //chiamo il pre-gioco
+                                login = true; //imposta l'utente su true
                             });  
                         } else if (response === "usernameFalse") {
-                            // Accesso negato, mostra un messaggio di errore
+                            //accesso negato, username non trovato nel db
                             alert("Account inesistente");
                         } else if (response === "passwordFalse") {
+                            //accesso negato, password non corrisponde a quella nel db
                             alert("Password errata");
                         }
                     } else {
-                        // Gestisci eventuali errori durante la richiesta AJAX
+                        //errori durante la richiesta
                         console.error("Errore nella richiesta AJAX");
                     }
                 }
             };
-            // Converte l'oggetto dati in una stringa JSON e invialo al server
+            //converte l'oggetto dati in una stringa JSON e lo manda al server
             let jsonDataLog = JSON.stringify(dataLogin);
             xhr.send(jsonDataLog);
         });
     });
 
+    //click su registrati
     registratiChoiceButton.addEventListener("click", function() {
-        // Nascondi il container di login
+        //nascondi il container di login/registrazione
         loginRegistratiContainer.style.display = "none";
-        // Mostra il container di registrazione
+        //mostra il container di registrazione
         registratiPopup.style.display = "block";
+        //click di registrati
         registratiSubmitButton.addEventListener("click", function() {
+            //prende i valori inseriti
             let registratiUsername = document.querySelector("#registratiUsername").value;
             let email = document.querySelector("#registratiEmail").value;
             let registratiPassword = document.querySelector("#registratiPassword").value;
             let confermaPassword = document.querySelector("#registratiConfirmPassword").value;
         
         if (isEmailValid(email)) {
-            // Esegui il resto della registrazione
+            //mail valida nessun errore
         } else {
-            alert("L'indirizzo email sembra non essere valido. Vuoi proseguire lo stesso?");
+            //mail non valida chiede conferma per proseguire
+            alert("L'indirizzo email sembra non essere valido. Clicca 'Ok' se vuoi proseguire lo stesso, 'Esc' per modificarla.");
         }
         
+        //controllo sull'inserimento dei campi
         if (registratiUsername.trim() === "" || email.trim() === "" || registratiPassword.trim() === "" || confermaPassword.trim() === "") {
             alert("Compila tutti i campi obbligatori.");
         } else if (registratiPassword !== confermaPassword) {
+            //password non corrispondono
             alert("Le password non corrispondono.");
         } else {
-            // Verifica l'unicità dello username prima di procedere con la registrazione
+            //verifica l'unicità dello username prima di procedere con la registrazione
             checkUsernameAvailability(registratiUsername, function(isAvailable) {
                 if (isAvailable) {
-                    // Lo username è disponibile, invia i dati al server
+                    //username disponibile, invia i dati al server
                     const dataRegistrati = {
                         username: registratiUsername,
                         email: email,
                         password: registratiPassword
                     };
-    
+                    
                     let xhr = new XMLHttpRequest();
                     xhr.open("POST", "registra_account.php", true);
                     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                     xhr.onreadystatechange = function() {
                         if (xhr.readyState === 4) {
                             if (xhr.status === 200) {
+                                //chiamata andata a buon fine
+                                //nasconde il popup di registrazione
                                 registratiPopup.style.display = "none";
                                 registratiChoiceButton.style.display = "none";
+                                //mostra un messaggio di successo
                                 let successMessage = document.querySelector("#successMessage");
                                 successMessage.style.display = "block";
+                                //mostra solo il tasto di login
                                 loginRegistratiContainer.style.display = "flex";
                             } else {
+                                //errore
                                 console.error("Errore nella richiesta AJAX");
                             }
                         }
                     };
-                    // Converte l'oggetto dati in una stringa JSON e invialo al server
+                    //converte l'oggetto dati in una stringa JSON e lo manda al server
                     let jsonDataReg = JSON.stringify(dataRegistrati);
                     xhr.send(jsonDataReg);
                 } else {
-                    // Lo username non è disponibile, mostra un messaggio di errore
+                    //username non disponibile, mostra un messaggio di errore
                     alert("Lo username non è disponibile. Scegli un altro username.");
                 }
             });
@@ -275,37 +303,39 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function gameStart() {
+    //disabilita il tasto start (per non farlo avviare due volte buggando il timer)
     playButton.disabled = true;
-    running = true;    
-    
+    //imposta il run su true
+    running = true;   
+
     impostazioniContainer.style.display = "none";
 
-    // Imposta una variabile per tenere traccia dello stato della riproduzione del suono
+    //imposta una variabile per tenere traccia dello stato della riproduzione del suono
     var soundPlayed = false;
 
-    // Avvia un intervallo per il timer
+    //avvia un intervallo per il timer
     timerInterval = setInterval(() => {
-        ctx.clearRect(0, 0, gameWidth, gameHeight); // Cancella il canvas
+        ctx.clearRect(0, 0, gameWidth, gameHeight); //cancella il canvas
+        //formattazione del timer
         ctx.font = "50px MV Boli";
         ctx.fillStyle = "black";
         ctx.textAlign = "center";
         
-        
-
-        // Verifica se il suono non è ancora stato riprodotto
+        //verifica se il suono non è ancora stato riprodotto (sennò veniva prodotto a ogni tick)
         if (!soundPlayed) {
             countDown.play();
-            soundPlayed = true; // Imposta la variabile su true per indicare che il suono è stato riprodotto
+            soundPlayed = true; //imposta la variabile su true per indicare che il suono è stato riprodotto
         }
 
         if (timer === 0) {
-            clearInterval(timerInterval); // Ferma il timer quando raggiunge 0
-            startGame(); // Avvia il gioco effettivo
+            clearInterval(timerInterval); //ferma il timer quando raggiunge 0
+            startGame(); //avvia il gioco effettivo
         } else {
+            //mostra il timer a schermo
             ctx.fillText(`${timer}`, gameWidth / 2, gameHeight / 2);
         }
         timer--;
-    }, 1000); // Intervallo di 1 secondo (1000 millisecondi)
+    }, 1000); //intervallo di 1 secondo (1000 millisecondi)
 }
 
 
@@ -313,28 +343,40 @@ function startGame() {
     if(!isRestarted){
         vinto = false;
         loadSettings(usernameUtenteLoggato);
+        //posso riattivare il tasto, poichè nascosto
         playButton.disabled = false;
-        foods.splice(0, foods.length); // Svuota l'array foods
+        foods.splice(0, foods.length); //svuota l'array foods
+        //crea cibo in base all'impostazione settata
         for (let i = 0; i < numFood; i++) {
-            createFood(); // Chiamata alla funzione per creare il cibo
-            drawFood();
+            createFood(); //chiamata alla funzione per creare il cibo
+            drawFood(); //chiamata per printare il cibo a schermo
         }             
     }
-    nextTick();
+    //nextTick gestisce il "ciclo" del gioco
+    nextTick(); 
 }
 
 function nextTick(){
+    //se il gioco è in funzione e non è in pausa
     if(running && !isPaused){
         setTimeout(()=>{
+            //pulisce la board
             clearBoard();
+            //disegna il cibo
             drawFood();
+            //muove il serpente
             moveSnake();
+            //disegna il serpente
             drawSnake();
+            //controlla se si ha perso
             checkGameOver();
+            //richiama la funzione
             nextTick();
         }, speed)
     }
     else if (!running && !isPaused){
+        //nel caso in cui non fosse in running e nemmeno in pausa significa che ho perso 
+        //quindi mostra il messaggio di game over a schermo
         displayGameOver();
     }
 };
@@ -347,23 +389,24 @@ function clearBoard(){
 
 function createFood() {
     function randomFoodCoordinate() {
+        //crea un cibo in una cordinata randomica dello schermo
         return Math.round(Math.random() * (gameWidth - unitSize) / unitSize) * unitSize;
     }
 
-    // Calcola il numero totale di posizioni sulla board
+    //calcola il numero totale di posizioni sulla board
     const totalPositions = (gameWidth / unitSize) * (gameHeight / unitSize);
 
-    // Se non ci sono più posizioni disponibili, esci senza creare cibo
+    //se non ci sono più posizioni disponibili, esci senza creare cibo (serve quando si sta per finire il gioco)
     if (snake.length >= totalPositions) {
         return;
     }
 
-    // Ottieni tutte le coordinate occupate dai cibi
+    //ottieni tutte le coordinate occupate dai cibi
     const occupiedCoordinates = foods.map(food => `${food.x}-${food.y}`);
 
     let newFood;
     let attempts = 0;
-    const maxAttempts = 100; // Numero massimo di tentativi per trovare una posizione libera
+    const maxAttempts = 100; //numero massimo di tentativi per trovare una posizione libera
 
     do {
         newFood = {
@@ -375,22 +418,27 @@ function createFood() {
 
         attempts++;
 
-        // Se il numero di tentativi supera il massimo consentito, esci senza creare cibo
+        //se il numero di tentativi supera il massimo consentito, esci senza creare cibo
         if (attempts > maxAttempts) {
             console.warn("Impossibile trovare posizione per il cibo. La board potrebbe essere completamente riempita.");
             return;
         }
     } while (isFoodOnSnake(newFood.x, newFood.y) || occupiedCoordinates.includes(`${newFood.x}-${newFood.y}`));
-
+      //se il serpente è sopra la coordinata creata di cibo, ne crea un altro
+      //il cibo non dev'essere crato sotto al serpente
+    //aggiunge il cibo all'array di cibi  
     foods.push(newFood);
 }
 
 
 function isFoodOnSnake(x, y) {
+    //se il serpente è sopra la coordinata creata di cibo, ne crea un altro
+    //il cibo non dev'essere crato sotto al serpente
     return snake.some(segment => segment.x === x && segment.y === y);
 };
 
 function drawFood() {
+    //disegna il cibo
     ctx.fillStyle = foodColor;
     foods.forEach(food => {
         ctx.beginPath();
@@ -400,67 +448,72 @@ function drawFood() {
 }
 
 function moveSnake() {
+    //muovi serpente
     const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
     snake.unshift(head);
     foods.forEach((food, index) => {
         if (snake[0].x === food.x && snake[0].y === food.y) {
             
-            
+            //quando mangia cibo playa il suono
             eatSound.play();
-                        
+            
+            //aggiunge un punto allo score
             score += 1;
+            //aggiorna il valore dello score a schermo
             scoreText.textContent = score;
             actualCoins = coins + score;
+            //aggiorna il valore dei coins a schermo
             document.getElementById("coinsUtente").textContent = actualCoins;
-            console.log(score, coins);
+            
+            //chiama la funzione di congraturazioni
             congratulations();
 
-            // Rimuovi il cibo mangiato dall'array
+            //rimuovi il cibo mangiato dall'array
             foods.splice(index, 1);
 
-            // Crea un nuovo cibo
+            //crea un nuovo cibo
             createFood();
 
-            // Aggiungi un nuovo segmento alla coda del serpente
+            //aggiungi un nuovo segmento alla coda del serpente
             const tail = { x: snake[snake.length - 1].x, y: snake[snake.length - 1].y };
             snake.push(tail);
         }
     });
-    snake.pop();
+    snake.pop(); //rimuove l'ultimo elemento del serpente (poichè si sta muovendo)
 }
 
 function drawSnake() {
-    ctx.fillStyle = snakeColor; // Colore generale del serpente
+    ctx.fillStyle = snakeColor; //colore del serpente
     ctx.strokeStyle = snakeBorder;
 
-    // Disegna la testa del serpente (cambia il colore e la forma)
+    //disegna la testa del serpente
     ctx.beginPath();
     ctx.arc(snake[0].x + unitSize / 2, snake[0].y + unitSize / 2, unitSize / 2, 0, Math.PI * 2);
     ctx.fill();
 
-    // Disegna il corpo del serpente
+    //disegna il corpo del serpente (un po' più sottile)
     for (let i = 1; i < snake.length; i++) {
-        // Utilizza linee rette per il corpo del serpente in linea retta
+        //utilizza linee rette per il corpo del serpente in linea retta
         if (snake[i].x === snake[i - 1].x || snake[i].y === snake[i - 1].y) {
             ctx.beginPath();
             ctx.moveTo(snake[i - 1].x + unitSize / 2, snake[i - 1].y + unitSize / 2);
             ctx.lineTo(snake[i].x + unitSize / 2, snake[i].y + unitSize / 2);
-            ctx.lineWidth = unitSize * 0.7; // Riduci la larghezza delle linee
+            ctx.lineWidth = unitSize * 0.7; //riduci la larghezza delle linee
             ctx.lineCap = 'round';
             ctx.stroke();
-            ctx.lineWidth = 1; // Ripristina la larghezza della linea
+            ctx.lineWidth = 1; 
         } else {
-            // Utilizza curve quadratiche per arrotondare le curve
+            //utilizza curve quadratiche per arrotondare le curve
             let midX = (snake[i].x + snake[i - 1].x) / 2;
             let midY = (snake[i].y + snake[i - 1].y) / 2;
 
             ctx.beginPath();
             ctx.moveTo(snake[i - 1].x + unitSize / 2, snake[i - 1].y + unitSize / 2);
             ctx.quadraticCurveTo(midX, midY, snake[i].x + unitSize / 2, snake[i].y + unitSize / 2);
-            ctx.lineWidth = unitSize * 0.7; // Riduci la larghezza delle linee
+            ctx.lineWidth = unitSize * 0.7; //riduci la larghezza delle linee
             ctx.lineCap = 'round';
             ctx.stroke();
-            ctx.lineWidth = 1; // Ripristina la larghezza della linea
+            ctx.lineWidth = 1; 
         }
     }
 }
@@ -468,6 +521,7 @@ function drawSnake() {
 
 
 function changeDirection(event){
+    //in base al tasto premuto capisce come muoversi
     const keyPressed = event.keyCode;
     const LEFT = 37;
     const UP = 38;
@@ -485,9 +539,12 @@ function changeDirection(event){
     const goingLeft = (xVelocity == -unitSize);
 
     if(login){
+        //questo controllo serve per non far avviare i suoni di movimento durante il login o la registrazione
+        //o in generale al di fuori del gioco
         changeDirectionV.play();
     }    
 
+    //in base alla key premuta controlla se cambiare la direzione o no
     switch (true) {
         case (keyPressed == UP || keyPressed == W) && !goingDown:
             xVelocity = 0;
@@ -509,6 +566,8 @@ function changeDirection(event){
 };
 
 function checkGameOver(){
+    //fa tutti i controlli che potrebbero terminare il gioco:
+    //andare contro i bordi
     switch (true) {
         case (snake[0].x < 0):
         case (snake[0].x >= gameWidth):
@@ -518,13 +577,16 @@ function checkGameOver(){
             persoControIlMuro = true;
             break;
     }   
+    //mangiarsi da solo
     for(let i = 1; i < snake.length; i+=1){
         if(snake[i].x == snake[0].x && snake[i].y == snake[0].y){
             running = false;
             persoControIlMuro = false;
         }
     }
-    
+
+    //controllo di vittoria
+    //in base alla grandezza del serpente si possono prendere più cibi per questo ci sono 3 controlli differenti
     if((unitSize == 25 && score == 395) ||
       (unitSize ==  5 && score == 1995) ||
       (unitSize == 1 && score == 9995)) {
@@ -534,12 +596,15 @@ function checkGameOver(){
 };
 
 function displayGameOver() {
+    //formattazione del testo
     ctx.font = "50px MV Boli";
     ctx.fillStyle = "black";
     ctx.textAlign = "center";
     
+    //suono di game over
     loseSound.play()
 
+    //messaggio di errore (o vincita) in base ai controlli fatti precedentemente
     if (persoControIlMuro && !vinto) {
         ctx.fillText("Boink!", gameWidth / 2, gameHeight / 3);
     } else if (!persoControIlMuro && !vinto) {
@@ -549,23 +614,33 @@ function displayGameOver() {
         congratulations();
     } 
 
-    running = false;    
+    //imposta running su false così da poter avviare una nuova partita
+    running = false;   
+    //chiama la funzione che manda i dati della partita al db 
     inviaPunteggioAlServer(id_utente, score, numFood, unitSize, speed);
+    //imposta l'elemento "score in fine partita" per mostrarlo successivamente nel riepilogo
     scoreInFinePartita.textContent = `Score: ${score}`;
+    //chiama get my top score per prendere il punteggio migliore dell'utente e mostrarlo nel riepilogo partita
     getMyTopScore(id_utente);
+    //mostra il riepilogo partita
     riepilogoPartitaFinita.style.display = "block";
+    //prende i coins
     getCoins(usernameUtenteLoggato);
 };
 
 function resetGame() {
+    //a fine partita per rigiocare si usa il tasto di reset
     if(login){
-        // Disabilita il tasto di reset
-        resetBtn.disabled = true;
+        //disabilita il tasto di reset stesso motivo del play sopra
+        resetBtn.disabled = true; 
+        //nascondo il riepilogo partita
         riepilogoPartitaFinita.style.display = "none";
+        //imposto lo score a 0
         score = 0;
         scoreText.textContent = "0"; // Assegna una stringa vuota per nascondere il testo
         xVelocity = unitSize;
         yVelocity = 0;
+        //imposto le coordinate di partenza del serpente
         snake = [
             { x: unitSize * 4, y: 225 },
             { x: unitSize * 3, y: 225 },
@@ -573,29 +648,32 @@ function resetGame() {
             { x: unitSize, y: 225 },
             { x: 0, y: 225 }
         ];
-        timer = 3; // Reimposta il timer a 3 secondi
+        timer = 3; //reimposta il timer a 3 secondi
         gameStart();
-        // Riabilita il tasto di reset dopo 6 secondi
+        //riabilita il tasto di reset dopo 6 secondi
         setTimeout(function() {
             resetBtn.disabled = false;
-        }, 6000); // 6000 millisecondi (6 secondi)
+        }, 6000); //6000 millisecondi (6 secondi)
     }
 };
 
 function congratulations() {
+    //ogni dieci punti o alla vittoria viene eseguito questo codice
     if (score % 10 === 0 || vinto) {
-        const confettiContainer = document.querySelector('.confetti-container');
-        const colors = ['#f06', '#0f6', '#60f', '#ff0', '#f0f', '#0ff']; // Definisci una serie di colori
-        const confettiCount = 100; // Numero di coriandoli
+        //vengono mostrati a schermo dei "coriandoli" (o confetti) di diversi colori
 
-        // Crea i coriandoli
+        const confettiContainer = document.querySelector('.confetti-container');
+        const colors = ['#f06', '#0f6', '#60f', '#ff0', '#f0f', '#0ff']; //serie di colori
+        const confettiCount = 100; //numero di coriandoli
+
+        //crea i coriandoli
         for (let i = 0; i < confettiCount; i++) {
             const confetti = document.createElement('div');
             confetti.className = 'confetti';
             confetti.style.left = Math.random() * 100 + 'vw';
             confetti.style.animationDelay = Math.random() * 2 + 's';
 
-            // Assegna un colore casuale dai colori definiti
+            //assegna un colore casuale dai colori definiti
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
             confetti.style.backgroundColor = randomColor;
 
@@ -605,39 +683,43 @@ function congratulations() {
 };
 
 function pauseGame() {
+    //funzione di pausa
     if (running && !isPaused) {
+        //prende il top score per mostrarlo
         getMyTopScore(id_utente);
         isPaused = true;
         clearInterval(timerInterval);
         running = false;
+        //prende lo score attuale per mostrarlo
         document.querySelector("#actualScore").textContent = `Score: ${score}`;
+        //mostra il container della pausa con le informazioni prese e un tasto per riprendere il gioco
         pauseContainer.style.display = "block";
-        
     }
 };
 
 function continueGame() {
+    //per riprendere il gioco
     if (isPaused) {
         isPaused = false;
         pauseContainer.style.display = "none";
         timer = 3;
 
-        // Imposta una variabile per tenere traccia dello stato della riproduzione del suono
+        //imposta una variabile per tenere traccia dello stato della riproduzione del suono (come nello start game)
         var soundPlayed = false;
 
         timerInterval = setInterval(() => {
             
 
-            // Verifica se il suono non è ancora stato riprodotto
+            //verifica se il suono non è ancora stato riprodotto (per non riprodurlo più volte)
             if (!soundPlayed) {
                 countDown.play();
-                soundPlayed = true; // Imposta la variabile su true per indicare che il suono è stato riprodotto
+                soundPlayed = true; //imposta la variabile su true per indicare che il suono è stato riprodotto
             }
 
             if (timer <= 0) {
                 clearInterval(timerInterval);
                 isRestarted = true;
-                startGame();
+                startGame();  //alla fine del timer riprende il gioco
             } else {
                 ctx.clearRect(0, 0, gameWidth, gameHeight);
                 ctx.font = "50px MV Boli";
@@ -654,40 +736,44 @@ function continueGame() {
 
 function openSettings() {
     loadSettings(usernameUtenteLoggato);
-    if (!running && !isPaused)
+    if (!running && !isPaused) {
+        //mostra il container delle impostazioni
         impostazioniContainer.style.display = "block";
+        //prende i dati precedenti
+        prevSpeed = speed;
+        prevNumFood = numFood;
+        prevUnitSize = unitSize;
 
-    prevSpeed = speed;
-    prevNumFood = numFood;
-    prevUnitSize = unitSize;
+        //inverti il valore di speed prima di visualizzarlo
+        speedValue.textContent = 251 - speed; //mostra il valore in modo invertito
 
-    // Inverti il valore di speed prima di visualizzarlo
-    speedValue.textContent = 251 - speed; // Mostra il valore in modo invertito
+        speedInput.addEventListener("input", function() {
+            //inverti il valore di speed quando lo imposti
+            speed = 251 - this.value; //aggiorna il valore della variabile speed
+            //inverti nuovamente il valore prima di visualizzarlo
+            speedValue.textContent = 251 - speed; //mostra il valore aggiornato in modo invertito
+        });
 
-    speedInput.addEventListener("input", function() {
-        // Inverti il valore di speed quando lo imposti
-        speed = 251 - this.value; // Aggiorna il valore della variabile speed
-        // Inverti nuovamente il valore prima di visualizzarlo
-        speedValue.textContent = 251 - speed; // Mostra il valore aggiornato in modo invertito
-    });
+        const dimensioneSelect = document.querySelector("#dimensione");
+        dimensioneSelect.addEventListener("change", function() {
+            unitSize = parseInt(this.value);  //prende il nuovo valore della dimensione
+        });
+        const ciboSelect = document.querySelector("#cibo")
+        ciboSelect.addEventListener("change", function() {
+            numFood = parseInt(this.value) //prende il nuovo valore del numero cibo
+        });
 
-    const dimensioneSelect = document.querySelector("#dimensione");
-    dimensioneSelect.addEventListener("change", function() {
-        unitSize = parseInt(this.value);
-        // Esegui le azioni desiderate con il valore di unitSize
-    });
-    const ciboSelect = document.querySelector("#cibo")
-    ciboSelect.addEventListener("change", function() {
-        numFood = parseInt(this.value)
-    });
-
-    chiudiImpostazioniContainerBtn.addEventListener("click", function() {
-        // Chiamare la funzione di salvataggio con i parametri corretti
-        saveSettings(numFood, unitSize, speed /*, foodColor, snakeColor*/);
-    });
+        //cliccando salva vengono salvate
+        chiudiImpostazioniContainerBtn.addEventListener("click", function() {
+            //chiama la funzione di salvataggio con i parametri corretti
+            saveSettings(numFood, unitSize, speed /*, foodColor, snakeColor*/);
+        });
+    }
 };
 
+
 function saveSettings(numFood, unitSize, speed /*, colore_cibo_selezionato, colore_serpente_selezionato*/){
+    //salva le impostazioni che gli sono state inviate
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "salva_impostazioni.php", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -696,7 +782,7 @@ function saveSettings(numFood, unitSize, speed /*, colore_cibo_selezionato, colo
             if (xhr.status === 200) {
 
             } else {
-                // Gestisci gli errori
+                //gestisci gli errori
                 console.error("Errore nella richiesta AJAX");
             }
         }
@@ -711,12 +797,15 @@ function saveSettings(numFood, unitSize, speed /*, colore_cibo_selezionato, colo
         //colore_cibo_selezionato: colore_cibo_selezionato
     };
 
+    //converte in json e manda
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
     
+    //chiude il container delle impostazioni
     impostazioniContainer.style.display = "none";
 };
 
+//cliccando annulla non vengono salvate
 function closeSettings(){
     speed = prevSpeed;
     numFood = prevNumFood;
@@ -724,6 +813,8 @@ function closeSettings(){
     impostazioniContainer.style.display = "none";
 };
 
+//carica impostazioni serve all'apertura del gioco nel caso si fossero modificate le impostazioni di gioco precedentemente
+//a non modificarle ogni volta che si accede
 function loadSettings(username){
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "carica_impostazioni.php", true);
@@ -731,10 +822,11 @@ function loadSettings(username){
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                // Elabora la risposta del server
+                //elabora la risposta del server
                 var response = JSON.parse(xhr.responseText);
                 if (response.numero_cibo && response.dimensione_serpente
                 && response.speed && response.colore_cibo_selezionato && response.colore_serpente_selezionato) {
+                    //imposta i valori delle variabili di gioco con i dati del db
                     numFood = response.numero_cibo;
                     unitSize = response.dimensione_serpente;
                     speed = response.speed;
@@ -753,11 +845,13 @@ function loadSettings(username){
     const data = {
         username: username
     };
+    //converte in json e invia
     const jsonData = JSON.stringify(data);
     xhr.send(jsonData);
 };
 
 function openShop(username) {
+    //chiama carica shop per prendere i dati dal db
     loadShop(username);
     
     let xhr = new XMLHttpRequest();
@@ -767,6 +861,7 @@ function openShop(username) {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 let response = JSON.parse(xhr.responseText);
+                //se tutti i dati sono stati presi senza problemi
                 if (
                     response.serpente_arancione &&
                     response.serpente_verde &&
@@ -785,7 +880,7 @@ function openShop(username) {
                     response.cibo_grigio &&
                     response.cibo_rosso
                 ) {                  
-
+                    //allora può proseguire col codice
                     const coloriSerpenteArray = [
                         { colore: 'orange', costo: 50, stato: response.serpente_arancione },
                         { colore: 'green', costo: 50, stato: response.serpente_verde },
@@ -814,20 +909,27 @@ function openShop(username) {
                     coloriSerpente.innerHTML = '';
                     coloriCibo.innerHTML = '';
 
+                    //crea l'elemento dello shop (con nome colore di quel colore, prezzo e tasto per comprare)
                     const createShopItemElement = (item, itemType) => {
+                        //container
                         const shopItemElement = document.createElement('div');                        
 
+                        //nome
                         const itemNameElement = document.createElement('div');
                         itemNameElement.style.color = item.colore;
                         itemNameElement.style.fontWeight = "bold";
                         itemNameElement.style.marginTop = "5px";
                         itemNameElement.textContent = item.colore;
 
+                        //prezzo
                         const itemCostElement = document.createElement('div');
                         itemCostElement.textContent = "Prezzo: " + item.costo;
                         itemCostElement.style.fontSize = "14px";
 
+                        //tasto
                         const buyButton = document.createElement('button');
+                        //a secondo dello stato del colore nel db
+                        //dipenderà il colore e il testo all'interno del tasto
                         if(item.stato == "no") {
                             buyButton.textContent = 'Acquista'
                             buyButton.style.backgroundColor = 'green';
@@ -841,12 +943,14 @@ function openShop(username) {
                                 buyButton.style.backgroundColor = 'blue';
                             }
                         }
-
+                        
+                        //stile generale dei tasti di buy
                         buyButton.style.color = 'white';
                         buyButton.style.padding = "5px, 10px";
                         buyButton.style.cursor = "pointer";
                         buyButton.classList.add('buy-button');
-
+                        
+                        //funzione al click del tasto di buy
                         buyButton.addEventListener('click', function () {
                             if(item.stato == "no" && item.costo < coins){
                                 console.log("comprato");
@@ -857,7 +961,7 @@ function openShop(username) {
                                     if (xhr.readyState === 4) {
                                         if (xhr.status === 200) {                                            
                                             
-                                            console.log("comprato davvero");
+                                            //aggiorna i coins e lo stato dello shop (sennò ti farebbe comprare lo stesso colore all'infinito)
                                             getCoins(username);  
                                             openShop(username);
                                             
@@ -865,10 +969,13 @@ function openShop(username) {
                                             buyButton.style.backgroundColor = 'blue';
                                             
                                         } else {
-                                            console.log("fallito");
+                                            //errore nella richiesta
+                                            console.log("Errore nella richiesta");
                                         }
                                     }    
                                 };
+
+                                //in base all'item type invia i dati richiesti
                                 if (itemType == 'serpente') {
                                     data = {
                                         username: username,
@@ -882,6 +989,7 @@ function openShop(username) {
                                         type: "cibo"
                                     }
                                 }
+                                //converte in stringa e manda
                                 const jsonData = JSON.stringify(data);
                                 xhr.send(jsonData);
                             
