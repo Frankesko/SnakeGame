@@ -85,10 +85,12 @@ function handlePostRequest($table, $json_data, $pdo) {
 
 //richiesta put per la modifica della password
 function handlePutRequest($table, $input, $key, $pdo){
+  $hashedPassword = password_hash($input['password'], PASSWORD_DEFAULT);
+    
   $sql = "UPDATE $table SET password = :campo WHERE id_utente = :id_utente";
   try {
       $stmt = $pdo->prepare($sql);
-      $stmt->bindParam(':campo', $input['password'], PDO::PARAM_STR);
+      $stmt->bindParam(':campo', $hashedPassword, PDO::PARAM_STR);
       $stmt->bindParam(':id_utente', $key, PDO::PARAM_INT);
       $stmt->execute();
       $response = array('status' => 'success', 'message' => 'Password aggiornata');
@@ -105,13 +107,11 @@ function handlePutRequest($table, $input, $key, $pdo){
 //richiesta delete per l'eliminazione dell'account
 function handleDeleteRequest($table, $key, $pdo) {
   $sql1 = "DELETE FROM partite WHERE id_utente = " . $pdo->quote($key);
-  $sql2 = "DELETE FROM bie WHERE id_utente = " . $pdo->quote($key);
   $sql3 = "DELETE FROM colori_sbloccati WHERE id_utente = " . $pdo->quote($key);
   $sql4 = "DELETE FROM impostazioni WHERE id_utente = " . $pdo->quote($key);
   $sql = "DELETE FROM `$table` WHERE id_utente = " . $pdo->quote($key);
   try {
       $statement1 = $pdo->query($sql1);
-      $statement2 = $pdo->query($sql2);
       $statement3 = $pdo->query($sql3);
       $statement4 = $pdo->query($sql4);
       $statement = $pdo->query($sql);

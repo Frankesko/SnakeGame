@@ -38,8 +38,8 @@ if(!$data){
 
     } else {    
         //altrimenti esegue l'inserimento
-        $stmt = $conn->prepare("INSERT INTO impostazioni (id_utente, numero_cibo, dimensione_serpente, speed /*, colore_serpente_selezionato, colore_cibo_selezionato*/) VALUES (?, ?, ?, ?/*, ?, ?*/)");
-        $stmt->execute([$id_utente, $numFood, $unitSize, $speed /*, $colore_serpente_selezionato, $colore_cibo_selezionato*/]);
+        $stmt = $conn->prepare("INSERT INTO impostazioni (id_utente, numero_cibo, dimensione_serpente, speed, colore_serpente_selezionato, colore_cibo_selezionato) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$id_utente, $numFood, $unitSize, $speed, 'orange', 'red']);
 
         //verifica se l'inserimento è riuscito
         if ($stmt->rowCount() > 0) {
