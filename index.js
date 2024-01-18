@@ -1729,7 +1729,7 @@ function drawStringOnCanvas(characters) {
 
   for (let i = 0; i < characters.length; i++) {
     const xInitialSpace = 25;
-    canvProp.font = "20px Roboto Mono";
+    canvProp.font = "16px Arial";
     canvProp.fillStyle = textColors[randomNumber(0, 1)];
     canvProp.fillText(
       characters[i].char,
