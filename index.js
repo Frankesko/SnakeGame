@@ -250,22 +250,26 @@ document.addEventListener("DOMContentLoaded", function() {
             let registratiPassword = document.querySelector("#registratiPassword").value;
             let confermaPassword = document.querySelector("#registratiConfirmPassword").value;
         
-        if (isEmailValid(email)) {
-            //mail valida nessun errore
-        } else {
-            //mail non valida chiede conferma per proseguire
-            alert("L'indirizzo email sembra non essere valido. Clicca 'Ok' se vuoi proseguire lo stesso, 'Esc' per modificarla.");
-        }
-        
-        //controllo sull'inserimento dei campi
-        if (registratiUsername.trim() === "" || email.trim() === "" || registratiPassword.trim() === "" || confermaPassword.trim() === "") {
-            alert("Compila tutti i campi obbligatori.");
-        } else if (registratiPassword !== confermaPassword) {
-            //password non corrispondono
-            alert("Le password non corrispondono.");
-        } else {
-            //verifica l'unicità dello username prima di procedere con la registrazione
-            checkUsernameAvailability(registratiUsername, function(isAvailable) {
+        // Definisci una regex per verificare la presenza di almeno un carattere speciale, una lettera maiuscola e un numero
+        const passwordRegex = /^(?=.*[!@#$%^&*])(?=.*[A-Z])(?=.*[0-9]).{8,}$/;
+        if (passwordRegex.test(registratiPassword)){
+
+            if (isEmailValid(email)) {
+                //mail valida nessun errore
+            } else {
+                //mail non valida chiede conferma per proseguire
+                alert("L'indirizzo email sembra non essere valido. Clicca 'Ok' se vuoi proseguire lo stesso, 'Esc' per modificarla.");
+            }
+            
+            //controllo sull'inserimento dei campi
+            if (registratiUsername.trim() === "" || email.trim() === "" || registratiPassword.trim() === "" || confermaPassword.trim() === "") {
+                alert("Compila tutti i campi obbligatori.");
+            } else if (registratiPassword !== confermaPassword) {
+                //password non corrispondono
+                alert("Le password non corrispondono.");
+            } else {
+                //verifica l'unicità dello username prima di procedere con la registrazione
+                checkUsernameAvailability(registratiUsername, function(isAvailable) {
                 if (isAvailable) {
                     //username disponibile, invia i dati al server
                     const dataRegistrati = {
@@ -303,6 +307,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     alert("Lo username non è disponibile. Scegli un altro username.");
                 }
             });
+        }
+        } else {
+            alert("La password deve contenere almeno un carattere maiuscolo, un carattere numerico e un carattere speciale, e una lunghezza minima di 8 caratteri");
         }
     });
 });
