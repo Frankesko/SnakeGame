@@ -160,73 +160,79 @@ document.addEventListener("DOMContentLoaded", function() {
         loginPopUp.style.display = "block";
         //click su login
         loginSubmitButton.addEventListener("click", function() {
+            if(userInputCaptcha.value == "" || loginUsername == "" || loginPassword == ""){
+                alert("Assicurati di aver compilato tutti i campi");
+            } else if(userInputCaptcha.value == text){
 
-            //prende i valori inseriti
-            let loginUsername = document.querySelector("#loginUsername").value;
-            let loginPassword = document.querySelector("#loginPassword").value;
+                //prende i valori inseriti
+                let loginUsername = document.querySelector("#loginUsername").value;
+                let loginPassword = document.querySelector("#loginPassword").value;
 
-            //prepara l'array da inviare al server
-            let dataLogin = {
-                username: loginUsername,
-                password: loginPassword
-            };
+                //prepara l'array da inviare al server
+                let dataLogin = {
+                    username: loginUsername,
+                    password: loginPassword
+                };
 
-            //richiesta al server
-            let xhr = new XMLHttpRequest();
-            xhr.open("POST", "verifica_accesso.php", true);
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        //elabora la risposta dal server
-                        var response = xhr.responseText;
-                        if (response === "true") {
-                            //accesso consentito
-                            //nasconde il popup di login e mostra quello di gioco
-                            loginPopUp.style.display = "none";
-                            gameContainer.style.display = "block";
-                            //mostra lo username
-                            usernameUtenteLoggato = loginUsername;
-                            testoSpiegazioneGioco.style.display = "none";
-                            mostraUsernameIfLoggato.style.display = "block";
-                            mostraUsernameIfLoggato.textContent = usernameUtenteLoggato;
-                            
-                            //mostra il footer e i tasti centrali
-                            containerFooter.style.display = "flex";
-                            startContainer.style.display = "block";
+                //richiesta al server
+                let xhr = new XMLHttpRequest();
+                xhr.open("POST", "verifica_accesso.php", true);
+                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            //elabora la risposta dal server
+                            var response = xhr.responseText;
+                            if (response === "true") {
+                                //accesso consentito
+                                //nasconde il popup di login e mostra quello di gioco
+                                loginPopUp.style.display = "none";
+                                gameContainer.style.display = "block";
+                                //mostra lo username
+                                usernameUtenteLoggato = loginUsername;
+                                testoSpiegazioneGioco.style.display = "none";
+                                mostraUsernameIfLoggato.style.display = "block";
+                                mostraUsernameIfLoggato.textContent = usernameUtenteLoggato;
+                                
+                                //mostra il footer e i tasti centrali
+                                containerFooter.style.display = "flex";
+                                startContainer.style.display = "block";
 
-                            //prende l'id utente
-                            getIdUtente(usernameUtenteLoggato)
-                            .then(id => { //promises risolta con successo quindi assegna a id_utente l'id preso
-                               id_utente = id;
-                            })
-                            
-                            getCoins(usernameUtenteLoggato);  //prende i coin dell'utente per mostrarli in basso a sinistra
-                            loadShop(usernameUtenteLoggato);  //carica gli elementi del negozio 
-                            loadSettings(usernameUtenteLoggato);    //carica le precedenti impostazioni dell'utente
-                            
-                            //listner del tasto gioca
-                            playButton.addEventListener("click", function() {
-                                startContainer.style.display = "none"; //nascondo lo startContainer                
-                                gameStart(); //chiamo il pre-gioco
-                                login = true; //imposta l'utente su true
-                            });  
-                        } else if (response === "usernameFalse") {
-                            //accesso negato, username non trovato nel db
-                            alert("Account inesistente");
-                        } else if (response === "passwordFalse") {
-                            //accesso negato, password non corrisponde a quella nel db
-                            alert("Password errata");
+                                //prende l'id utente
+                                getIdUtente(usernameUtenteLoggato)
+                                .then(id => { //promises risolta con successo quindi assegna a id_utente l'id preso
+                                id_utente = id;
+                                })
+                                
+                                getCoins(usernameUtenteLoggato);  //prende i coin dell'utente per mostrarli in basso a sinistra
+                                loadShop(usernameUtenteLoggato);  //carica gli elementi del negozio 
+                                loadSettings(usernameUtenteLoggato);    //carica le precedenti impostazioni dell'utente
+                                
+                                //listner del tasto gioca
+                                playButton.addEventListener("click", function() {
+                                    startContainer.style.display = "none"; //nascondo lo startContainer                
+                                    gameStart(); //chiamo il pre-gioco
+                                    login = true; //imposta l'utente su true
+                                });  
+                            } else if (response === "usernameFalse") {
+                                //accesso negato, username non trovato nel db
+                                alert("Account inesistente");
+                            } else if (response === "passwordFalse") {
+                                //accesso negato, password non corrisponde a quella nel db
+                                alert("Password errata");
+                            }
+                        } else {
+                            //errori durante la richiesta
+                            console.error("Errore nella richiesta AJAX");
                         }
-                    } else {
-                        //errori durante la richiesta
-                        console.error("Errore nella richiesta AJAX");
                     }
-                }
-            };
-            //converte l'oggetto dati in una stringa JSON e lo manda al server
-            let jsonDataLog = JSON.stringify(dataLogin);
-            xhr.send(jsonDataLog);
+                };
+                //converte l'oggetto dati in una stringa JSON e lo manda al server
+                let jsonDataLog = JSON.stringify(dataLogin);
+                xhr.send(jsonDataLog);
+            } else {
+                alert("Assicurati che il captcha corrisponda a quello nell'immagine");
+            }
         });
     });
 
@@ -1695,3 +1701,64 @@ function calcolaTotPartiteGiocateFunct() {
     xhr.open("GET", "/api.php/partite/" + id_utente, true);
     xhr.send();
 }
+
+let userInputCaptcha = document.getElementById("userInputCaptcha");
+let canvas = document.getElementById("captchaCanvas");
+
+let text = "";
+
+const randomNumber = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1) + min);
+
+const textGenerator = () => {
+  let generatedText = "";
+  for (let i = 0; i < 3; i++) {
+    generatedText += String.fromCharCode(randomNumber(65, 90));
+    generatedText += String.fromCharCode(randomNumber(97, 122));
+    generatedText += String.fromCharCode(randomNumber(48, 57));
+  }
+  return generatedText;
+};
+
+function drawStringOnCanvas(characters) {
+  let canvProp = canvas.getContext("2d");
+  canvProp.clearRect(0, 0, canvProp.canvas.width, canvProp.canvas.height);
+
+  const textColors = ["rgb(255,0,0)", "rgb(255,165, 0)"];
+  const letterSpace = 150 / characters.length;
+
+  for (let i = 0; i < characters.length; i++) {
+    const xInitialSpace = 25;
+    canvProp.font = "20px Roboto Mono";
+    canvProp.fillStyle = textColors[randomNumber(0, 1)];
+    canvProp.fillText(
+      characters[i].char,
+      xInitialSpace + i * letterSpace,
+      characters[i].y,
+      100
+    );
+  }
+}
+
+function triggerFunction() {
+  userInputCaptcha.value = "";
+  text = textGenerator();
+  console.log(text);
+
+  // Creiamo un array di oggetti contenenti il carattere e la sua posizione
+  const characters = [];
+  for (let i = 0; i < text.length; i++) {
+    characters.push({
+      char: text[i],
+      y: randomNumber(25, 40),
+    });
+  }
+
+  // Disegna il testo sul canvas
+  drawStringOnCanvas(characters);
+
+  // Ordina il testo per il confronto successivo
+  text = characters.map((charObj) => charObj.char).join("");
+}
+
+window.onload = () => triggerFunction();

@@ -53,6 +53,12 @@
             <form id="loginForm">
                 <input type="text" id="loginUsername" placeholder="Username">
                 <input type="password" id="loginPassword" placeholder="Password">
+                <div id="captcha">
+                    <div class = "wrapper">
+                        <canvas id = "captchaCanvas" width="190" height="50"> </canvas>
+                    </div>
+                    <input type = "text" id="userInputCaptcha" placeholder="Inserisci il testo dell'immagine" required> 
+                </div>
                 <button  type="button" id="loginSubmitButton">Login</button>
                 <!--
                 <br>
