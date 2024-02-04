@@ -1716,9 +1716,10 @@ let text = "";
 
 const randomNumber = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
-
+//funzione che genera un numero casuale tra min e max
 const textGenerator = () => {
   let generatedText = "";
+  //genera tre coppie di caratteri: maiuscole, minuscole e numeri
   for (let i = 0; i < 3; i++) {
     generatedText += String.fromCharCode(randomNumber(65, 90));
     generatedText += String.fromCharCode(randomNumber(97, 122));
@@ -1726,14 +1727,14 @@ const textGenerator = () => {
   }
   return generatedText;
 };
-
+//funzione che disegna il testo del captcha nel canvas
 function drawStringOnCanvas(characters) {
   let canvProp = canvas.getContext("2d");
   canvProp.clearRect(0, 0, canvProp.canvas.width, canvProp.canvas.height);
 
   const textColors = ["rgb(255,0,0)", "rgb(255,165, 0)"];
-  const letterSpace = 150 / characters.length;
-
+  const letterSpace = 150 / characters.length; //spazio tra le lettere
+  //itera i caratteri e li disegna sul canvas
   for (let i = 0; i < characters.length; i++) {
     const xInitialSpace = 25;
     canvProp.font = "16px Arial";
@@ -1746,13 +1747,14 @@ function drawStringOnCanvas(characters) {
     );
   }
 }
-
+//funzione chiamata al caricamento della pagina
 function triggerFunction() {
   userInputCaptcha.value = "";
+  //genera il testo del captcha
   text = textGenerator();
   console.log(text);
 
-  // Creiamo un array di oggetti contenenti il carattere e la sua posizione
+  //creo array di oggetti contenenti il carattere e la sua posizione
   const characters = [];
   for (let i = 0; i < text.length; i++) {
     characters.push({
@@ -1761,10 +1763,10 @@ function triggerFunction() {
     });
   }
 
-  // Disegna il testo sul canvas
+  //disegna il testo sul canvas
   drawStringOnCanvas(characters);
 
-  // Ordina il testo per il confronto successivo
+  //ordina il testo per il confronto successivo
   text = characters.map((charObj) => charObj.char).join("");
 }
 
